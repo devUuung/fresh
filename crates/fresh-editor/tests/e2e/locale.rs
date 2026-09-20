@@ -29,6 +29,7 @@ fn test_default_locale_shows_english_search_options() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Default locale should show English search option labels
     harness.assert_screen_contains("Case Sensitive");
@@ -51,6 +52,7 @@ fn test_locale_from_config_spanish_search_options() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Spanish locale should show Spanish search option labels
     harness.assert_screen_contains("Distinguir");
@@ -72,6 +74,7 @@ fn test_locale_from_config_german_search_options() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // German locale should show German search option labels
     harness.assert_screen_contains("Ganzes Wort");
@@ -92,6 +95,7 @@ fn test_locale_from_config_french_search_options() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // French locale should show French search option labels
     harness.assert_screen_contains("Mot entier");
@@ -139,10 +143,12 @@ fn test_locale_switch_via_command_palette() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Case Sensitive");
 
     // Close search with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Open the locale picker. Via `run_palette_command` so Enter fires on the
     // filtered row rather than on whatever happened to be selected when the
@@ -175,6 +181,7 @@ fn test_locale_switch_via_command_palette() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify locale changed status message (shown in the new locale)
     // After switching to Spanish, the message is shown in Spanish: "Idioma cambiado a"
@@ -189,6 +196,7 @@ fn test_locale_switch_via_command_palette() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Search UI should now show Spanish labels
     harness.wait_for_screen_contains("Distinguir").unwrap();
@@ -210,6 +218,7 @@ fn test_invalid_locale_falls_back_to_english() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Should fall back to English search option labels
     harness.assert_screen_contains("Case Sensitive");
@@ -230,6 +239,7 @@ fn test_locale_switch_updates_search_cancelled_message() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Cancel search with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
@@ -256,6 +266,7 @@ fn test_locale_switch_updates_menu_labels() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify English menu items are shown
     harness.assert_screen_contains("New File");
@@ -263,11 +274,13 @@ fn test_locale_switch_updates_menu_labels() {
 
     // Close the menu with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Open command palette with Ctrl+P
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type to filter for locale command
     harness.type_text("Select Locale").unwrap();
@@ -277,6 +290,7 @@ fn test_locale_switch_updates_menu_labels() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show locale selection prompt
     harness.assert_screen_contains("Select locale:");
@@ -295,11 +309,13 @@ fn test_locale_switch_updates_menu_labels() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Open File menu again with Alt+F
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify Spanish menu items are now shown
     harness.assert_screen_contains("Nuevo archivo");
@@ -345,6 +361,7 @@ fn test_multiple_locales_can_be_loaded() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     for (locale, expected_text) in locales_and_expected {
         fresh::i18n::init_with_config(Some(locale));
@@ -378,6 +395,7 @@ fn switch_locale(harness: &mut EditorTestHarness, locale: &str, search_command: 
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 }
 
 #[test]
@@ -392,10 +410,12 @@ fn test_locale_switch_affects_file_browser_columns() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Name");
     harness.assert_screen_contains("Size");
     harness.assert_screen_contains("Modified");
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Switch to Spanish (start from English -> "Select Locale")
     switch_locale(&mut harness, "es", "Select Locale");
@@ -404,10 +424,12 @@ fn test_locale_switch_affects_file_browser_columns() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Nombre");
     harness.assert_screen_contains("Tamaño");
     harness.assert_screen_contains("Modificado");
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Switch to German (start from Spanish -> "Seleccionar idioma")
     switch_locale(&mut harness, "de", "Seleccionar idioma");
@@ -416,6 +438,7 @@ fn test_locale_switch_affects_file_browser_columns() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Größe");
     harness.assert_screen_contains("Geändert");
 }
@@ -435,9 +458,11 @@ fn test_locale_switch_affects_clipboard_messages() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Copied");
 
     // Switch to Spanish (from English)
@@ -447,9 +472,11 @@ fn test_locale_switch_affects_clipboard_messages() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Copiado");
 
     // Switch to French (from Spanish)
@@ -459,9 +486,11 @@ fn test_locale_switch_affects_clipboard_messages() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Copié");
 }
 
@@ -476,8 +505,10 @@ fn test_locale_switch_affects_file_browser_show_hidden() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Show Hidden");
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Switch to Spanish (from English)
     switch_locale(&mut harness, "es", "Select Locale");
@@ -486,6 +517,7 @@ fn test_locale_switch_affects_file_browser_show_hidden() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Mostrar ocultos");
 }
 
@@ -499,6 +531,7 @@ fn test_locale_switch_affects_command_palette_commands() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // In English
     harness.type_text("Open File").unwrap();
@@ -507,6 +540,7 @@ fn test_locale_switch_affects_command_palette_commands() {
 
     // Close command palette
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // 2. Switch to Spanish
     switch_locale(&mut harness, "es", "Select Locale");
@@ -515,6 +549,7 @@ fn test_locale_switch_affects_command_palette_commands() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     harness.type_text("Abrir archivo").unwrap();
     harness.render().unwrap();

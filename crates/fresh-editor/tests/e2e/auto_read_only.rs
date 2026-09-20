@@ -212,6 +212,7 @@ fn test_read_only_indicator_click_opens_menu_and_enables_editing() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Editing is now enabled: the [RO] indicator is gone and typed text lands.
     harness.type_text("ZZTYPEDZZ").unwrap();

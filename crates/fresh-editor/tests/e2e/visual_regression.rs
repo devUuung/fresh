@@ -81,6 +81,7 @@ fn long_function() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for file explorer to load and auto-expand to show the current
     // file (issue #1569): `src/` is expanded automatically, no manual
@@ -101,6 +102,7 @@ fn long_function() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Add LSP diagnostic markers (simulated)
     {
@@ -131,14 +133,17 @@ fn long_function() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Add next occurrence (Ctrl+D)
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Capture the comprehensive state
     harness
@@ -207,10 +212,12 @@ fn helper() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split horiz").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Open second file in the new split
     harness.open_file(&project_dir.join("file2.rs")).unwrap();
@@ -220,18 +227,22 @@ fn helper() {
     harness
         .send_key(KeyCode::Char('k'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Move to the long line (line 3)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Scroll right on the long line
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Now open command palette with some filter text showing
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("help").unwrap();
     harness.render().unwrap();
 
@@ -371,6 +382,7 @@ fn test_lsp_rename_undo_restores_all() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify ALL occurrences are restored to original in ONE undo step
     let after_undo_content = harness.get_buffer_content().unwrap();
@@ -392,6 +404,7 @@ fn test_lsp_rename_undo_restores_all() {
     harness
         .send_key(KeyCode::Char('y'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let after_redo_content = harness.get_buffer_content().unwrap();
     assert_eq!(

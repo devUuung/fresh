@@ -41,6 +41,7 @@ fn test_bash_profile_is_editable() {
     harness
         .send_key(KeyCode::Char('i'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify the typed text appears on screen (not blocked by "Editing disabled")
     harness.assert_screen_contains("hi");
@@ -88,6 +89,7 @@ fn test_dotfile_symlinked_to_library_path_is_editable() {
     harness
         .send_key(KeyCode::Char('Z'), KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // The typed text "QZ" should appear on screen, proving editing works.
     // "QZ" is chosen because it doesn't appear in the original file content.
@@ -118,6 +120,7 @@ fn test_file_in_library_path_stays_readonly() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // The typed character 'x' should NOT appear in the buffer area.
     // The original content "module.exports = {};" should be unchanged.

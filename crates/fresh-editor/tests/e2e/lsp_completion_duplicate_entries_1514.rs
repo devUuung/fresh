@@ -178,6 +178,7 @@ fn test_completion_popup_has_no_duplicates_after_second_request_1514() -> anyhow
     // ---- Round 1: first indented empty line ----------------------------
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Type a prefix that matches all three fake items, then trigger
     // completion with Ctrl+Space.
@@ -208,6 +209,7 @@ fn test_completion_popup_has_no_duplicates_after_second_request_1514() -> anyhow
     // That path does NOT clear self.completion_items — which is what sets
     // up the bug.
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Wait until the old popup is gone from the screen before triggering
     // the second round, so we're sure the popup we observe next is a

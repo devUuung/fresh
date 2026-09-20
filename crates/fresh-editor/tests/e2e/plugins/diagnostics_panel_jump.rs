@@ -99,11 +99,13 @@ fn test_diagnostics_panel_enter_does_not_jump() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("Show Diagnostics Panel").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for diagnostics panel to open
     harness
@@ -128,6 +130,7 @@ fn test_diagnostics_panel_enter_does_not_jump() {
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
     harness.render().unwrap();
+    harness.render().unwrap();
 
     let after_screen = harness.screen_to_string();
     eprintln!("[TEST] Screen after Enter:\n{}", after_screen);
@@ -141,6 +144,7 @@ fn test_diagnostics_panel_enter_does_not_jump() {
 
     // Close the diagnostics panel to return focus to the editor
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Wait for focus to return to the editor (panel tab may still be visible,
     // but the editor buffer should be the active split)
@@ -242,11 +246,13 @@ fn test_diagnostics_panel_cursor_move_scrolls_editor() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("Show Diagnostics Panel").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     harness
         .wait_until(|h| {
@@ -260,6 +266,7 @@ fn test_diagnostics_panel_cursor_move_scrolls_editor() {
     // Panel layout: line 1=title, line 2=blank, line 3=filename, line 4=first item
     for _ in 0..3 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
     }
 
     // Wait for the status bar to show item info, confirming cursor is on an item

@@ -49,6 +49,7 @@ fn test_ctrl_backspace_deletes_word_backward() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Cursor should be at position 16 (after "test")
     assert_eq!(harness.cursor_position(), 16);
@@ -58,6 +59,7 @@ fn test_ctrl_backspace_deletes_word_backward() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Should have deleted "test", cursor now at position 12 (after "world ")
     assert_eq!(harness.cursor_position(), 12);
@@ -67,6 +69,7 @@ fn test_ctrl_backspace_deletes_word_backward() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Should have deleted "world", cursor now at position 6 (after "hello ")
     assert_eq!(harness.cursor_position(), 6);
@@ -87,6 +90,7 @@ fn test_cursor_visible_after_enter_at_end_of_file() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Cursor should be at end of "line3"
     let cursor_before_enter = harness.cursor_position();
@@ -96,6 +100,7 @@ fn test_cursor_visible_after_enter_at_end_of_file() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Cursor should now be on the new empty line (position 18, after the newline)
     let cursor_after_enter = harness.cursor_position();
@@ -149,10 +154,12 @@ fn test_cursor_visible_when_scrolling_down_in_large_file() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Move down 15 times (past the visible area)
     for i in 0..15 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
 
         // After each key press, cursor should be visible on screen
         // (not disappeared as the bug describes)
@@ -196,6 +203,7 @@ fn test_empty_last_line_delete_preserves_margin() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Cursor should be at position 11 (end of "line2")
     let initial_cursor = harness.cursor_position();
@@ -205,6 +213,7 @@ fn test_empty_last_line_delete_preserves_margin() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Now cursor should be at position 12 (on the new empty line)
     let cursor_on_empty_line = harness.cursor_position();
@@ -238,6 +247,7 @@ fn test_empty_last_line_delete_preserves_margin() {
     harness
         .send_key(KeyCode::Delete, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Get screen position after Delete
     let (_, screen_y_after_delete) = harness.screen_cursor_position();
@@ -265,6 +275,7 @@ fn test_empty_last_line_delete_preserves_margin() {
 
     // Now test cursor movement: move left (should go to end of previous line)
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let cursor_after_left = harness.cursor_position();
     assert_eq!(
@@ -276,6 +287,7 @@ fn test_empty_last_line_delete_preserves_margin() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let cursor_after_right = harness.cursor_position();
     assert_eq!(
@@ -299,6 +311,7 @@ fn test_cursor_x_position_after_enter_at_end_of_line() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Cursor should be at position 11
     assert_eq!(harness.cursor_position(), 11);
@@ -307,6 +320,7 @@ fn test_cursor_x_position_after_enter_at_end_of_line() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Cursor should be at position 12 (on the new empty line)
     assert_eq!(harness.cursor_position(), 12);
@@ -437,6 +451,7 @@ fn test_ctrl_down_scrolls_view_down() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Cursor buffer position should NOT change
     let cursor_pos_after = harness.cursor_position();

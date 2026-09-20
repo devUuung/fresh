@@ -115,6 +115,7 @@ fn test_completion_left_arrow_closes_popup() -> anyhow::Result<()> {
 
     // Press Left arrow
     harness.send_key(KeyCode::Left, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Popup should be closed
     assert!(
@@ -137,6 +138,7 @@ fn test_completion_right_arrow_closes_popup() -> anyhow::Result<()> {
 
     // Press Right arrow
     harness.send_key(KeyCode::Right, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Popup should be closed
     assert!(
@@ -164,6 +166,7 @@ fn test_completion_space_closes_popup_and_inserts() -> anyhow::Result<()> {
 
     // Press Space
     harness.send_key(KeyCode::Char(' '), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Popup should be closed
     assert!(
@@ -193,6 +196,7 @@ fn test_completion_semicolon_closes_popup_and_inserts() -> anyhow::Result<()> {
 
     // Press semicolon
     harness.send_key(KeyCode::Char(';'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Popup should be closed
     assert!(
@@ -246,6 +250,7 @@ fn test_completion_equals_closes_popup_and_inserts() -> anyhow::Result<()> {
 
     // Press equals
     harness.send_key(KeyCode::Char('='), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Popup should be closed
     assert!(
@@ -268,6 +273,7 @@ fn test_completion_close_brace_closes_popup_and_inserts() -> anyhow::Result<()> 
 
     // Press close brace
     harness.send_key(KeyCode::Char('}'), KeyModifiers::SHIFT)?;
+    harness.render()?;
 
     // Popup should be closed
     assert!(
@@ -293,6 +299,7 @@ fn test_completion_comma_closes_popup_and_inserts() -> anyhow::Result<()> {
 
     // Press comma
     harness.send_key(KeyCode::Char(','), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Popup should be closed
     assert!(
@@ -315,6 +322,7 @@ fn test_completion_plus_closes_popup_and_inserts() -> anyhow::Result<()> {
 
     // Press plus (requires Shift on most keyboards)
     harness.send_key(KeyCode::Char('+'), KeyModifiers::SHIFT)?;
+    harness.render()?;
 
     // Popup should be closed
     assert!(
@@ -363,6 +371,7 @@ fn test_completion_dot_closes_popup_and_inserts() -> anyhow::Result<()> {
 
     // Press dot
     harness.send_key(KeyCode::Char('.'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Popup should be closed (or re-triggered for member access, but not
     // kept open with the old items and a corrupted filter state)
@@ -389,6 +398,7 @@ fn test_completion_ctrl_p_closes_popup() -> anyhow::Result<()> {
 
     // Press Ctrl+P (command palette)
     harness.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Popup should be closed
     assert!(
@@ -414,6 +424,7 @@ fn test_completion_ctrl_s_closes_popup() -> anyhow::Result<()> {
 
     // Press Ctrl+S
     harness.send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Popup should be closed
     assert!(
@@ -439,6 +450,7 @@ fn test_completion_ctrl_f_closes_popup() -> anyhow::Result<()> {
 
     // Press Ctrl+F
     harness.send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Popup should be closed
     assert!(
@@ -468,6 +480,7 @@ fn test_completion_delete_key_closes_popup() -> anyhow::Result<()> {
 
     // Press Delete
     harness.send_key(KeyCode::Delete, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Popup should be closed
     assert!(
@@ -491,9 +504,11 @@ fn test_completion_shift_tab_not_swallowed() -> anyhow::Result<()> {
 
     // Move to second item first
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Press Shift+Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::SHIFT)?;
+    harness.render()?;
 
     // The key should have some effect - either the popup closes or the
     // selection moves. It should NOT be silently consumed.
@@ -519,6 +534,7 @@ fn test_completion_word_chars_still_filter() -> anyhow::Result<()> {
 
     // Type 'u' to filter to "calcu*" items
     harness.send_key(KeyCode::Char('u'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Popup should still be visible (items match "calcu")
     assert!(
@@ -600,6 +616,7 @@ fn test_completion_underscore_filters() -> anyhow::Result<()> {
 
     // Type underscore - should filter to only "calculate_sum"
     harness.send_key(KeyCode::Char('_'), KeyModifiers::SHIFT)?;
+    harness.render()?;
 
     // Popup should still be visible
     assert!(
@@ -727,6 +744,7 @@ fn test_completion_popup_format_consistent_after_filter() -> anyhow::Result<()> 
 
     // Type a filter character — this triggers refilter_completion_popup
     harness.send_key(KeyCode::Char('u'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Popup should still be visible
     assert!(

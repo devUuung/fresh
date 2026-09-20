@@ -74,6 +74,7 @@ fn test_format_on_save() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Buffer content should be sorted by the formatter
     harness.assert_buffer_content("apple\nbanana\ncherry\n");
@@ -144,6 +145,7 @@ fn test_on_save_linter_style() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Content should be unchanged (linter doesn't modify)
     harness.assert_buffer_content("original content\n");
@@ -215,6 +217,7 @@ fn test_on_save_action_failure() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Status should show error (may be truncated on narrow terminals)
     harness.assert_screen_contains("On-save action");
@@ -294,6 +297,7 @@ fn test_on_save_file_placeholder() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Check that marker file was created by copying the source file
     assert!(marker_path.exists(), "Marker file should be created");
@@ -366,6 +370,7 @@ fn test_formatter_stdin_mode() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Buffer content should be uppercase
     harness.assert_buffer_content("HELLO WORLD\n");
@@ -446,6 +451,7 @@ fn test_on_save_stops_on_failure() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // The second action should NOT have run (marker file should not exist)
     assert!(
@@ -481,6 +487,7 @@ fn test_on_save_no_actions_configured() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Should save normally without any issues
     harness.assert_screen_contains("Saved");
@@ -547,6 +554,7 @@ fn test_formatter_not_found_shows_message() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Content should be unchanged (formatter didn't run)
     harness.assert_buffer_content("xcontent\n");
@@ -579,6 +587,7 @@ fn test_trim_trailing_whitespace_on_save() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Trailing whitespace should be removed
     harness.assert_buffer_content("line 1\nline 2\nline 3\n");
@@ -612,6 +621,7 @@ fn test_ensure_final_newline_on_save() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Should have final newline
     harness.assert_buffer_content("line 1\nline 2\n");
@@ -646,6 +656,7 @@ fn test_whitespace_cleanup_combined() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Should have both cleanups applied
     harness.assert_buffer_content("line 1\nline 2\nline 3\n");
@@ -684,6 +695,7 @@ fn test_on_save_action_no_false_conflict_on_next_save() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_buffer_content("line 1\nline 2\nline 3\n");
 
     // The editor's own on-save re-write must NOT register as an external
@@ -700,6 +712,7 @@ fn test_on_save_action_no_false_conflict_on_next_save() {
         harness
             .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
             .unwrap();
+        harness.render().unwrap();
     }
     harness.assert_screen_not_contains("File changed on disk");
     assert!(
@@ -739,6 +752,7 @@ fn test_trim_on_save_preserves_crlf_and_no_revert() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Buffer keeps CRLF endings and all four line terminators.
     assert_eq!(
@@ -852,12 +866,14 @@ fn test_format_on_save_keeps_cursor_anchored_to_its_text() {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     }
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Ln 5, Col 11");
 
     // Save: the formatter removes the three blank lines.
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_buffer_content("alpha\nMARKER xyz\nomega\n");
 
     // The cursor must still sit at the end of "MARKER xyz", now line 2.
@@ -920,11 +936,13 @@ fn test_format_on_save_cursor_before_edit_stays_put() {
 
     // End of line 1 ("alpha"), before every removed blank line.
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Ln 1, Col 6");
 
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_buffer_content("alpha\nMARKER xyz\nomega\n");
     harness.assert_screen_contains("Ln 1, Col 6");
 }
@@ -955,11 +973,13 @@ fn test_whitespace_cleanup_no_change_needed() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Save the file
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Content should remain the same
     harness.assert_buffer_content("line 1\nline 2\n");

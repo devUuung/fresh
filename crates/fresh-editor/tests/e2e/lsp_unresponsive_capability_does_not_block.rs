@@ -82,12 +82,14 @@ fn test_completion_works_when_server_silently_drops_semantic_tokens() -> anyhow:
     // on the same server's command queue and never reach the server.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
 
     harness.type_text("med")?;
     harness.render()?;
 
     // Trigger completion explicitly.
     harness.send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // The completion popup must show the fake item ("median") within a
     // bounded time well below the per-request timeout. Without the fix this

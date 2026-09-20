@@ -36,6 +36,7 @@ fn test_active_tab_color_does_not_bleed_through_menu() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify menu is open
     harness.assert_screen_contains("New File");

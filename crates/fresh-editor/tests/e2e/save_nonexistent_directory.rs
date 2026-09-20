@@ -32,6 +32,7 @@ fn test_issue_1434_save_file_in_nonexistent_directory_confirm() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Save as:");
 
     // Type a relative path with non-existent parent directory and press Enter
@@ -39,6 +40,7 @@ fn test_issue_1434_save_file_in_nonexistent_directory_confirm() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should see the confirmation prompt about creating the directory
     harness.assert_screen_contains("does not exist");
@@ -74,12 +76,14 @@ fn test_issue_1434_save_file_in_nonexistent_directory_cancel() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type non-existent path and confirm
     harness.type_text("newdir/readme.md").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should see the confirmation prompt
     harness.assert_screen_contains("does not exist");
@@ -88,6 +92,7 @@ fn test_issue_1434_save_file_in_nonexistent_directory_cancel() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show cancellation, file should NOT exist
     assert!(

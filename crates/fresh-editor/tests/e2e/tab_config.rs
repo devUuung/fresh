@@ -169,6 +169,7 @@ fn test_use_tabs_rust_inserts_spaces() {
 
     // Press Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Get buffer content - should be spaces, not tab
     let content = harness.get_buffer_content().unwrap();
@@ -197,6 +198,7 @@ fn test_use_tabs_go_inserts_tab_character() {
 
     // Press Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Get buffer content - should be a tab character
     let content = harness.get_buffer_content().unwrap();
@@ -229,6 +231,7 @@ fn test_use_tabs_makefile_inserts_tab_character() {
 
     // Press Tab to indent the recipe
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Get buffer content
     let content = harness.get_buffer_content().unwrap();
@@ -281,6 +284,7 @@ fn test_use_tabs_go_saved_file_contains_tabs() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Read the saved file and verify it contains actual tab characters
     let saved_content = std::fs::read_to_string(&file_path).unwrap();
@@ -326,6 +330,7 @@ fn test_use_tabs_rust_saved_file_contains_spaces() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Read the saved file and verify it contains spaces, not tabs
     let saved_content = std::fs::read_to_string(&file_path).unwrap();
@@ -361,6 +366,7 @@ fn test_use_tabs_custom_config_enables_tabs() {
 
     // Press Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Get buffer content - should be a tab character due to custom config
     let content = harness.get_buffer_content().unwrap();
@@ -389,6 +395,7 @@ fn test_use_tabs_go_multiple_tabs() {
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Get buffer content - should be three tab characters
     let content = harness.get_buffer_content().unwrap();
@@ -418,6 +425,7 @@ fn test_use_tabs_rust_multiple_tabs() {
     // Press Tab twice
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Get buffer content - should be 8 spaces (2 x 4)
     let content = harness.get_buffer_content().unwrap();
@@ -467,6 +475,7 @@ fn test_issue_384_auto_indent_uses_tabs_in_go() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Get buffer content - the auto-indent should use a tab, not spaces
     let content = harness.get_buffer_content().unwrap();
@@ -513,6 +522,7 @@ fn test_issue_384_auto_indent_uses_spaces_in_rust() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Get buffer content - the auto-indent should use spaces
     let content = harness.get_buffer_content().unwrap();
@@ -649,6 +659,7 @@ fn test_issue_384_indent_respects_tab_size_in_calculation() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     println!(
@@ -742,11 +753,13 @@ fn test_issue_384_auto_indent_maintains_indent_with_tabs_in_go() {
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap(); // Now on line 4 (0-indexed line 3)
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Press Enter - auto-indent should maintain the tab indentation
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     println!("Buffer after Enter on normal Go line: {:?}", content);
@@ -839,6 +852,7 @@ fn test_issue_1068_auto_dedent_uses_tabs_not_spaces_in_go() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let content_before = harness.get_buffer_content().unwrap();
     println!("Buffer before typing }}: {:?}", content_before);

@@ -103,6 +103,7 @@ fn test_focusing_restored_terminal_activates_terminal_mode() {
         harness
             .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
             .unwrap();
+        harness.render().unwrap();
         assert!(
             !harness.editor().is_terminal_mode(),
             "terminal mode should be off after switching to the file tab"
@@ -145,6 +146,7 @@ fn test_focusing_restored_terminal_activates_terminal_mode() {
             harness
                 .send_key(KeyCode::PageDown, KeyModifiers::CONTROL)
                 .unwrap();
+            harness.render().unwrap();
         }
         let active = harness.editor().active_buffer_id();
         assert!(

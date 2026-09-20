@@ -154,6 +154,7 @@ editor.setStatus("Section test ready");
 
     // Navigate to the plugin section header (End jumps to last row)
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Navigate up until we find the test_sections header selected
     for _ in 0..5 {
@@ -164,16 +165,19 @@ editor.setStatus("Section test ready");
             break;
         }
         harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
     }
 
     // Press Enter to expand the section
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Navigate down to the first binding in the expanded section
     // (this also scrolls the viewport to show the binding)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Plugin bindings should now be visible
     let screen = harness.screen_to_string();
@@ -189,6 +193,7 @@ editor.setStatus("Section test ready");
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Edit Keybinding");
 
     // Tab to Save button (Key -> Action -> Context -> Save = 3 Tabs)
@@ -201,6 +206,7 @@ editor.setStatus("Section test ready");
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Edit dialog should be closed
     harness.assert_screen_not_contains("Edit Keybinding");
@@ -214,6 +220,7 @@ editor.setStatus("Section test ready");
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // With all sections collapsed, the full header list should be visible
     let screen = harness.screen_to_string();

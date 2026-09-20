@@ -78,10 +78,12 @@ fn test_new_split_has_buffer_in_tabs() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split horiz").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // The new split should also have the buffer in its tabs
     // With 2 splits, we should see "test.txt" twice (once in each split's tab bar)
@@ -114,10 +116,12 @@ fn test_splits_have_independent_tabs() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Now in second split - open a different file
     harness.open_file(&file2).unwrap();
@@ -131,10 +135,12 @@ fn test_splits_have_independent_tabs() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("next split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // First split should still have only file1.txt in its tabs
     // (file2.txt should only appear in second split's tabs)
@@ -168,10 +174,12 @@ fn test_buffer_cycling_within_split() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("next buffer").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     harness.assert_buffer_content("Content 1");
 
@@ -179,10 +187,12 @@ fn test_buffer_cycling_within_split() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("next buffer").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     harness.assert_buffer_content("Content 2");
 }
@@ -230,10 +240,12 @@ fn test_close_buffer_removes_from_tabs() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("close buffer").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Only file1 should remain in tabs
     harness.assert_screen_contains("file1.txt");
@@ -295,6 +307,7 @@ fn test_git_log_split_tabs() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("git log").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
@@ -342,10 +355,12 @@ fn test_debug_split_tabs_rendering() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     eprintln!("\n=== After vertical split ===");
     eprintln!("{}", harness.screen_to_string());
@@ -387,10 +402,12 @@ fn test_close_split_preserves_tabs_and_focus() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split horiz").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify we now have 2 splits (horizontal separator should appear)
     let screen = harness.screen_to_string();
@@ -422,10 +439,12 @@ fn test_close_split_preserves_tabs_and_focus() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("close split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Step 5: Verify only 1 split remains
     let screen_after_close = harness.screen_to_string();
@@ -476,10 +495,12 @@ fn test_close_tab_keeps_buffer_in_other_split() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should see shared.txt twice (once in each split's tabs)
     let screen = harness.screen_to_string();
@@ -495,6 +516,7 @@ fn test_close_tab_keeps_buffer_in_other_split() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Buffer should still exist (visible in first split)
     // Since this was the only tab in the second split, it can't be closed
@@ -537,6 +559,7 @@ fn test_close_tab_closes_buffer_when_last_viewport() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // file2.txt should be gone, file1.txt should remain
     harness.assert_screen_contains("file1.txt");
@@ -571,6 +594,7 @@ fn test_close_tab_prompts_for_modified_buffer() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Should see the save/discard/cancel prompt
     let screen = harness.screen_to_string();
@@ -584,6 +608,7 @@ fn test_close_tab_prompts_for_modified_buffer() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Both files should still be in tabs
     harness.assert_screen_contains("file1.txt");
@@ -614,6 +639,7 @@ fn test_close_tab_transfers_focus_to_remaining_tab() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // file2 should be closed, file1 should now be active
     let screen = harness.screen_to_string();
@@ -636,6 +662,7 @@ fn test_close_tab_transfers_focus_to_remaining_tab() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let file1_content = std::fs::read_to_string(&file1).unwrap();
     assert!(
@@ -668,10 +695,12 @@ fn test_close_last_tab_in_split_closes_split() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should see shared.txt twice (once in each split's tabs)
     let screen_two_splits = harness.screen_to_string();
@@ -696,6 +725,7 @@ fn test_close_last_tab_in_split_closes_split() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     let screen_after_close = harness.screen_to_string();
     eprintln!("Screen after closing tab:\n{}", screen_after_close);
@@ -754,10 +784,12 @@ fn test_close_tab_with_multiple_tabs_removes_tab_only() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let screen_with_split = harness.screen_to_string();
     eprintln!("Screen with split:\n{}", screen_with_split);
@@ -767,6 +799,7 @@ fn test_close_tab_with_multiple_tabs_removes_tab_only() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     let screen_after_close = harness.screen_to_string();
     eprintln!("Screen after closing file2 tab:\n{}", screen_after_close);

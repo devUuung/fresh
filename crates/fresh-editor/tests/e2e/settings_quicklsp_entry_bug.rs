@@ -79,6 +79,7 @@ fn quicklsp_entry_save_preserves_outer_map_key() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // The search jump lands focus directly on the quicklsp entry inside the
     // universal_lsp map (DeepMatch::MapKey). Pressing Enter must open the
@@ -88,6 +89,7 @@ fn quicklsp_entry_save_preserves_outer_map_key() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Edit Value");
     harness.assert_screen_contains("Key:quicklsp");
 
@@ -97,6 +99,7 @@ fn quicklsp_entry_save_preserves_outer_map_key() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Edit Item");
     harness.assert_screen_contains("Command");
 
@@ -113,10 +116,12 @@ fn quicklsp_entry_save_preserves_outer_map_key() {
             harness
                 .send_key(KeyCode::Char(' '), KeyModifiers::NONE)
                 .unwrap();
+            harness.render().unwrap();
             toggled = true;
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
     }
     assert!(
         toggled,
@@ -130,12 +135,14 @@ fn quicklsp_entry_save_preserves_outer_map_key() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Back at the outer dialog. Save it too so the whole entry flushes
     // through the normal save path.
     harness
         .send_key(KeyCode::Enter, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Save the Settings page (Ctrl+S) and wait for it to close.
     harness

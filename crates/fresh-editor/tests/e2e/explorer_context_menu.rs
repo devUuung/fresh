@@ -556,6 +556,7 @@ fn test_multi_selection_hides_create_and_rename() {
     h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     // Space toggles the current node into multi-selection.
     h.send_key(KeyCode::Char(' '), KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 
     h.mouse_right_click(EXPLORER_COL, 3).unwrap();
 
@@ -616,6 +617,7 @@ fn test_select_all_triggers_multi_selection_menu() {
 
     h.send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
 
     h.mouse_right_click(EXPLORER_COL, EXPLORER_ROW).unwrap();
 

@@ -23,10 +23,12 @@ fn run_command(harness: &mut EditorTestHarness, query: &str) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text(query).unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 }
 
 /// Ctrl+T in the first split must leave the second split parked where the
@@ -57,6 +59,7 @@ fn test_transpose_in_one_split_leaves_other_split_in_place() {
     harness
         .send_key(KeyCode::Char('t'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // The edit landed in the first split: "line 001" -> "lnie 001".
     harness.assert_screen_contains("lnie 001");
@@ -68,6 +71,7 @@ fn test_transpose_in_one_split_leaves_other_split_in_place() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // The second split is still showing line 151. Before the fix its cursor
     // had been reset to the transpose position, so this pane jumped to the
@@ -90,11 +94,13 @@ fn test_move_line_in_one_split_leaves_other_split_in_place() {
 
     run_command(&mut harness, "prev split");
     harness.send_key(KeyCode::Down, KeyModifiers::ALT).unwrap();
+    harness.render().unwrap();
 
     run_command(&mut harness, "next split");
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     harness.assert_screen_contains("line 151");
 }

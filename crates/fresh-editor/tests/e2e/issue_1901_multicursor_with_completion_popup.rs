@@ -74,6 +74,7 @@ fn test_multicursor_type_char_with_completion_popup() -> anyhow::Result<()> {
     show_completion_popup(&mut harness)?;
 
     harness.send_key(KeyCode::Char('x'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     let buffer = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -110,6 +111,7 @@ fn test_multicursor_backspace_with_completion_popup() -> anyhow::Result<()> {
     show_completion_popup(&mut harness)?;
 
     harness.send_key(KeyCode::Backspace, KeyModifiers::NONE)?;
+    harness.render()?;
 
     let buffer = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -189,6 +191,7 @@ fn test_multicursor_accept_completion_with_popup() -> anyhow::Result<()> {
 
     // Tab is bound to completion_accept in the Completion key context.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     let buffer = harness.get_buffer_content().unwrap();
     assert_eq!(

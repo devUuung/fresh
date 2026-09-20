@@ -90,6 +90,7 @@ fn test_did_open_sent_before_hover() -> anyhow::Result<()> {
     // Trigger hover with Alt+K (default keybinding for lsp_hover)
     eprintln!("[TEST] Triggering hover with Alt+K");
     harness.send_key(KeyCode::Char('k'), KeyModifiers::ALT)?;
+    harness.render()?;
     eprintln!("[TEST] Hover triggered, waiting for hover message");
 
     // Wait for hover request to be logged

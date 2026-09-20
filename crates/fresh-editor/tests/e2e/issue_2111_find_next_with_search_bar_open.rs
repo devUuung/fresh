@@ -129,6 +129,7 @@ fn test_f3_with_search_bar_open_reaches_matches_below_the_viewport() {
 
     for _ in 0..6 {
         harness.send_key(KeyCode::F(3), KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
     }
 
     harness.wait_for_screen_contains("Match 6 of 12").unwrap();

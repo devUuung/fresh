@@ -89,6 +89,7 @@ fn tab_padding_stays_blank_inside_a_selection() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     assert_eq!(
         indent_cells(&harness, "abcdefgh", 4),

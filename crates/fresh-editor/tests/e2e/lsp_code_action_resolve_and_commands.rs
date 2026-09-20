@@ -172,9 +172,11 @@ fn setup_editor(
 fn trigger_code_actions(harness: &mut EditorTestHarness) -> anyhow::Result<()> {
     // Move to line 2
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Request code actions (Ctrl+.)
     harness.send_key(KeyCode::Char('.'), KeyModifiers::ALT)?;
+    harness.render()?;
 
     // Wait for popup
     harness.wait_for_screen_contains("Command action")?;
@@ -201,6 +203,7 @@ fn test_code_action_with_command_sends_execute_and_applies_edit() -> anyhow::Res
 
     // Select "Command action" (item 1)
     harness.send_key(KeyCode::Char('1'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Wait for executeCommand to be sent to the server
     harness.wait_until(|_| {
@@ -243,6 +246,7 @@ fn test_code_action_resolve_then_apply() -> anyhow::Result<()> {
 
     // Select "Resolve action" (item 2)
     harness.send_key(KeyCode::Char('2'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Wait for codeAction/resolve to be sent
     harness.wait_until(|_| {
@@ -283,6 +287,7 @@ fn test_code_action_with_edit_and_command() -> anyhow::Result<()> {
 
     // Select "Edit+Command action" (item 3)
     harness.send_key(KeyCode::Char('3'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // The edit replaces "let x = 5;" with "let x = 99;"
     harness.wait_for_screen_contains("99")?;

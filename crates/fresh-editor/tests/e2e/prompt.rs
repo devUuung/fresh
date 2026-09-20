@@ -106,6 +106,7 @@ fn test_prompt_rendering() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Check that the prompt is visible in the status bar area (bottom line)
     let _screen = harness.screen_to_string();
@@ -137,6 +138,7 @@ fn test_prompt_input_handling() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Open file:");
 
     // Type some text
@@ -147,6 +149,7 @@ fn test_prompt_input_handling() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("test.tx");
     harness.assert_screen_not_contains("test.txt");
 
@@ -178,6 +181,7 @@ fn test_prompt_cancel() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Open file:");
 
     // Type some text (relative path)
@@ -186,6 +190,7 @@ fn test_prompt_cancel() {
 
     // Cancel with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Prompt should be gone, and "cancelled" message should appear
     harness.assert_screen_not_contains("Open file:");
@@ -211,6 +216,7 @@ fn test_open_file_workflow() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Open file:");
 
     // Type the file path
@@ -221,6 +227,7 @@ fn test_open_file_workflow() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Check that the file was opened
     harness.assert_screen_not_contains("Open file:");
@@ -285,6 +292,7 @@ fn test_open_nonexistent_file_edit_and_save() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show "Saved" message
     harness.assert_screen_contains("Saved");
@@ -329,6 +337,7 @@ fn test_spawn_with_nonexistent_file() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify file was created
     assert!(new_file_path.exists());
@@ -378,6 +387,7 @@ fn test_open_file_dialog_create_new_file() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show "New file" message
     harness.assert_screen_contains("New file");
@@ -412,6 +422,7 @@ fn test_save_as_functionality() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type to search for Save As command
     harness.type_text("Save File As").unwrap();
@@ -420,6 +431,7 @@ fn test_save_as_functionality() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for the Save As prompt to appear
     harness.wait_for_screen_contains("Save as:").unwrap();
@@ -439,6 +451,7 @@ fn test_save_as_functionality() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Note: "Saved as:" status message may be overwritten by auto-revert status
     // We verify the save succeeded by checking the file exists and has correct content below
@@ -514,6 +527,7 @@ fn test_save_as_tilde_expansion() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // The file should be saved to the home directory, not as a literal "~"
     if let Some(home) = dirs::home_dir() {
@@ -585,6 +599,7 @@ fn test_save_as_relative_path() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     eprintln!("[TEST] Waiting for 'Save as:' prompt");
     // Wait for the Save As prompt to appear
@@ -657,6 +672,7 @@ fn test_save_as_nested_path() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for the Save As prompt to appear
     harness.wait_for_screen_contains("Save as:").unwrap();
@@ -669,6 +685,7 @@ fn test_save_as_nested_path() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should prompt to create the missing directory
     // (check for "does not exist" which appears in the prompt text;
@@ -717,6 +734,7 @@ fn test_save_as_overwrite_confirmation() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for the Save As prompt to appear
     harness.wait_for_screen_contains("Save as:").unwrap();
@@ -731,6 +749,7 @@ fn test_save_as_overwrite_confirmation() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show the overwrite confirmation dialog
     harness.wait_for_screen_contains("File Exists").unwrap();
@@ -780,6 +799,7 @@ fn test_save_as_overwrite_confirmed() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for the Save As prompt to appear
     harness.wait_for_screen_contains("Save as:").unwrap();
@@ -794,6 +814,7 @@ fn test_save_as_overwrite_confirmed() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show the overwrite confirmation dialog
     harness.wait_for_screen_contains("File Exists").unwrap();
@@ -839,6 +860,7 @@ fn test_save_as_same_file_no_confirmation() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for the Save As prompt to appear with current filename
     harness.wait_for_screen_contains("Save as:").unwrap();
@@ -848,6 +870,7 @@ fn test_save_as_same_file_no_confirmation() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should save directly without confirmation (same file)
     harness.wait_for_screen_contains("Saved as:").unwrap();
@@ -900,6 +923,7 @@ fn test_open_file_prompt_truncates_long_paths() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // The prompt should show "Open:" and the truncated path
     harness.assert_screen_contains("Open file:");

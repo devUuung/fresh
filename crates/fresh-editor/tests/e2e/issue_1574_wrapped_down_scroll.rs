@@ -133,6 +133,7 @@ fn test_issue_1574_down_arrow_scrolling_invariants_rendered() {
             harness
                 .send_key(KeyCode::Home, KeyModifiers::CONTROL)
                 .unwrap();
+            harness.render().unwrap();
             let top_row_at_start = top_content_row(&harness);
 
             // Walk the cursor down through the whole buffer, one Down press at a
@@ -296,6 +297,7 @@ fn test_issue_1574_up_arrow_scrolling_invariants_rendered() {
             harness
                 .send_key(KeyCode::End, KeyModifiers::CONTROL)
                 .unwrap();
+            harness.render().unwrap();
             let top_row_at_start = top_content_row(&harness);
 
             // Walk the cursor up through the whole buffer, one Up press at a
@@ -519,9 +521,11 @@ fn run_jump_scenario_at_width_with_fixture(
         .unwrap();
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Step 2: one Down — cursor should be on the empty separator line.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let (_cx_empty, cy_empty) = harness.screen_cursor_position();
     let empty_row = harness.get_screen_row(cy_empty as usize);
@@ -612,6 +616,7 @@ fn run_jump_scenario_at_width_with_fixture(
 
     // Step 4: THE TEST — press Down once and inspect the cursor's row.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let (_cx_after, cy_after) = harness.screen_cursor_position();
     let row_after = harness.get_screen_row(cy_after as usize);
@@ -688,6 +693,7 @@ fn run_up_jump_scenario_at_width_with_fixture(
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let (_cx_empty, cy_empty) = harness.screen_cursor_position();
     let empty_row = harness.get_screen_row(cy_empty as usize);
@@ -792,6 +798,7 @@ fn run_up_jump_scenario_at_width_with_fixture(
     // cursor jump several visual rows up into paragraph one — e.g. land
     // on its first row containing `START_OF_PARA1`.
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let (_cx_after, cy_after) = harness.screen_cursor_position();
     let row_after = harness.get_screen_row(cy_after as usize);
@@ -1000,6 +1007,7 @@ fn run_ctrl_up_down_roundtrip_scenario_at_width(width: u16, height: u16) -> Scen
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Detect viewport-at-top from rendered output: the fixture's first
     // logical line has a unique marker only visible when it's on screen.
@@ -1033,6 +1041,7 @@ fn run_ctrl_up_down_roundtrip_scenario_at_width(width: u16, height: u16) -> Scen
         harness
             .send_key(KeyCode::Up, KeyModifiers::CONTROL)
             .unwrap();
+        harness.render().unwrap();
         let top_after_up = top_content_row(&harness);
 
         if at_top {
@@ -1072,6 +1081,7 @@ fn run_ctrl_up_down_roundtrip_scenario_at_width(width: u16, height: u16) -> Scen
         harness
             .send_key(KeyCode::Down, KeyModifiers::CONTROL)
             .unwrap();
+        harness.render().unwrap();
         let top_after_down = top_content_row(&harness);
 
         if ctrl_up_scrolled && top_after_down != top_before {
@@ -1093,6 +1103,7 @@ fn run_ctrl_up_down_roundtrip_scenario_at_width(width: u16, height: u16) -> Scen
         // longer moves the cursor (end of buffer).
         let (_cx_pre, cy_pre) = harness.screen_cursor_position();
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
         let (_cx_post, cy_post) = harness.screen_cursor_position();
         let top_after_walk = top_content_row(&harness);
 

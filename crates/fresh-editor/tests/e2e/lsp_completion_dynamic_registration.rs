@@ -84,7 +84,9 @@ fn test_completion_works_when_registered_dynamically_with_string_id() -> anyhow:
     // Move into the function body and ask for completion.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
     harness.send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // The completion popup must render the item served by the fake LSP.
     harness.wait_until(|h| h.editor().active_window().completion_items_count() > 0)?;

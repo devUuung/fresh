@@ -277,6 +277,7 @@ fn test_lsp_enabled_false_still_allows_manual_start() -> anyhow::Result<()> {
 
     // Manual start: explicit user action overrides the global opt-out.
     harness.send_key(KeyCode::Char('r'), KeyModifiers::ALT)?;
+    harness.render()?;
 
     // The manually started server receives didOpen and publishes an error
     // diagnostic that must render on the status bar.

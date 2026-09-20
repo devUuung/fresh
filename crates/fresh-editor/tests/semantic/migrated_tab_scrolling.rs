@@ -249,6 +249,7 @@ fn migrated_active_tab_visibility_with_scrolling() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::ALT)
             .unwrap();
+        harness.render().unwrap();
     }
 
     // Scroll left manually
@@ -256,12 +257,14 @@ fn migrated_active_tab_visibility_with_scrolling() {
         harness
             .send_key(KeyCode::PageUp, KeyModifiers::ALT)
             .unwrap();
+        harness.render().unwrap();
     }
 
     // After manual scrolling, switching tabs should bring active tab back into view.
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     active_idx = (active_idx + 1) % NUM_FILES;
     harness.assert_screen_contains(&expected_tab_label(&files[active_idx], NUM_FILES));
 }
@@ -290,6 +293,7 @@ fn migrated_tab_scroll_button_click() {
         harness
             .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
             .unwrap();
+        harness.render().unwrap();
     }
 
     // Now we're on the first file - should see ">" indicator for right scroll.
@@ -307,6 +311,7 @@ fn migrated_tab_scroll_button_click() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::CONTROL)
             .unwrap();
+        harness.render().unwrap();
     }
 
     // Now on the last file - should see "<" indicator for left scroll.

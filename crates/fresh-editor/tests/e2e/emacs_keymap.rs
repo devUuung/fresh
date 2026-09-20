@@ -23,6 +23,7 @@ fn emacs_harness() -> EditorTestHarness {
 
 fn key(harness: &mut EditorTestHarness, code: KeyCode, modifiers: KeyModifiers) {
     harness.send_key(code, modifiers).unwrap();
+    harness.render().unwrap();
 }
 
 fn ctrl(harness: &mut EditorTestHarness, c: char) {

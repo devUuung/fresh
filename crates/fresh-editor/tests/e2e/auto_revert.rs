@@ -282,6 +282,7 @@ fn test_auto_revert_preserves_cursor_position() {
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap(); // Now on line 3
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Record cursor position - should be at end of "Line 3" which is at byte offset 20
     let cursor_before = harness.cursor_position();

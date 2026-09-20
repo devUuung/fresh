@@ -27,6 +27,7 @@ fn test_command_palette_delete_word_backward() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     println!("Screen after Ctrl+Backspace:\n{screen}");
@@ -76,6 +77,7 @@ fn test_command_palette_delete_word_forward() {
     harness
         .send_key(KeyCode::Delete, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // EXPECTED: The word "file" should be deleted, leaving "save "
     let screen = harness.screen_to_string();
@@ -105,6 +107,7 @@ fn test_command_palette_copy() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // EXPECTED: Text should be copied to clipboard
     // In normal mode, Ctrl+C copies selected text
@@ -112,6 +115,7 @@ fn test_command_palette_copy() {
 
     // Cancel the prompt
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Open another prompt and try to paste
     harness
@@ -122,6 +126,7 @@ fn test_command_palette_copy() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // EXPECTED: The copied text should be pasted
     let screen = harness.screen_to_string();
@@ -151,6 +156,7 @@ fn test_command_palette_ctrl_u_clears_line() {
     harness
         .send_key(KeyCode::Char('u'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // The typed query is gone — the line is empty.
     harness.assert_screen_not_contains("openfilexyz");
@@ -176,6 +182,7 @@ fn test_command_palette_ctrl_u_keeps_text_after_cursor() {
     harness
         .send_key(KeyCode::Char('u'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Text before the cursor ("aaa") is removed; text after it ("bbb")
     // survives. (The leading mode sigil lives in the input buffer too, so
@@ -204,6 +211,7 @@ fn test_command_palette_cut() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // EXPECTED: Text should be cut (copied and cleared)
     let screen = harness.screen_to_string();
@@ -218,6 +226,7 @@ fn test_command_palette_cut() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // EXPECTED: The cut text should be pasted back
     // Uncomment when implementing:
@@ -245,11 +254,13 @@ fn test_command_palette_paste() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Try to paste with Ctrl+V
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // EXPECTED: The text from the buffer should be pasted into the prompt
     let screen = harness.screen_to_string();
@@ -269,6 +280,7 @@ fn test_open_file_delete_word_backward() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show find file prompt
     harness.assert_screen_contains("Open file:");
@@ -281,6 +293,7 @@ fn test_open_file_delete_word_backward() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // EXPECTED: The word "rs" should be deleted, leaving "src/editor."
     let screen = harness.screen_to_string();
@@ -352,6 +365,7 @@ fn test_delete_word_with_special_chars() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // EXPECTED: Should delete "as", leaving "save-file-"
     // because hyphen is not a word character
@@ -395,6 +409,7 @@ fn test_command_palette_copy_paste_workflow() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // EXPECTED: The text should be pasted back
     let screen = harness.screen_to_string();
@@ -456,6 +471,7 @@ fn test_word_deletion_at_boundaries() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // EXPECTED: Behavior depends on implementation
     // Common approach: delete trailing spaces first, then the word
@@ -538,6 +554,7 @@ fn test_selection_copy_paste_workflow() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Cancel this prompt
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
@@ -551,6 +568,7 @@ fn test_selection_copy_paste_workflow() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     println!("Screen after paste:\n{screen}");
@@ -593,6 +611,7 @@ fn test_selection_cut_workflow() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     println!("Screen after cut:\n{screen}");
@@ -610,6 +629,7 @@ fn test_selection_cut_workflow() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     println!("Screen after paste cut text:\n{screen}");
@@ -644,6 +664,7 @@ fn test_select_all_in_prompt() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Copy the selection
     harness
@@ -709,6 +730,7 @@ fn test_selection_in_different_prompts() {
     harness
         .send_key(KeyCode::Char('g'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     harness.type_text("search term").unwrap();
     harness.render().unwrap();
@@ -727,11 +749,13 @@ fn test_selection_in_different_prompts() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Paste what we copied
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     println!("Screen after pasting in open file prompt:\n{screen}");
@@ -794,12 +818,14 @@ fn test_bug_word_selection_gets_stuck() {
     harness
         .send_key(KeyCode::Left, KeyModifiers::CONTROL | KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // Press Ctrl+Shift+Left again - should extend selection to include "two three"
     // BUG: Currently gets stuck and doesn't extend further
     harness
         .send_key(KeyCode::Left, KeyModifiers::CONTROL | KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // If we copy now, we should get "two three", not just "three"
     harness
@@ -814,6 +840,7 @@ fn test_bug_word_selection_gets_stuck() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     println!("Pasted text after double Ctrl+Shift+Left:\n{screen}");
@@ -847,6 +874,7 @@ fn test_bug_word_movement_doesnt_work() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     println!("After Ctrl+Left and Ctrl+Backspace:\n{screen}");

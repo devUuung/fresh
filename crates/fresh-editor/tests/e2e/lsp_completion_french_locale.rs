@@ -134,6 +134,7 @@ fn test_french_locale_completion_typing_not_stuck_after_refilter() -> anyhow::Re
 
     // Type '_' to filter to "test_*" items - this triggers refilter_completion_popup
     harness.send_key(KeyCode::Char('_'), KeyModifiers::SHIFT)?;
+    harness.render()?;
 
     // The popup should still be visible (items match "test_")
     assert!(
@@ -149,6 +150,7 @@ fn test_french_locale_completion_typing_not_stuck_after_refilter() -> anyhow::Re
     // If the popup was reclassified as List, this key will be consumed
     // by the action handler and never reach the buffer.
     harness.send_key(KeyCode::Char('f'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // The character should appear in the buffer
     let buffer = harness.get_buffer_content().unwrap();
@@ -184,6 +186,7 @@ fn test_french_locale_completion_tab_confirms_fr() -> anyhow::Result<()> {
 
     // Appuyer sur Tab pour confirmer le premier élément de complétion ("test_function")
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // La popup devrait être fermée
     assert!(
@@ -208,6 +211,7 @@ fn test_french_locale_completion_tab_confirms() -> anyhow::Result<()> {
 
     // Press Tab to confirm the first completion item ("test_function")
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Popup should be closed
     assert!(

@@ -47,6 +47,7 @@ fn harness_searched_for_needle() -> (EditorTestHarness, tempfile::TempDir) {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("NEEDLE").unwrap();
     harness.render().unwrap();
     harness

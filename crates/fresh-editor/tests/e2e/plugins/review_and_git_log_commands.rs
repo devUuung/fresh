@@ -135,6 +135,7 @@ fn review_diff_add_comment_command_puts_the_comment_in_the_review() {
     harness
         .send_key(KeyCode::Char('n'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     harness
         .run_palette_command("Review Diff: Add Comment")
@@ -193,6 +194,7 @@ fn add_comment(harness: &mut EditorTestHarness, text: &str) {
     harness
         .send_key(KeyCode::Char('n'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .run_palette_command("Review Diff: Add Comment")
         .unwrap();

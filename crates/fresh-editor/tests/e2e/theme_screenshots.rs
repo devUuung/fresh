@@ -209,6 +209,7 @@ fn scene_selection(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
 
     // Deselect
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 3: Multi-cursor editing.
@@ -231,16 +232,19 @@ fn scene_multi_cursor(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
 
     // Escape multi-cursor
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 4: Search with highlights.
 /// Covers: search.match_bg, search.match_fg, prompt_fg/bg, prompt_selection_fg/bg
 fn scene_search(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
     h.send_key(KeyCode::Home, KeyModifiers::CONTROL).unwrap();
+    h.render().unwrap();
 
     // Open search (Ctrl+F)
     h.send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
 
     // Type search query
     for ch in "config".chars() {
@@ -251,6 +255,7 @@ fn scene_search(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
 
     // Close search
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 5: Command palette open.
@@ -258,6 +263,7 @@ fn scene_search(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
 fn scene_command_palette(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
     snap(h, s, Some("Ctrl+P"), 200);
 
     // Type a partial filter
@@ -269,6 +275,7 @@ fn scene_command_palette(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
 
     // Close
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 6: File explorer open.
@@ -277,6 +284,7 @@ fn scene_file_explorer(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
     // Toggle file explorer
     h.send_key(KeyCode::Char('e'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
 
     // Wait a beat for file tree to load
     let _ = h.wait_until(|h| h.screen_to_string().contains("src"));
@@ -284,15 +292,19 @@ fn scene_file_explorer(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
 
     // Navigate down in explorer
     h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 
     snap(h, s, Some("File Explorer"), 300);
 
     // Focus back on editor and close explorer
     h.send_key(KeyCode::Char('e'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
     h.send_key(KeyCode::Char('e'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 7: Split view with two files.
@@ -303,10 +315,12 @@ fn scene_split_view(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
     // Open split
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
     for ch in "Split Right".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
     }
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 
     // Open a different file in the right split
     h.open_file(&pd.join("src/utils.rs")).unwrap();
@@ -317,10 +331,12 @@ fn scene_split_view(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
     // Close the split — go back to single pane
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
     for ch in "Close Split".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
     }
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 8: Diagnostics / overlays.
@@ -347,6 +363,7 @@ fn scene_diagnostics(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
     .unwrap();
 
     h.send_key(KeyCode::Home, KeyModifiers::CONTROL).unwrap();
+    h.render().unwrap();
     snap(h, s, Some("Diagnostics"), 300);
 
     // Clear overlays
@@ -360,29 +377,37 @@ fn scene_diagnostics(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
 fn scene_menu_bar(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
     // Open menu bar with F10
     h.send_key(KeyCode::F(10), KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
     snap(h, s, Some("F10"), 200);
 
     // Open first menu dropdown
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 
     // Navigate down to show hover states
     h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
     h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
     snap(h, s, Some("Menu"), 300);
 
     // Close menu
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 10: Help overlay (F1).
 /// Covers: help_bg/fg, help_key_fg, help_separator_fg, help_indicator_fg/bg
 fn scene_help(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
     h.send_key(KeyCode::F(1), KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
     snap(h, s, Some("F1 Help"), 300);
 
     // Close help
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 11: Settings view.
@@ -400,6 +425,7 @@ fn scene_settings(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
 
     // Close settings
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 12: Diff highlights (simulate git diff coloring).
@@ -449,6 +475,7 @@ fn scene_scrollbar(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
 
     // Go back to top
     h.send_key(KeyCode::Home, KeyModifiers::CONTROL).unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 14: Whitespace indicators.
@@ -457,20 +484,24 @@ fn scene_whitespace(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
     // Toggle whitespace via command palette
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
     for ch in "Toggle Whitespace".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
     }
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 
     snap(h, s, Some("Whitespace"), 300);
 
     // Toggle off
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
     for ch in "Toggle Whitespace".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
     }
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 15: Find & Replace toolbar (prompt + text-input styling).
@@ -478,15 +509,18 @@ fn scene_whitespace(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
 ///         search.match_bg/fg in the replace context.
 fn scene_replace_dialog(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
     h.send_key(KeyCode::Home, KeyModifiers::CONTROL).unwrap();
+    h.render().unwrap();
 
     // Open Replace via the command palette.
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
     for ch in "Replace".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
     }
     h.render().unwrap();
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 
     // Type a search term so the toolbar + match highlights are populated.
     for ch in "config".chars() {
@@ -497,6 +531,7 @@ fn scene_replace_dialog(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
 
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 16: Go to Line prompt.
@@ -504,11 +539,13 @@ fn scene_replace_dialog(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
 fn scene_goto_line(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
     for ch in "Go to Line".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
     }
     h.render().unwrap();
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
     for ch in "20".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
     }
@@ -516,6 +553,7 @@ fn scene_goto_line(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
     snap(h, s, Some("Go to Line"), 300);
 
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 17: Keybinding editor dialog.
@@ -532,6 +570,7 @@ fn scene_keybinding_editor(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
 
     // Search within the editor.
     h.send_key(KeyCode::Char('/'), KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
     for ch in "save".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
     }
@@ -540,6 +579,7 @@ fn scene_keybinding_editor(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
 
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 18: Integrated terminal panel.
@@ -562,6 +602,7 @@ fn scene_terminal(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
 
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
     for ch in "Open Terminal".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
     }
@@ -576,6 +617,7 @@ fn scene_terminal(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
     // Back to the editor pane.
     h.send_key(KeyCode::Char('k'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 19: Completion popup (LSP-style), rendered deterministically.
@@ -623,12 +665,14 @@ fn scene_completion_popup(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
     snap(h, s, Some("Completion"), 300);
 
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
 }
 
 /// Scene 20: Reference / semantic highlight overlay.
 /// Covers: ui.semantic_highlight_bg.
 fn scene_reference_highlight(h: &mut EditorTestHarness, s: &mut BlogShowcase) {
     h.send_key(KeyCode::Home, KeyModifiers::CONTROL).unwrap();
+    h.render().unwrap();
 
     // Highlight a few occurrences as the document-highlight feature would.
     for (i, range) in [(0usize, 6usize), (300, 306), (620, 626)]

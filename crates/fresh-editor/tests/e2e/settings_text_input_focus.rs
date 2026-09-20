@@ -39,6 +39,7 @@ fn open_terminal_command(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Command");
 
     // Walk up then down looking for the focus indicator on the Command
@@ -48,12 +49,14 @@ fn open_terminal_command(harness: &mut EditorTestHarness) {
             return;
         }
         harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
     }
     for _ in 0..30 {
         if find_command_row(harness).is_some() {
             return;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
     }
     panic!(
         "Could not focus the Terminal -> Command row. Screen:\n{}",
@@ -152,6 +155,7 @@ fn test_command_cursor_hidden_until_editing() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let (row, _line) = find_command_row(&harness).expect("Command row still focused");
     let bracket_x = find_bracket_open(&harness, row).expect("Expected '[' on Command row");

@@ -104,6 +104,7 @@ fn horizontal_scroll_reveals_end_of_line_with_inlay_hints() {
 
     // Park the cursor at end of line; horizontal scroll follows it.
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     assert!(
         harness.find_text_on_screen("END_SENTINEL").is_some(),

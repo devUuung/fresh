@@ -45,6 +45,7 @@ fn scroll_offset_holds_the_cursor_off_the_edge_with_wrap_off() {
 
     for step in 1..=120 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
         let (_, cursor_row) = harness.screen_cursor_position();
         assert!(
             cursor_row as usize + SCROLL_OFFSET <= last_row,
@@ -60,6 +61,7 @@ fn scroll_offset_holds_the_cursor_off_the_edge_with_wrap_off() {
     // Back up, stopping short of the first line so there is always more above.
     for step in 1..=80 {
         harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
         let (_, cursor_row) = harness.screen_cursor_position();
         assert!(
             cursor_row as usize >= first_row + SCROLL_OFFSET,

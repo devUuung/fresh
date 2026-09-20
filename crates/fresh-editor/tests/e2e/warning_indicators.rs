@@ -79,6 +79,7 @@ fn test_show_warnings_no_warnings() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show "No warnings" status message
     harness.assert_screen_contains("No warnings");
@@ -99,6 +100,7 @@ fn test_show_lsp_status_no_lsp() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show "No LSP server active" status message
     harness.assert_screen_contains("No LSP server active");
@@ -157,6 +159,7 @@ fn test_lsp_popup_shows_start_for_stopped_server() -> anyhow::Result<()> {
     harness.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)?;
     harness.type_text("Show LSP Status")?;
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     let screen = harness.screen_to_string();
 
@@ -179,6 +182,7 @@ fn test_lsp_popup_shows_start_for_stopped_server() -> anyhow::Result<()> {
 
     // Dismiss and verify cleanup
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE)?;
+    harness.render()?;
     harness.assert_screen_not_contains("LSP Servers");
 
     Ok(())
@@ -248,6 +252,7 @@ fn test_lsp_indicator_on_shows_server_actions() -> anyhow::Result<()> {
     harness.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)?;
     harness.type_text("Show LSP Status")?;
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     let screen = harness.screen_to_string();
 
@@ -275,6 +280,7 @@ fn test_lsp_indicator_on_shows_server_actions() -> anyhow::Result<()> {
 
     // Dismiss
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE)?;
+    harness.render()?;
     harness.assert_screen_not_contains("LSP Servers");
 
     Ok(())
@@ -352,6 +358,7 @@ fn test_clear_warnings_command() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show "Warnings cleared" status message
     harness.assert_screen_contains("Warnings cleared");

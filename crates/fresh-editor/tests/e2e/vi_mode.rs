@@ -75,6 +75,7 @@ fn enable_vi_mode(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type a PARTIAL query - if the command is hidden by context, the full name won't appear
     // in suggestions (only our typed input "Toggle Vi" would show, not "Toggle Vi mode")
@@ -88,6 +89,7 @@ fn enable_vi_mode(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for vi mode to be enabled (semantic: editor_mode is set to vi-normal)
     harness
@@ -102,6 +104,7 @@ fn send_vi_key(harness: &mut EditorTestHarness, c: char) {
         KeyModifiers::NONE
     };
     harness.send_key(KeyCode::Char(c), modifiers).unwrap();
+    harness.render().unwrap();
 }
 
 fn send_vi_operator_motion(harness: &mut EditorTestHarness, operator: char, motion: char) {
@@ -173,6 +176,7 @@ fn test_vi_hjkl_navigation() {
     harness
         .send_key(KeyCode::Char('l'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.cursor_position() > initial_pos)
         .unwrap();
@@ -182,6 +186,7 @@ fn test_vi_hjkl_navigation() {
     harness
         .send_key(KeyCode::Char('j'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.cursor_position() > pos_before_j)
         .unwrap();
@@ -191,6 +196,7 @@ fn test_vi_hjkl_navigation() {
     harness
         .send_key(KeyCode::Char('k'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.cursor_position() < pos_before_k)
         .unwrap();
@@ -199,6 +205,7 @@ fn test_vi_hjkl_navigation() {
     harness
         .send_key(KeyCode::Char('h'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.cursor_position() == initial_pos)
         .unwrap();
@@ -223,12 +230,14 @@ fn test_vi_word_navigation() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.wait_until(|h| h.cursor_position() > pos0).unwrap();
 
     let pos1 = harness.cursor_position();
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.wait_until(|h| h.cursor_position() > pos1).unwrap();
 
     // Test 'b' (move to previous word) - wait for cursor to move back
@@ -236,6 +245,7 @@ fn test_vi_word_navigation() {
     harness
         .send_key(KeyCode::Char('b'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.wait_until(|h| h.cursor_position() < pos2).unwrap();
 
     // Content should be unchanged
@@ -255,6 +265,7 @@ fn test_vi_vim_compat_options_default_enabled() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.wait_until(|h| h.cursor_position() == 1).unwrap();
 
     send_vi_key(&mut harness, '*');
@@ -285,6 +296,7 @@ fn test_vi_vim_compat_optional_features_can_be_disabled() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.wait_until(|h| h.cursor_position() == 0).unwrap();
 
     send_vi_key(&mut harness, '*');
@@ -318,6 +330,7 @@ fn test_vi_vim_compat_change_word_motion_keeps_following_space() {
     send_vi_operator_motion(&mut harness, 'c', 'W');
     harness.type_text("X").unwrap();
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     harness.assert_buffer_content("X three\n");
 }
@@ -343,6 +356,7 @@ fn test_vi_vim_compat_change_word_motion_honors_count() {
         .unwrap();
     harness.type_text("X").unwrap();
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     harness.assert_buffer_content("X four\n");
 }
@@ -402,6 +416,7 @@ fn test_vi_vim_compat_change_lower_word_keeps_following_space() {
     send_vi_operator_motion(&mut harness, 'c', 'w');
     harness.type_text("X").unwrap();
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     harness.assert_buffer_content("X world foo bar\n");
 }
@@ -421,6 +436,7 @@ fn test_vi_vim_compat_change_lower_word_stops_at_punctuation() {
     send_vi_operator_motion(&mut harness, 'c', 'w');
     harness.type_text("X").unwrap();
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     harness.assert_buffer_content("X.two three\n");
 }
@@ -448,6 +464,7 @@ fn test_vi_vim_compat_change_lower_word_honors_count() {
         .unwrap();
     harness.type_text("X").unwrap();
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     harness.assert_buffer_content("X foo\n");
 }
@@ -982,6 +999,7 @@ fn test_vi_insert_mode() {
     harness
         .send_key(KeyCode::Char('i'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for insert mode (semantic check)
     harness
@@ -994,6 +1012,7 @@ fn test_vi_insert_mode() {
 
     // Return to normal mode with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Wait for normal mode (semantic check)
     harness
@@ -1019,6 +1038,7 @@ fn test_vi_insert_after() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for insert mode (semantic check)
     harness
@@ -1031,6 +1051,7 @@ fn test_vi_insert_after() {
 
     // Return to normal mode
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Wait for normal mode (semantic check)
     harness
@@ -1056,6 +1077,7 @@ fn test_vi_open_below() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for insert mode (semantic check)
     harness
@@ -1068,6 +1090,7 @@ fn test_vi_open_below() {
 
     // Return to normal mode
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Wait for normal mode (semantic check)
     harness
@@ -1099,6 +1122,7 @@ fn test_vi_delete_char() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for delete to complete (semantic waiting)
     harness.wait_for_buffer_content("bc\n").unwrap();
@@ -1127,6 +1151,7 @@ fn test_vi_delete_line() {
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for delete to complete (semantic waiting)
     harness.wait_for_buffer_content("line2\nline3\n").unwrap();
@@ -1155,6 +1180,7 @@ fn test_vi_delete_word() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // "hello " should be deleted (semantic waiting)
     harness.wait_for_buffer_content("world test\n").unwrap();
@@ -1179,12 +1205,14 @@ fn test_vi_undo() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.wait_for_buffer_content("bc\n").unwrap();
 
     // Undo with 'u' - use semantic wait since undo is async
     harness
         .send_key(KeyCode::Char('u'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for undo to complete (semantic waiting per README guidelines)
     harness.wait_for_buffer_content("abc\n").unwrap();
@@ -1209,6 +1237,7 @@ fn test_vi_yank_paste_line() {
     harness
         .send_key(KeyCode::Char('y'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for operator-pending mode
     harness
@@ -1219,6 +1248,7 @@ fn test_vi_yank_paste_line() {
     harness
         .send_key(KeyCode::Char('y'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait to return to normal mode (yy is complete)
     harness
@@ -1229,6 +1259,7 @@ fn test_vi_yank_paste_line() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // AAA should be duplicated on line 2 (semantic waiting)
     harness
@@ -1252,6 +1283,7 @@ fn test_vi_paste_before_line() {
     harness
         .send_key(KeyCode::Char('j'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.cursor_position() > pos_before_j)
         .unwrap();
@@ -1277,6 +1309,7 @@ fn test_vi_paste_before_line() {
     harness
         .send_key(KeyCode::Char('P'), KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // BBB should be inserted above the current line (semantic waiting)
     harness
@@ -1692,6 +1725,7 @@ fn test_vi_visual_delete() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-visual".to_string()))
         .unwrap();
@@ -1701,6 +1735,7 @@ fn test_vi_visual_delete() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.cursor_position() > pos_before_w)
         .unwrap();
@@ -1709,6 +1744,7 @@ fn test_vi_visual_delete() {
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // A visual selection includes the character under its head, so `vw` covers
     // `hello w` and `d` leaves `orld` — one character more than `dw` would
@@ -1736,6 +1772,7 @@ fn test_vi_visual_line_delete() {
     harness
         .send_key(KeyCode::Char('j'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.cursor_position() > pos_before_j)
         .unwrap();
@@ -1744,6 +1781,7 @@ fn test_vi_visual_line_delete() {
     harness
         .send_key(KeyCode::Char('V'), KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-visual-line".to_string()))
         .unwrap();
@@ -1752,6 +1790,7 @@ fn test_vi_visual_line_delete() {
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // BBB line should be deleted (semantic waiting)
     harness.wait_for_buffer_content("AAA\nCCC\n").unwrap();
@@ -1902,6 +1941,7 @@ fn test_vi_visual_yank() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-visual".to_string()))
         .unwrap();
@@ -1911,6 +1951,7 @@ fn test_vi_visual_yank() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.cursor_position() > pos_before_e)
         .unwrap();
@@ -1919,6 +1960,7 @@ fn test_vi_visual_yank() {
     harness
         .send_key(KeyCode::Char('y'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-normal".to_string()))
         .unwrap();
@@ -1928,6 +1970,7 @@ fn test_vi_visual_yank() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.cursor_position() > pos_before_w)
         .unwrap();
@@ -1936,6 +1979,7 @@ fn test_vi_visual_yank() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     // "hello" should be pasted after 'w' in "world" (semantic waiting)
     harness
         .wait_for_buffer_content("hello whelloorld\n")
@@ -1958,6 +2002,7 @@ fn test_vi_delete_inner_word() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.cursor_position() > pos_before_w)
         .unwrap();
@@ -1982,6 +2027,7 @@ fn test_vi_delete_inner_word() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // "world" should be deleted, leaving "hello  test"
     // Use wait_for_buffer_content since text object operations are async
@@ -2006,6 +2052,7 @@ fn test_vi_change_inner_quotes() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for find-char mode
     harness
@@ -2015,6 +2062,7 @@ fn test_vi_change_inner_quotes() {
     harness
         .send_key(KeyCode::Char('h'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for cursor to move from initial position (semantic waiting)
     harness
@@ -2025,6 +2073,7 @@ fn test_vi_change_inner_quotes() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for operator-pending mode
     harness
@@ -2034,6 +2083,7 @@ fn test_vi_change_inner_quotes() {
     harness
         .send_key(KeyCode::Char('i'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for text-object mode
     harness
@@ -2043,6 +2093,7 @@ fn test_vi_change_inner_quotes() {
     harness
         .send_key(KeyCode::Char('"'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for insert mode (ci" deletes content and enters insert)
     harness
@@ -2107,6 +2158,7 @@ fn test_vi_colon_write() {
     harness
         .send_key(KeyCode::Char(':'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for prompt to appear (semantic waiting)
     harness.wait_for_prompt().unwrap();
@@ -2116,6 +2168,7 @@ fn test_vi_colon_write() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for file to be saved (buffer no longer modified) - semantic waiting
     harness
@@ -2144,6 +2197,7 @@ fn test_vi_colon_quit() {
     harness
         .send_key(KeyCode::Char(':'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for prompt to appear (semantic waiting)
     harness.wait_for_prompt().unwrap();
@@ -2153,6 +2207,7 @@ fn test_vi_colon_quit() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for buffer to close - we should now see test1.txt
     harness.wait_for_screen_contains("test1.txt").unwrap();
@@ -2196,6 +2251,7 @@ fn test_vi_colon_force_quit() {
     harness
         .send_key(KeyCode::Char(':'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for prompt to appear
     harness.wait_for_prompt().unwrap();
@@ -2205,6 +2261,7 @@ fn test_vi_colon_force_quit() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for buffer to close - we should now see test1.txt
     harness.wait_for_screen_contains("test1.txt").unwrap();
@@ -2248,6 +2305,7 @@ fn test_vi_colon_write_quit() {
     harness
         .send_key(KeyCode::Char(':'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for prompt to appear
     harness.wait_for_prompt().unwrap();
@@ -2257,6 +2315,7 @@ fn test_vi_colon_write_quit() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for buffer to close - we should now see test1.txt
     harness.wait_for_screen_contains("test1.txt").unwrap();
@@ -2292,6 +2351,7 @@ fn test_vi_colon_goto_line() {
     harness
         .send_key(KeyCode::Char(':'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for prompt to appear
     harness.wait_for_prompt().unwrap();
@@ -2302,6 +2362,7 @@ fn test_vi_colon_goto_line() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Enter insert mode and type "INSERTED_" at the beginning of line 35
     harness
@@ -2347,6 +2408,7 @@ fn test_vi_colon_buffer_next() {
     harness
         .send_key(KeyCode::Char(':'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for prompt to appear
     harness.wait_for_prompt().unwrap();
@@ -2356,6 +2418,7 @@ fn test_vi_colon_buffer_next() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for buffer to change to test1.txt
     harness.wait_for_screen_contains("test1.txt").unwrap();
@@ -2376,6 +2439,7 @@ fn test_vi_colon_split() {
     harness
         .send_key(KeyCode::Char(':'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for prompt to appear
     harness.wait_for_prompt().unwrap();
@@ -2385,6 +2449,7 @@ fn test_vi_colon_split() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for split to be created - we should see "hello" twice (semantic waiting)
     // Split creates a divider, so content should appear in both panes
@@ -2424,6 +2489,7 @@ fn test_vi_percent_matching_bracket() {
         harness
             .send_key(KeyCode::Char('l'), KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
     }
     harness.wait_until(|h| h.cursor_position() == 3).unwrap();
 
@@ -2431,12 +2497,14 @@ fn test_vi_percent_matching_bracket() {
     harness
         .send_key(KeyCode::Char('%'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.wait_until(|h| h.cursor_position() == 7).unwrap();
 
     // '%' from the ')' jumps back to the '('.
     harness
         .send_key(KeyCode::Char('%'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.wait_until(|h| h.cursor_position() == 3).unwrap();
 }
 
@@ -2461,6 +2529,7 @@ fn test_vi_escape_from_insert_moves_cursor_left() {
     harness
         .send_key(KeyCode::Char('i'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-insert".to_string()))
         .unwrap();
@@ -2471,6 +2540,7 @@ fn test_vi_escape_from_insert_moves_cursor_left() {
 
     // Escape -> normal mode, and the cursor drops one column left to byte 1.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-normal".to_string()))
         .unwrap();
@@ -2514,6 +2584,7 @@ fn a_confirmation_dialog_takes_the_keyboard_from_vi_mode() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Unsaved Changes");
     harness.assert_screen_contains("Save and Quit");
 
@@ -2522,12 +2593,14 @@ fn a_confirmation_dialog_takes_the_keyboard_from_vi_mode() {
     harness
         .send_key(KeyCode::Char('l'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Unsaved Changes");
 
     // The buttons still move and the buffer is untouched.
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let row = (0..30)
         .find(|r| harness.screen_row_text(*r).contains("Save and Quit"))
         .expect("the button row is on screen");
@@ -2547,6 +2620,7 @@ fn a_confirmation_dialog_takes_the_keyboard_from_vi_mode() {
     // Esc is vi's "back to normal mode" *and* the dialog's retreat. The
     // dialog has it while it is up.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     assert!(!harness.should_quit());
     assert!(!harness.screen_to_string().contains("Unsaved Changes"));
 }
@@ -2574,12 +2648,14 @@ fn a_dialog_accelerator_beats_a_vi_operator() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Discard and Quit");
 
     // `d` is vi's delete operator and the D of "Discard and Quit".
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     assert!(
         harness.should_quit(),
         "the dialog's accelerator must win over vi's operator"

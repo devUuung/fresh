@@ -49,11 +49,13 @@ fn row_is_focused(harness: &EditorTestHarness, label: &str) -> bool {
 fn open_language_dialog(harness: &mut EditorTestHarness) {
     harness.open_settings().unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     for _ in 0..60 {
         if harness.screen_to_string().contains("[Enter to edit]") {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
     }
     assert!(
         harness.screen_to_string().contains("[Enter to edit]"),
@@ -62,6 +64,7 @@ fn open_language_dialog(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     assert!(
         harness.screen_to_string().contains("Edit Value"),
         "language entry dialog should open; screen was:\n{}",
@@ -78,6 +81,7 @@ fn focus_tab_size(harness: &mut EditorTestHarness) {
             return;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
     }
     panic!(
         "could not focus the Tab Size field; screen was:\n{}",
@@ -117,6 +121,7 @@ fn language_tab_size_edit_survives_commit() {
     );
 
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // After committing, the value must still be 8 — not reverted to 0.
     assert!(

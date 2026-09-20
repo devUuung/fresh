@@ -91,6 +91,7 @@ fn test_code_action_request_includes_overlapping_diagnostic() -> anyhow::Result<
     harness.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)?;
     harness.type_text("Code Actions")?;
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // With the fix, the diagnostic-gated quickfix appears.
     harness.wait_for_screen_contains("Remove unused variable")?;

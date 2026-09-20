@@ -50,6 +50,7 @@ fn enable_vi_mode(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     harness.type_text("Toggle Vi").unwrap();
     harness.wait_for_screen_contains("Toggle Vi mode").unwrap();
@@ -57,6 +58,7 @@ fn enable_vi_mode(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-normal".to_string()))
@@ -71,6 +73,7 @@ fn send_key(harness: &mut EditorTestHarness, c: char) {
         KeyModifiers::NONE
     };
     harness.send_key(KeyCode::Char(c), mods).unwrap();
+    harness.render().unwrap();
 }
 
 /// Helper: wait for operator-pending mode, then send the motion key
@@ -99,6 +102,7 @@ fn wait_insert(harness: &mut EditorTestHarness) {
 /// Helper: escape to normal mode
 fn escape(harness: &mut EditorTestHarness) {
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     wait_normal(harness);
 }
 
@@ -239,6 +243,7 @@ fn test_vi_bug_visual_block_I_ignored() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-visual-block".to_string()))
         .unwrap();
@@ -567,6 +572,7 @@ fn test_vi_bug_find_char_dot() {
     harness
         .send_key(KeyCode::Char('.'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     wait_normal(&mut harness);
     assert_eq!(
@@ -593,6 +599,7 @@ fn test_vi_bug_find_char_slash() {
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     wait_normal(&mut harness);
     assert_eq!(
@@ -750,6 +757,7 @@ fn test_vi_bug_visual_mode_switching() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-visual-block".to_string()))
         .unwrap();
@@ -1282,6 +1290,7 @@ fn test_vi_visual_line_indent() {
     harness
         .send_key(KeyCode::Char('V'), KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-visual-line".to_string()))
         .unwrap();
@@ -1310,6 +1319,7 @@ fn test_vi_visual_line_dedent() {
     harness
         .send_key(KeyCode::Char('V'), KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-visual-line".to_string()))
         .unwrap();
@@ -1342,6 +1352,7 @@ fn test_vi_visual_line_indent_stops_at_selection() {
     harness
         .send_key(KeyCode::Char('V'), KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-visual-line".to_string()))
         .unwrap();
@@ -1375,6 +1386,7 @@ fn test_vi_visual_block_indent() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-visual-block".to_string()))
         .unwrap();
@@ -1403,6 +1415,7 @@ fn test_vi_visual_block_dedent() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-visual-block".to_string()))
         .unwrap();
@@ -1700,6 +1713,7 @@ fn wait_insert_indicator(harness: &mut EditorTestHarness) {
 /// Leave insert mode, waiting for the status line to show normal mode again.
 fn escape_to_normal(harness: &mut EditorTestHarness) {
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.wait_for_screen_contains("-- NORMAL --").unwrap();
 }
 
@@ -2170,6 +2184,7 @@ fn test_vi_visual_line_up_extends_selection() {
     harness
         .send_key(KeyCode::Char('V'), KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-visual-line".to_string()))
         .unwrap();
@@ -2194,6 +2209,7 @@ fn test_vi_visual_line_join() {
     harness
         .send_key(KeyCode::Char('V'), KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| h.editor().editor_mode() == Some("vi-visual-line".to_string()))
         .unwrap();
@@ -2281,6 +2297,7 @@ fn test_vi_insert_line_start_skips_indent() {
     harness
         .send_key(KeyCode::Char('I'), KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
     wait_insert(&mut harness);
     harness.type_text("X").unwrap();
     escape(&mut harness);

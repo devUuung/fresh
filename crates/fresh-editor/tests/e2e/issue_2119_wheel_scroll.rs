@@ -426,6 +426,7 @@ fn file_explorer_keyboard_nav_scrolls_selection_back_into_view() {
 
     // Keyboard Down moves the selection and must scroll it back into view.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let after = harness.screen_to_string();
     let selected_after = token_on_line_with(&after, "▌", "file_").unwrap_or_else(|| {
         panic!(

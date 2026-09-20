@@ -110,6 +110,7 @@ fn test_issue_1572_inlay_hint_stays_put_across_below_line_edits() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // The hint must still be on the same visual row and column as before.
     let hint_col_after = find_hint_column(&harness, hint_text, hint_row).unwrap_or_else(|| {

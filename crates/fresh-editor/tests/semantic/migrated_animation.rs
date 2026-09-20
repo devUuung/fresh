@@ -262,6 +262,7 @@ fn migrated_tab_switch_from_group_to_file_animates() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("TestBG: Create").unwrap();
     harness.render().unwrap();
     harness
@@ -324,6 +325,7 @@ fn cursor_jump_long_move_test(cursor_jump_enabled: bool) -> u64 {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| !h.editor().active_window().animations.is_active())
         .unwrap();
@@ -334,6 +336,7 @@ fn cursor_jump_long_move_test(cursor_jump_enabled: bool) -> u64 {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Give the runner one extra render tick so the jump observed
     // in this frame can call `start()` if it's going to.
@@ -434,6 +437,7 @@ fn anti_cursor_jump_without_long_move_does_not_advance_counter() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness
         .wait_until(|h| !h.editor().active_window().animations.is_active())
         .unwrap();

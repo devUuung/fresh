@@ -355,6 +355,7 @@ fn test_wrapped_line_no_horizontal_scroll() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let screen_before = harness.screen_to_string();
 
@@ -370,6 +371,7 @@ fn test_wrapped_line_no_horizontal_scroll() {
 
     // Press End - should go to end of VISUAL line (first segment), not physical line end
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let screen_after = harness.screen_to_string();
 
@@ -407,6 +409,7 @@ fn test_wrapped_line_cursor_positioning() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let (start_x, start_y) = harness.screen_cursor_position();
     assert_eq!(
@@ -441,6 +444,7 @@ fn test_wrapped_line_cursor_positioning() {
         harness
             .send_key(KeyCode::Right, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
 
         let (cur_x, cur_y) = harness.screen_cursor_position();
         let buf_pos = harness.cursor_position();
@@ -513,6 +517,7 @@ fn test_wrapped_line_cursor_positioning() {
 
     // Now press End to jump to end of current visual segment
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let end_pos_after_end = harness.cursor_position();
     let (_end_x, _end_y) = harness.screen_cursor_position();
@@ -522,6 +527,7 @@ fn test_wrapped_line_cursor_positioning() {
     let mut pos = end_pos_after_end;
     while pos < long_text.len() {
         harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
         let new_pos = harness.cursor_position();
         assert!(
             new_pos > pos,
@@ -571,6 +577,7 @@ fn test_wrapped_line_cursor_positioning() {
     // least one wrap boundary from the physical end of the text.
     for i in 1..=long_text.len() {
         harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
 
         let (cur_x, cur_y) = harness.screen_cursor_position();
         let buf_pos = harness.cursor_position();
@@ -601,6 +608,7 @@ fn test_wrapped_line_cursor_positioning() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let (final_x, final_y) = harness.screen_cursor_position();
     assert_eq!(
@@ -651,6 +659,7 @@ fn test_wrapped_line_scrolling_down_past_viewport() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let buffer_content = harness.get_buffer_content().unwrap();
     eprintln!("\n=== Buffer content ===");
@@ -680,6 +689,7 @@ fn test_wrapped_line_scrolling_down_past_viewport() {
 
     for i in 0..max_down_presses {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
 
         let (cur_x, cur_y) = harness.screen_cursor_position();
         let buf_pos = harness.cursor_position();
@@ -1057,6 +1067,7 @@ fn test_wrapped_line_cursor_no_empty_space() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let (_start_x, start_y) = harness.screen_cursor_position();
     eprintln!("\n=== Testing cursor doesn't go into empty space ===");
@@ -1113,6 +1124,7 @@ fn test_wrapped_line_cursor_no_empty_space() {
         harness
             .send_key(KeyCode::Right, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
     }
 
     assert!(
@@ -1123,8 +1135,10 @@ fn test_wrapped_line_cursor_no_empty_space() {
 
     // Now test pressing End from the start
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let (end_x, end_y) = harness.screen_cursor_position();
     let buf_pos_at_end = harness.cursor_position();
@@ -1314,6 +1328,7 @@ fn test_line_numbers_correct_with_wrapping_and_scrolling() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let screen_at_top = harness.screen_to_string();
     eprintln!("=== Screen at top ===\n{}", screen_at_top);
@@ -1324,6 +1339,7 @@ fn test_line_numbers_correct_with_wrapping_and_scrolling() {
     // Test 1: Scroll down one line at a time and verify
     for i in 1..=15 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
         eprintln!("=== After {} down presses ===\n{}", i, screen);
@@ -1333,6 +1349,7 @@ fn test_line_numbers_correct_with_wrapping_and_scrolling() {
     // Test 2: Scroll back up and verify - this is key to reproducing #552
     for i in 1..=15 {
         harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
         eprintln!("=== After {} up presses ===\n{}", i, screen);
@@ -1345,6 +1362,7 @@ fn test_line_numbers_correct_with_wrapping_and_scrolling() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
         let screen = harness.screen_to_string();
         eprintln!("=== After PageDown {} ===\n{}", i, screen);
         verify_line_numbers_match_content(&screen, &format!("After PageDown {}", i));
@@ -1355,6 +1373,7 @@ fn test_line_numbers_correct_with_wrapping_and_scrolling() {
         harness
             .send_key(KeyCode::PageUp, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
         let screen = harness.screen_to_string();
         eprintln!("=== After PageUp {} ===\n{}", i, screen);
         verify_line_numbers_match_content(&screen, &format!("After PageUp {}", i));
@@ -1364,6 +1383,7 @@ fn test_line_numbers_correct_with_wrapping_and_scrolling() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     let screen = harness.screen_to_string();
     eprintln!("=== After Ctrl+End ===\n{}", screen);
     verify_line_numbers_match_content(&screen, "After Ctrl+End");
@@ -1371,6 +1391,7 @@ fn test_line_numbers_correct_with_wrapping_and_scrolling() {
     // Scroll up from end
     for i in 1..=10 {
         harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
         eprintln!("=== From end: after {} up presses ===\n{}", i, screen);
@@ -1381,6 +1402,7 @@ fn test_line_numbers_correct_with_wrapping_and_scrolling() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     let screen = harness.screen_to_string();
     eprintln!("=== After Ctrl+Home ===\n{}", screen);
     verify_line_numbers_match_content(&screen, "After Ctrl+Home");
@@ -1388,6 +1410,7 @@ fn test_line_numbers_correct_with_wrapping_and_scrolling() {
     // Final scroll down cycle
     for i in 1..=10 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
         eprintln!("=== Final cycle: after {} down presses ===\n{}", i, screen);
@@ -1483,6 +1506,7 @@ fn test_line_numbers_with_pagedown_scrolling() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
         eprintln!("=== After PageDown {} ===\n{}", i, screen);
@@ -1494,6 +1518,7 @@ fn test_line_numbers_with_pagedown_scrolling() {
         harness
             .send_key(KeyCode::PageUp, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
         eprintln!("=== After PageUp {} ===\n{}", i, screen);
@@ -1585,6 +1610,7 @@ fn test_line_numbers_single_pagedown_narrow_terminal() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     verify_line_numbers_match_content(&screen, "After single PageDown");
@@ -1594,6 +1620,7 @@ fn test_line_numbers_single_pagedown_narrow_terminal() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
         let screen = harness.screen_to_string();
         verify_line_numbers_match_content(&screen, &format!("After PageDown #{}", i));
     }
@@ -1603,6 +1630,7 @@ fn test_line_numbers_single_pagedown_narrow_terminal() {
         harness
             .send_key(KeyCode::PageUp, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
         let screen = harness.screen_to_string();
         verify_line_numbers_match_content(&screen, &format!("After PageUp #{}", i));
     }
@@ -1690,6 +1718,7 @@ fn test_mouse_click_wrapped_thai_grapheme_clusters() {
     let row = content_start as u16;
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let (gutter_x, _) = harness.screen_cursor_position();
 
     // Valid byte boundaries for the text
@@ -1769,6 +1798,7 @@ fn test_visual_line_movement_up_down() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let (start_x, start_y) = harness.screen_cursor_position();
     let start_pos = harness.cursor_position();
@@ -1805,6 +1835,7 @@ fn test_visual_line_movement_up_down() {
     // Now press Down - with visual line movement, should move to second visual line
     // (the wrapped continuation), not to the second logical line
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let (down_x, down_y) = harness.screen_cursor_position();
     let down_pos = harness.cursor_position();
@@ -1853,6 +1884,7 @@ fn test_visual_line_movement_up_down() {
 
     // Now press Up - should go back to first visual line
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let (up_x, up_y) = harness.screen_cursor_position();
     let up_pos = harness.cursor_position();
@@ -1892,6 +1924,7 @@ fn test_end_key_goes_to_visual_line_end() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     assert_eq!(
         harness.cursor_position(),
@@ -1904,6 +1937,7 @@ fn test_end_key_goes_to_visual_line_end() {
 
     // Press End - should go to end of first visual segment (not end of physical line)
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let end_pos_1 = harness.cursor_position();
     let (end_x_1, end_y_1) = harness.screen_cursor_position();
@@ -1932,6 +1966,7 @@ fn test_end_key_goes_to_visual_line_end() {
 
     // Press End again - should go to end of second visual segment
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let end_pos_2 = harness.cursor_position();
     let (_end_x_2, end_y_2) = harness.screen_cursor_position();
@@ -1955,6 +1990,7 @@ fn test_end_key_goes_to_visual_line_end() {
     let mut prev_pos = end_pos_2;
     for step in 0..20 {
         harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
         let pos = harness.cursor_position();
         eprintln!("After End #{step}: pos={pos}");
         assert!(
@@ -1991,6 +2027,7 @@ fn test_home_key_goes_to_visual_line_start() {
 
     // Press Home - should go to start of the LAST visual segment (not physical line start)
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let home_pos_1 = harness.cursor_position();
     let (_home_x_1, home_y_1) = harness.screen_cursor_position();
@@ -2012,6 +2049,7 @@ fn test_home_key_goes_to_visual_line_start() {
 
     // Press Home again - should go to start of previous visual segment
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let home_pos_2 = harness.cursor_position();
     eprintln!("After second Home: pos={}", home_pos_2);
@@ -2023,6 +2061,7 @@ fn test_home_key_goes_to_visual_line_start() {
     let mut prev_pos = home_pos_2;
     for step in 0..20 {
         harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
         let pos = harness.cursor_position();
         eprintln!("After Home #{step}: pos={pos}");
         assert!(
@@ -2078,6 +2117,7 @@ fn test_block_select_with_line_wrap_enabled() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::ALT | KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     let down_pos = harness.cursor_position();
     eprintln!("After block select down: pos={}", down_pos);
@@ -2132,6 +2172,7 @@ fn test_add_cursor_below_with_line_wrap_enabled() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::CONTROL | KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify no crash and cursor count increased
     let cursor_count = harness.editor().active_cursors().count();
@@ -2395,6 +2436,7 @@ fn test_page_view_default_width_80() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
 

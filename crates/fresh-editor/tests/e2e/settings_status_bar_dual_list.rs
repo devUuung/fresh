@@ -31,12 +31,14 @@ fn focus_status_bar_left(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     for _ in 0..40 {
         let screen = harness.screen_to_string();
         if screen.contains("Available") && screen.contains("Included") {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
     }
     let screen = harness.screen_to_string();
     assert!(
@@ -45,6 +47,7 @@ fn focus_status_bar_left(harness: &mut EditorTestHarness) {
     );
     // Move focus from the category sidebar into the content pane.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 }
 
 /// The label carried by the row holding `marker`, with the marker and
@@ -99,6 +102,7 @@ fn dual_list_shows_cursor_and_active_column_once_editing() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -138,10 +142,12 @@ fn dual_list_cursor_moves_and_switches_columns_visibly() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let first = cell_at_marker(&harness, ACTIVE).expect("cursor on entry");
 
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let second = cell_at_marker(&harness, ACTIVE).expect("cursor after Down");
     assert_ne!(
         first,
@@ -155,6 +161,7 @@ fn dual_list_cursor_moves_and_switches_columns_visibly() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let screen = harness.screen_to_string();
     assert!(
         screen.contains(&format!("{COLUMN} Included")),
@@ -180,12 +187,14 @@ fn dual_list_shift_right_moves_the_entry_under_the_cursor() {
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let picked = cell_at_marker(&harness, ACTIVE).expect("cursor on entry");
 
     harness
         .send_key(KeyCode::Right, KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -209,6 +218,7 @@ fn dual_list_click_selects_the_clicked_entry() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let before = cell_at_marker(&harness, ACTIVE).expect("cursor on entry");
 

@@ -322,10 +322,12 @@ fn test_drag_tab_to_another_split_center() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     assert_eq!(harness.editor().get_split_count(), 2);
 
@@ -457,10 +459,12 @@ fn test_drag_last_tab_closes_split() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Open second file in the new split
     harness.open_file(&file2).unwrap();
@@ -625,10 +629,12 @@ fn test_drag_tab_to_tab_bar() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     assert_eq!(harness.editor().get_split_count(), 2);
 
@@ -738,10 +744,12 @@ fn test_drag_right_split_to_left_border_switches_order() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     assert_eq!(harness.editor().get_split_count(), 2);
 

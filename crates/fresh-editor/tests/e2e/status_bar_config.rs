@@ -205,6 +205,7 @@ fn test_cursor_indicator_width_is_stable_across_cursor_movement() {
     // Move to line 2, then to the end of the (150-char) line.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let status_after = harness.get_status_bar();
     let lang_col_after = status_after

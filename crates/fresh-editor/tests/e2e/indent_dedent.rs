@@ -39,9 +39,11 @@ fn test_tab_indent_single_line_spaces() {
 
     // Move cursor to beginning of line
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Press Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -65,9 +67,11 @@ fn test_tab_indent_multiple_lines_spaces() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL | KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // Press Tab to indent all selected lines
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -99,9 +103,11 @@ fn test_tab_indent_partial_selection_spaces() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // Press Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -126,9 +132,11 @@ fn test_shift_tab_dedent_single_line_spaces() {
 
     // Move cursor somewhere in the line
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Press Shift+Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::SHIFT).unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert_eq!(content, "Hello world", "Shift+Tab should remove 4 spaces");
@@ -149,9 +157,11 @@ fn test_shift_tab_dedent_multiple_lines_spaces() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL | KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // Press Shift+Tab to dedent all selected lines
     harness.send_key(KeyCode::Tab, KeyModifiers::SHIFT).unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -172,6 +182,7 @@ fn test_shift_tab_dedent_fewer_spaces() {
 
     // Press Shift+Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::SHIFT).unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -192,6 +203,7 @@ fn test_shift_tab_dedent_no_indentation() {
 
     // Press Shift+Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::SHIFT).unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -216,9 +228,11 @@ fn test_tab_indent_with_tab_character() {
 
     // Move cursor to beginning
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Press Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -242,9 +256,11 @@ fn test_tab_indent_multiple_lines_with_tabs() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL | KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // Press Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -265,6 +281,7 @@ fn test_shift_tab_dedent_with_tab_character() {
 
     // Press Shift+Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::SHIFT).unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -288,9 +305,11 @@ fn test_shift_tab_dedent_multiple_lines_with_tabs() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL | KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // Press Shift+Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::SHIFT).unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -319,9 +338,11 @@ fn test_shift_tab_dedent_mixed_indentation() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL | KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // Press Shift+Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::SHIFT).unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -349,9 +370,11 @@ fn test_tab_preserves_selection() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL | KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // Press Tab to indent
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Verify content is indented
     let content = harness.get_buffer_content().unwrap();
@@ -395,9 +418,11 @@ fn test_shift_tab_preserves_selection() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL | KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // Press Shift+Tab to dedent
     harness.send_key(KeyCode::Tab, KeyModifiers::SHIFT).unwrap();
+    harness.render().unwrap();
 
     // Verify content is dedented
     let content = harness.get_buffer_content().unwrap();
@@ -437,10 +462,13 @@ fn test_multiple_indent_dedent_preserves_selection() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL | KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // Indent twice
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Verify content
     let content = harness.get_buffer_content().unwrap();
@@ -455,6 +483,7 @@ fn test_multiple_indent_dedent_preserves_selection() {
 
     // Dedent once
     harness.send_key(KeyCode::Tab, KeyModifiers::SHIFT).unwrap();
+    harness.render().unwrap();
 
     // Verify content
     let content = harness.get_buffer_content().unwrap();
@@ -500,6 +529,7 @@ fn test_dedent_moves_cursor_without_selection() {
     harness
         .send_key(KeyCode::BackTab, KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify content was dedented
     let content = harness.get_buffer_content().unwrap();
@@ -596,6 +626,7 @@ fn test_multicursor_indent_with_selections() {
     // Press Tab 3 times to test multiple consecutive indents
     for indent_count in 1..=3 {
         harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
 
         // Verify content after each indent
         let expected_indent = "    ".repeat(indent_count);
@@ -667,6 +698,7 @@ fn test_multicursor_indent_with_selections() {
         harness
             .send_key(KeyCode::BackTab, KeyModifiers::SHIFT)
             .unwrap();
+        harness.render().unwrap();
 
         let remaining_indents = 3 - dedent_count;
         let expected_indent = "    ".repeat(remaining_indents);
@@ -783,11 +815,13 @@ fn test_smart_backspace_dedent_spaces() {
     // Move to end of the indented empty line (line 2, 8 spaces)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Press Backspace - should remove 4 spaces (one tab unit), not just 1
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -800,6 +834,7 @@ fn test_smart_backspace_dedent_spaces() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -827,11 +862,13 @@ fn test_smart_backspace_dedent_tabs() {
     // Move to end of the indented empty line (line 2, 2 tabs)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Press Backspace - should remove 1 tab
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -844,6 +881,7 @@ fn test_smart_backspace_dedent_tabs() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -865,11 +903,13 @@ fn test_smart_backspace_normal_after_text() {
 
     // Move to end of line (after 'o')
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Press Backspace - should delete just 'o' (normal behavior)
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -891,11 +931,13 @@ fn test_smart_backspace_partial_indent() {
 
     // Cursor is at start, move to end of first line
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Press Backspace - should remove the 2 spaces
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -932,9 +974,11 @@ fn test_tab_indent_does_not_indent_line_at_selection_boundary() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // Press Tab to indent
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     // Only lines 2 and 3 should be indented; lines 1, 4, and 5 should remain unchanged
@@ -973,11 +1017,13 @@ fn test_shift_tab_dedent_does_not_dedent_line_at_selection_boundary() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // Press Shift+Tab to dedent
     harness
         .send_key(KeyCode::BackTab, KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     // Only lines 2 and 3 should be dedented; line 4 should keep its indentation

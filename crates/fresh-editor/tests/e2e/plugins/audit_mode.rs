@@ -1119,11 +1119,13 @@ fn test_close_buffer_skips_hidden_buffers() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Now close the main.rs buffer
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     println!("Screen after closing buffer:\n{}", screen);
@@ -1897,6 +1899,7 @@ fn test_review_diff_shows_untracked_and_staged_new_files() {
         harness
             .send_key(KeyCode::Char('.'), KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
         let s = harness.screen_to_string();
         if s.contains("staged_func") {
             found_staged = true;
@@ -2014,6 +2017,7 @@ fn test_review_diff_only_new_files_no_modifications() {
         harness
             .send_key(KeyCode::Char('.'), KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
         if harness.screen_to_string().contains("also_new") {
             found_also_new = true;
         }
@@ -2136,6 +2140,7 @@ fn test_review_diff_scrolling_many_files() {
         harness
             .send_key(KeyCode::Char('n'), KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
     }
 
     let scrolled_screen = harness.screen_to_string();
@@ -2342,7 +2347,9 @@ fn test_review_diff_home_end_navigation() {
     let _screen = open_review_diff(&mut harness);
 
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     assert!(
         !harness.screen_to_string().contains("TypeError"),
         "Home / End should not error. Screen:\n{}",
@@ -2452,6 +2459,7 @@ fn test_review_diff_renamed_file_message() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
     }
 
     assert!(
@@ -2529,6 +2537,7 @@ fn test_review_diff_untracked_directory_files_listed() {
         harness
             .send_key(KeyCode::Char('.'), KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
         if harness.screen_to_string().contains("hello from newdir") {
             found_body = true;
         }
@@ -2865,6 +2874,7 @@ fn test_review_diff_symlinks_and_type_changes() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
     }
 
     assert!(
@@ -2930,6 +2940,7 @@ fn test_review_diff_new_symlink() {
             found_newfile = true;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
     }
 
     assert!(
@@ -3005,6 +3016,7 @@ fn test_review_diff_file_replaced_with_directory() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
     }
 
     // The original file should show as deleted
@@ -3507,6 +3519,7 @@ fn test_review_diff_drill_down_close_returns_to_group() {
     harness
         .send_key(KeyCode::Char('n'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Drill down on the selected file. Enter triggers `review_drill_down`,
     // which builds a composite side-by-side diff buffer and switches to it.
@@ -3609,6 +3622,7 @@ fn test_review_diff_drill_down_close_without_other_buffers() {
     harness
         .send_key(KeyCode::Char('n'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Drill down — wait for composite CONTENT (see comment in variant 1).
     harness
@@ -3826,6 +3840,7 @@ fn test_review_diff_n_p_cross_file_boundaries() {
         harness
             .send_key(KeyCode::Char('n'), KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
     }
 
     let after_n = harness.screen_to_string();
@@ -3840,6 +3855,7 @@ fn test_review_diff_n_p_cross_file_boundaries() {
         harness
             .send_key(KeyCode::Char('p'), KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
     }
     let after_p = harness.screen_to_string();
     assert!(
@@ -3970,6 +3986,7 @@ fn test_review_diff_sticky_header_renders() {
     harness
         .send_key(KeyCode::Char('n'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Walk forward enough to push the file header off-screen.
     for _ in 0..15 {
@@ -4034,6 +4051,7 @@ fn test_review_diff_visual_select_and_cancel() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Extend the selection downward.
     for _ in 0..2 {
@@ -4052,6 +4070,7 @@ fn test_review_diff_visual_select_and_cancel() {
 
     // Cancel the selection — Esc should clear and not crash.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let after_esc = harness.screen_to_string();
     assert!(
         !after_esc.contains("TypeError"),
@@ -4100,6 +4119,7 @@ fn test_review_diff_comment_nav_single_keys() {
     harness
         .send_key(KeyCode::Char(']'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let after_close_bracket = harness.screen_to_string();
     assert!(
         !after_close_bracket.contains("TypeError"),
@@ -4110,6 +4130,7 @@ fn test_review_diff_comment_nav_single_keys() {
     harness
         .send_key(KeyCode::Char('['), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let after_open_bracket = harness.screen_to_string();
     assert!(
         !after_open_bracket.contains("TypeError"),
@@ -4248,6 +4269,7 @@ fn test_review_diff_capital_s_stages_whole_file() {
     harness
         .send_key(KeyCode::Char('S'), KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // After staging, the file moves into STAGED and the UNSTAGED
     // section disappears (single-file repo).
@@ -5106,6 +5128,7 @@ fn test_issue2318_discarding_an_added_then_edited_file_says_delete() {
     harness
         .send_key(KeyCode::Char('.'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('D'), KeyModifiers::SHIFT)
         .unwrap();

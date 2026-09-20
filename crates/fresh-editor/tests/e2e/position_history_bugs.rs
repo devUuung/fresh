@@ -26,6 +26,7 @@ fn test_back_forward_updates_visible_content() {
 
     // Navigate back to buffer 2
     harness.send_key(KeyCode::Left, KeyModifiers::ALT).unwrap();
+    harness.render().unwrap(); // Force render
 
     // Check that the VISIBLE CONTENT actually changed, not just the tab
     let screen = harness.screen_to_string();
@@ -40,6 +41,7 @@ fn test_back_forward_updates_visible_content() {
 
     // Navigate back again to buffer 1
     harness.send_key(KeyCode::Left, KeyModifiers::ALT).unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -53,6 +55,7 @@ fn test_back_forward_updates_visible_content() {
 
     // Navigate forward to buffer 2
     harness.send_key(KeyCode::Right, KeyModifiers::ALT).unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -96,6 +99,7 @@ fn test_cursor_movement_tracked_in_history() {
 
     // Navigate back - cursor should return to the end position in buffer 1
     harness.send_key(KeyCode::Left, KeyModifiers::ALT).unwrap();
+    harness.render().unwrap();
 
     // Verify we're in the first buffer AND cursor is at the saved position
     harness.assert_buffer_content("Line 1\nLine 2\nLine 3\nLine 4\nLine 5");
@@ -133,6 +137,7 @@ fn test_small_cursor_movements_with_back_forward() {
 
     // Navigate back
     harness.send_key(KeyCode::Left, KeyModifiers::ALT).unwrap();
+    harness.render().unwrap();
 
     // Should be back at position 5 in first buffer
     harness.assert_buffer_content("0123456789");
@@ -177,6 +182,7 @@ fn test_page_movements_tracked_in_history() {
 
     // Navigate back
     harness.send_key(KeyCode::Left, KeyModifiers::ALT).unwrap();
+    harness.render().unwrap();
 
     // Should be at the middle position where we paged down to
     assert_eq!(
@@ -227,6 +233,7 @@ fn test_cursor_movements_within_single_buffer_tracked() {
 
     // First back: should go to position 2 (end)
     harness.send_key(KeyCode::Left, KeyModifiers::ALT).unwrap();
+    harness.render().unwrap();
     assert_eq!(
         harness.cursor_position(),
         pos2,
@@ -237,6 +244,7 @@ fn test_cursor_movements_within_single_buffer_tracked() {
 
     // Second back: should go to position 1 (beginning before jump to end)
     harness.send_key(KeyCode::Left, KeyModifiers::ALT).unwrap();
+    harness.render().unwrap();
     assert_eq!(
         harness.cursor_position(),
         pos1,
@@ -247,6 +255,7 @@ fn test_cursor_movements_within_single_buffer_tracked() {
 
     // Navigate forward: should go back to end
     harness.send_key(KeyCode::Right, KeyModifiers::ALT).unwrap();
+    harness.render().unwrap();
     assert_eq!(
         harness.cursor_position(),
         pos2,
@@ -291,6 +300,7 @@ fn test_large_jumps_within_buffer_tracked() {
     // Should go: current(page2) -> page1 -> start
 
     harness.send_key(KeyCode::Left, KeyModifiers::ALT).unwrap();
+    harness.render().unwrap();
     assert_eq!(
         harness.cursor_position(),
         page1_pos,
@@ -300,6 +310,7 @@ fn test_large_jumps_within_buffer_tracked() {
     );
 
     harness.send_key(KeyCode::Left, KeyModifiers::ALT).unwrap();
+    harness.render().unwrap();
     assert_eq!(
         harness.cursor_position(),
         start_pos,
@@ -310,6 +321,7 @@ fn test_large_jumps_within_buffer_tracked() {
 
     // Navigate forward
     harness.send_key(KeyCode::Right, KeyModifiers::ALT).unwrap();
+    harness.render().unwrap();
     assert_eq!(
         harness.cursor_position(),
         page1_pos,

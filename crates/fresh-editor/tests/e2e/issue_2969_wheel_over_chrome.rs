@@ -94,6 +94,7 @@ fn wheel_over_chrome_does_not_scroll_the_focused_editor() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let baseline = line_markers(&harness.screen_to_string());
     assert!(

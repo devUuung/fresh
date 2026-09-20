@@ -176,9 +176,11 @@ fn test_code_action_undo_sends_did_change() -> anyhow::Result<()> {
 
     // Move cursor to line 2 (the "let x = 5;" line)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Request code actions (Alt+.)
     harness.send_key(KeyCode::Char('.'), KeyModifiers::ALT)?;
+    harness.render()?;
 
     // Wait for the code action popup
     harness.wait_for_screen_contains("Change value")?;
@@ -191,6 +193,7 @@ fn test_code_action_undo_sends_did_change() -> anyhow::Result<()> {
 
     // Select the code action (press Enter or 1)
     harness.send_key(KeyCode::Char('1'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Wait for didChange from the code action application
     harness.wait_until(|_| {
@@ -209,6 +212,7 @@ fn test_code_action_undo_sends_did_change() -> anyhow::Result<()> {
 
     // Undo the code action (Ctrl+Z)
     harness.send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Verify undo was applied — original "5" should be back
     harness.wait_for_screen_contains("let x = 5")?;

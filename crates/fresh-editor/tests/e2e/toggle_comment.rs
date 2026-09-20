@@ -15,6 +15,7 @@ fn run_command(harness: &mut EditorTestHarness, command_name: &str) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type the command name
     harness.type_text(command_name).unwrap();
@@ -24,6 +25,7 @@ fn run_command(harness: &mut EditorTestHarness, command_name: &str) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 }
 
 /// Test that Toggle Comment uses // for Rust files
@@ -113,6 +115,7 @@ fn test_toggle_comment_preserves_selection() {
 
     // Move to start of file
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Select lines 1 and 2 (Shift+Down twice)
     harness
@@ -121,6 +124,7 @@ fn test_toggle_comment_preserves_selection() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify we have a selection before commenting
     let cursor_before = *harness.editor().active_cursors().primary();
@@ -175,6 +179,7 @@ fn test_toggle_uncomment_preserves_selection() {
 
     // Move to start of file
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Select lines 1 and 2 (Shift+Down twice)
     harness
@@ -183,6 +188,7 @@ fn test_toggle_uncomment_preserves_selection() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify we have a selection before uncommenting
     let cursor_before = *harness.editor().active_cursors().primary();
@@ -228,6 +234,7 @@ fn test_toggle_comment_roundtrip_with_selection() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Toggle comment (comment all)
     run_command(&mut harness, "Toggle Comment");
@@ -246,6 +253,7 @@ fn test_toggle_comment_roundtrip_with_selection() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Toggle comment again (uncomment all)
     run_command(&mut harness, "Toggle Comment");
@@ -278,6 +286,7 @@ fn test_toggle_comment_single_line_no_newline() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify we have a selection
     let cursor = *harness.editor().active_cursors().primary();
@@ -368,6 +377,7 @@ fn test_toggle_comment_selection_at_buffer_end() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Toggle comment
     run_command(&mut harness, "Toggle Comment");

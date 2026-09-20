@@ -134,9 +134,11 @@ fn test_file_browser_arrow_navigation() {
     // Move down twice
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Move back up
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // The test passes if no crash occurs and we can still see the files
     let screen = harness.screen_to_string();
@@ -359,6 +361,7 @@ fn test_file_browser_cancel() {
 
     // Cancel with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // File browser should be closed
     harness.assert_screen_not_contains("Navigation:");

@@ -14,11 +14,13 @@ fn run_palette(harness: &mut EditorTestHarness, command_name: &str) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text(command_name).unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 }
 
 #[test]
@@ -70,6 +72,7 @@ fn discover_dialog_scans_through_the_plugin_hub() {
     );
 
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let closed = harness.screen_to_string();
     assert!(
         !closed.contains("Pick a machine and choose Scan"),

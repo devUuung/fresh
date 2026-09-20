@@ -134,6 +134,7 @@ fn test_lsp_hover_popup_text_selection_copy() -> anyhow::Result<()> {
     // Press Ctrl+C to copy
     println!("Pressing Ctrl+C...");
     harness.send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Check clipboard content
     let clipboard_content = harness.editor_mut().clipboard_content_for_test();
@@ -238,6 +239,7 @@ fn test_popup_text_selection_copy() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Check clipboard content
     {
@@ -294,6 +296,7 @@ fn test_popup_copy_does_not_copy_from_editor() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Check clipboard - should have popup text, NOT editor text
     {
@@ -510,6 +513,7 @@ fn test_transient_popup_mouse_drag_and_copy() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Check clipboard content
     {

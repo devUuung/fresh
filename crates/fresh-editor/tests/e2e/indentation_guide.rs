@@ -23,6 +23,7 @@ fn indentation_guide_render_configured_glyph_in_editor_flow() {
     harness.render().unwrap();
 
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -159,6 +160,7 @@ fn indentation_guide_keeps_subdued_color_inside_selection() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // The glyph must still be drawn at the same cell.
     assert_eq!(
@@ -370,6 +372,7 @@ fn indentation_guide_all_mode_no_staircase_gap_when_openers_scrolled_off() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     // The indent-12 body row must carry a guide at all three levels (columns 0,
@@ -404,6 +407,7 @@ fn indentation_guide_active_mode_continues_through_wrapped_line() {
     // becomes the single active guide.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     let lines: Vec<&str> = screen.lines().collect();

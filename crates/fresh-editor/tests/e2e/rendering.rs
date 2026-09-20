@@ -325,6 +325,8 @@ fn test_line_numbers_rendered_correctly() {
             .send_key(KeyCode::End, KeyModifiers::CONTROL)
             .unwrap();
 
+        harness.render().unwrap();
+
         // Get the screen to see what's rendered
         let screen = harness.screen_to_string();
         let lines: Vec<&str> = screen.lines().collect();
@@ -407,6 +409,7 @@ fn test_page_down_line_numbers() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let after_first_pagedown = harness.top_line_number();
     let cursor_after_first = harness.cursor_position();
 
@@ -437,6 +440,7 @@ fn test_page_down_line_numbers() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let after_second_pagedown = harness.top_line_number();
     let cursor_after_second = harness.cursor_position();
 
@@ -474,6 +478,7 @@ fn test_page_down_line_numbers() {
     // We need to move up more than scroll_offset (3) lines to trigger scroll
     for i in 0..10 {
         harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
         let current_line = harness.top_line_number();
         let cursor_pos = harness.cursor_position();
 
@@ -747,6 +752,7 @@ fn test_current_line_highlight_follows_cursor_movement() {
 
     // Move cursor down to line 1
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Line 0 should no longer be highlighted
     let style_line0_after = harness
@@ -916,6 +922,7 @@ fn test_hide_current_line_on_selection() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
     assert!(
         harness.has_selection(),
         "Should have selection after Shift+Right"

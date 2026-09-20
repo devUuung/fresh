@@ -35,6 +35,7 @@ fn test_find_next_centers_match_when_scrolling() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("NEEDLE").unwrap();
     harness.render().unwrap();
     harness
@@ -92,6 +93,7 @@ fn test_find_centers_match_in_wrapped_doc() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text(needle).unwrap();
     harness.render().unwrap();
     harness
@@ -132,6 +134,7 @@ fn test_find_next_does_not_recenter_visible_match() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("NEEDLE").unwrap();
     harness.render().unwrap();
     harness

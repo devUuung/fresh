@@ -32,6 +32,7 @@ fn test_bug_472_turkish_char_backspace_in_search() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify search prompt is open
     harness.assert_screen_contains("Search:");
@@ -48,6 +49,7 @@ fn test_bug_472_turkish_char_backspace_in_search() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // After backspace, the prompt should be empty
     harness.assert_screen_contains("Search:");
@@ -78,6 +80,7 @@ fn test_multibyte_char_backspace_in_search() {
         harness
             .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
             .unwrap();
+        harness.render().unwrap();
 
         // Type the multi-byte character
         harness.type_text(ch).unwrap();
@@ -96,6 +99,7 @@ fn test_multibyte_char_backspace_in_search() {
         harness
             .send_key(KeyCode::Backspace, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
 
         // Verify the character was deleted
         let screen = harness.screen_to_string();
@@ -121,6 +125,7 @@ fn test_cursor_movement_with_multibyte_chars_in_prompt() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type "aşb" - ASCII, Turkish, ASCII
     harness.type_text("aşb").unwrap();
@@ -156,6 +161,7 @@ fn test_delete_with_multibyte_chars_in_prompt() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type "şa" - Turkish char followed by ASCII
     harness.type_text("şa").unwrap();
@@ -168,6 +174,7 @@ fn test_delete_with_multibyte_chars_in_prompt() {
     harness
         .send_key(KeyCode::Delete, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should have just "a" left
     harness.assert_screen_contains("Search: a");
@@ -183,6 +190,7 @@ fn test_multiple_multibyte_chars_backspace_sequence() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type "şçü" - three 2-byte Turkish/German characters
     harness.type_text("şçü").unwrap();
@@ -195,16 +203,19 @@ fn test_multiple_multibyte_chars_backspace_sequence() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Search: şç");
 
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Search: ş");
 
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Prompt should be empty now
     let screen = harness.screen_to_string();
@@ -223,6 +234,7 @@ fn test_multibyte_backspace_in_command_palette() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type Japanese characters (each is 3 bytes, 2 display columns)
     harness.type_text("日本語").unwrap();
@@ -238,6 +250,7 @@ fn test_multibyte_backspace_in_command_palette() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let screen = harness.screen_to_string();
     assert!(screen.contains("日"), "Should still contain 日");
     assert!(screen.contains("本"), "Should still contain 本");
@@ -246,6 +259,7 @@ fn test_multibyte_backspace_in_command_palette() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let screen = harness.screen_to_string();
     assert!(screen.contains("日"), "Should still contain 日");
     assert!(!screen.contains("本"), "本 should be deleted");
@@ -253,6 +267,7 @@ fn test_multibyte_backspace_in_command_palette() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // All Japanese characters should be deleted
     let screen = harness.screen_to_string();
@@ -271,6 +286,7 @@ fn test_multibyte_backspace_in_replace_prompt() {
     harness
         .send_key(KeyCode::Char('r'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type a multi-byte character
     harness.type_text("ñ").unwrap();
@@ -283,6 +299,7 @@ fn test_multibyte_backspace_in_replace_prompt() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     harness.assert_screen_not_contains("ñ");
 }
@@ -372,11 +389,13 @@ fn test_multibyte_in_settings_number_input() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Start editing mode
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Select all and clear
     harness
@@ -395,6 +414,7 @@ fn test_multibyte_in_settings_number_input() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Cancel editing
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
@@ -418,6 +438,7 @@ fn test_insert_ascii_between_multibyte_chars() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type "你好" (two 3-byte Chinese characters)
     harness.type_text("你好").unwrap();
@@ -446,6 +467,7 @@ fn test_mixed_content_cursor_and_delete() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type mixed content using unique characters that won't appear elsewhere on screen
     // Use numbers and CJK which are unlikely to be in UI elements
@@ -520,6 +542,7 @@ fn test_home_end_with_multibyte_chars_in_prompt() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type multi-byte content (CJK chars are double-width)
     harness.type_text("日本語").unwrap();
@@ -566,6 +589,7 @@ fn test_bug_472_exact_reproduction() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // 2. Type 'ş' (Turkish s-cedilla)
     harness.type_text("ş").unwrap();
@@ -576,6 +600,7 @@ fn test_bug_472_exact_reproduction() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // If we get here without panicking, the bug is fixed
     // Verify the prompt is now empty

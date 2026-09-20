@@ -607,6 +607,7 @@ fn test_edit_save_edit_save_diagnostic_flow() -> anyhow::Result<()> {
         crossterm::event::KeyCode::Char('s'),
         crossterm::event::KeyModifiers::CONTROL,
     )?;
+    harness.render()?;
 
     // Wait for save to be processed and diagnostics re-sent
     harness.wait_until(|_| {
@@ -633,6 +634,7 @@ fn test_edit_save_edit_save_diagnostic_flow() -> anyhow::Result<()> {
         crossterm::event::KeyCode::Char('s'),
         crossterm::event::KeyModifiers::CONTROL,
     )?;
+    harness.render()?;
 
     // Wait for second save to clear diagnostics
     harness.wait_until(|_| {

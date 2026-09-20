@@ -87,6 +87,7 @@ fn harness_with_explorer_and_terminal(root: &PathBuf) -> EditorTestHarness {
 /// directory row hands the keyboard back either way.
 fn assert_enter_expands_nested(harness: &mut EditorTestHarness) {
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let before = selected_explorer_row(harness).unwrap_or_else(|| {
         panic!(
             "the explorer should have moved its selection down onto `nested`, \
@@ -103,6 +104,7 @@ fn assert_enter_expands_nested(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     assert!(
         explorer_text(harness).contains("inner_file.txt"),

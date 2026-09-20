@@ -53,6 +53,7 @@ fn test_issue_562_delete_folder_crash_scroll_offset() {
 
     // Navigate to big_folder
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Expand big_folder by pressing Enter (this shows 100 files)
     harness
@@ -178,6 +179,7 @@ fn test_issue_564_replace_all_hang() {
     harness
         .send_key(KeyCode::Char('r'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show "Replace:" prompt
     harness.assert_screen_contains("Replace:");
@@ -190,6 +192,7 @@ fn test_issue_564_replace_all_hang() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show replacement prompt
     harness.assert_screen_contains("Replace 'Wii' with:");
@@ -202,6 +205,7 @@ fn test_issue_564_replace_all_hang() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Now we should be in interactive replace mode
     // Press 'a' to replace all occurrences
@@ -266,18 +270,21 @@ fn test_replace_all_overlapping_pattern() {
     harness
         .send_key(KeyCode::Char('r'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Search for "aa"
     harness.type_text("aa").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Replace with "aaa" (pattern contained in replacement)
     harness.type_text("aaa").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Press 'a' to replace all
     harness.type_text("a").unwrap();
@@ -342,6 +349,7 @@ fn test_issue_562_rapid_folder_deletion() {
     // Scroll down
     for _ in 0..15 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
     }
 
     // Delete multiple folders rapidly
@@ -423,6 +431,7 @@ fn test_issue_564_query_replace_all_hang_large_file() {
             KeyModifiers::CONTROL | KeyModifiers::ALT,
         )
         .unwrap();
+    harness.render().unwrap();
 
     // Should show "Query replace:" prompt
     harness.assert_screen_contains("Query replace:");
@@ -432,6 +441,7 @@ fn test_issue_564_query_replace_all_hang_large_file() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show replacement prompt
     harness.assert_screen_contains("Query replace 'Wii' with:");
@@ -441,6 +451,7 @@ fn test_issue_564_query_replace_all_hang_large_file() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show interactive replace prompt
     harness.assert_screen_contains("Replace?");
@@ -569,6 +580,7 @@ fn test_saved_at_index_out_of_bounds_after_undo_and_edit() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify we're not modified after save
     assert!(
@@ -790,6 +802,7 @@ fn test_review_diff_typing_after_open_does_not_panic() {
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Typing a character must not panic. Before the fix this hit the
     // unwrap at mod.rs:2825.
@@ -847,6 +860,7 @@ fn test_review_diff_empty_repo_then_type_does_not_panic() {
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type — must not panic.
     harness

@@ -21,6 +21,7 @@ fn test_delete_forward_does_not_decrement_status_bar_line_number() {
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Verify we're on line 3
     let status = harness.get_status_bar();
@@ -34,6 +35,7 @@ fn test_delete_forward_does_not_decrement_status_bar_line_number() {
     harness
         .send_key(KeyCode::Delete, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Buffer should now have merged line3 and line4
     harness.assert_buffer_content("line1\nline2\nline3line4\nline5\n");
@@ -69,6 +71,7 @@ fn test_relative_line_numbers_show_correct_distances() {
     // Move cursor to line 3
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     println!("Screen with relative line numbers (cursor on line 3):\n{screen}");

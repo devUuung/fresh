@@ -27,6 +27,7 @@ fn run_command_palette(harness: &mut EditorTestHarness, query: &str) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 }
 
 /// Wide harness so the status bar isn't clipped at the right edge — the

@@ -15,6 +15,7 @@ fn test_split_horizontal() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split horiz").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
@@ -41,6 +42,7 @@ fn test_split_vertical() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
@@ -64,10 +66,12 @@ fn test_split_navigation() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Now in second split - it shows the same buffer content (Emacs-style)
     // The cursor in the new split starts at position 0
@@ -82,6 +86,7 @@ fn test_split_navigation() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("next split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
@@ -95,6 +100,7 @@ fn test_split_navigation() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("prev split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
@@ -114,15 +120,18 @@ fn test_close_split() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Close the split via command palette
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("close split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
@@ -142,10 +151,12 @@ fn test_cannot_close_last_split() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("close split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should see error message
     harness.assert_screen_contains("Cannot close split");
@@ -239,10 +250,12 @@ fn test_split_with_file_operations() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Open second file in the newly-focused split
     harness.open_file(&file2).unwrap();
@@ -266,10 +279,12 @@ fn test_toggle_maximize_split() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Both splits should show "Buffer 1" (Emacs-style)
     harness.assert_screen_contains("Split pane vertically");
@@ -278,6 +293,7 @@ fn test_toggle_maximize_split() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("togmax").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
@@ -304,10 +320,12 @@ fn test_toggle_unmaximize_split() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Open second file in the new split
     harness.open_file(&file2).unwrap();
@@ -317,19 +335,23 @@ fn test_toggle_unmaximize_split() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("togmax").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Toggle again to unmaximize (second toggle = unmaximize)
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("togmax").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should see status message
     harness.assert_screen_contains("Restored all splits");
@@ -348,10 +370,12 @@ fn test_cannot_toggle_maximize_single_split() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("togmax").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should see error message (may be truncated in status bar)
     harness.assert_screen_contains("Cannot maximize");
@@ -403,6 +427,7 @@ fn test_close_last_buffer_in_split_closes_split() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Should be back to 1 split (split was closed)
     assert_eq!(
@@ -458,11 +483,13 @@ fn test_close_unique_buffer_in_split_closes_split() {
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Close the file1 tab (which is also in split A, so it just removes from tabs)
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Now the second split should only have file2, which is NOT in the first split
     let active_split = harness.editor().get_active_split();
@@ -481,6 +508,7 @@ fn test_close_unique_buffer_in_split_closes_split() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Should be back to 1 split (the bug would leave 2 splits with an empty buffer)
     assert_eq!(

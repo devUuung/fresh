@@ -23,6 +23,7 @@ fn test_basic_search_forward() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Check that the search prompt appeared
     harness.assert_screen_contains("Search: ");
@@ -77,6 +78,7 @@ fn test_find_previous_with_ctrl_shift_n() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type search query
     harness.type_text("hello").unwrap();
@@ -216,11 +218,14 @@ fn test_find_in_selection_command() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("Find in Selection").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+
+    harness.render().unwrap();
     harness.assert_screen_contains("Search: word");
 
     harness
@@ -271,6 +276,7 @@ fn test_incremental_search_highlighting() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type "test" - should see highlighting before pressing Enter
     harness.type_text("test").unwrap();
@@ -309,6 +315,7 @@ fn test_search_highlight_does_not_extend_on_adjacent_insert() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("def").unwrap();
     harness.render().unwrap();
     harness
@@ -367,6 +374,7 @@ fn test_search_highlight_clears_when_edit_breaks_match() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("def").unwrap();
     harness.render().unwrap();
     harness
@@ -417,10 +425,12 @@ fn test_search_highlight_clears_when_whole_word_boundary_breaks() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     // Toggle Whole Word with Alt+W.
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("def").unwrap();
     harness.render().unwrap();
     harness
@@ -475,6 +485,7 @@ fn test_search_highlighting_visible_only() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type search query
     harness.type_text("search").unwrap();
@@ -488,6 +499,7 @@ fn test_search_highlighting_visible_only() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should be at first match
     let cursor_pos = harness.cursor_position();
@@ -497,9 +509,11 @@ fn test_search_highlighting_visible_only() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Find next should work even after scrolling
     harness.send_key(KeyCode::F(3), KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let new_cursor_pos = harness.cursor_position();
     assert!(
@@ -548,6 +562,7 @@ fn test_interactive_replace_wrap_around() {
             KeyModifiers::CONTROL | KeyModifiers::ALT,
         )
         .unwrap();
+    harness.render().unwrap();
 
     // Should show "Query replace: " prompt
     harness.assert_screen_contains("Query replace: ");
@@ -560,6 +575,7 @@ fn test_interactive_replace_wrap_around() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show "Query replace 'foo' with: " prompt
     harness.assert_screen_contains("Query replace 'foo' with: ");
@@ -572,6 +588,7 @@ fn test_interactive_replace_wrap_around() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should be at first match after position 25, which is at position 29 ("foo again")
     let pos1 = harness.cursor_position();
@@ -650,18 +667,21 @@ fn test_interactive_replace_wrap_stops_at_start() {
             KeyModifiers::CONTROL | KeyModifiers::ALT,
         )
         .unwrap();
+    harness.render().unwrap();
 
     // Enter search term
     harness.type_text("foo").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Enter replacement
     harness.type_text("XXX").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should be at second "foo", press 'n' to skip
     harness.type_text("n").unwrap();
@@ -705,6 +725,7 @@ fn test_search_highlights_update_on_scroll() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type search query
     harness.type_text("MATCH").unwrap();
@@ -714,6 +735,7 @@ fn test_search_highlights_update_on_scroll() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should have highlights for visible matches
     let highlights_initial = harness.count_search_highlights();
@@ -742,6 +764,7 @@ fn test_search_highlights_update_on_scroll() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
     }
 
     // After scrolling, overlays for all matches still exist
@@ -777,60 +800,73 @@ fn test_search_history_navigation() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("hello").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Second search: "foo"
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("foo").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Third search: "test"
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("test").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Open search prompt again - should pre-fill with most recent search ("test")
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Search: test");
 
     // Press Up arrow - should show "foo" (previous in history)
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Search: foo");
 
     // Press Up arrow again - should show "hello"
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Search: hello");
 
     // Press Up arrow again - should stay at "hello" (oldest)
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Search: hello");
 
     // Press Down arrow - should show "foo"
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Search: foo");
 
     // Press Down arrow - should show "test"
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Search: test");
 
     // Cancel the prompt
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 }
 
 /// Test that search history preserves current input when navigating
@@ -851,29 +887,35 @@ fn test_search_history_preserves_current_input() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("previous").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Open search again and start typing
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("current input").unwrap();
     harness.render().unwrap();
     harness.assert_screen_contains("Search: current input");
 
     // Press Up to go to history
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Search: previous");
 
     // Press Down to return to current input
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Search: current input");
 
     // Cancel
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 }
 
 /// Test that replace has separate history from search
@@ -891,21 +933,25 @@ fn test_replace_history_separate_from_search() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("search_term").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Do a replace to add to both search and replace history
     harness
         .send_key(KeyCode::Char('r'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Replace: ");
 
     harness.type_text("hello").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should now show replacement prompt
     harness.assert_screen_contains("Replace 'hello' with: ");
@@ -914,29 +960,35 @@ fn test_replace_history_separate_from_search() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Open replace again - pre-fills with "hello" (last search history item)
     harness
         .send_key(KeyCode::Char('r'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Replace: hello");
 
     // Press Up - should show "search_term" (going back in shared search history)
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Replace: search_term");
 
     // Confirm to get to replacement prompt (searching for "search_term")
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Replace 'search_term' with: ");
 
     // Press Up - should show "goodbye" (from replace history, which is separate)
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Replace 'search_term' with: goodbye");
 
     // Cancel
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 }
 
 /// Test that history skips empty entries and duplicate consecutive entries
@@ -957,52 +1009,64 @@ fn test_search_history_skips_empty_and_duplicates() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Search for "test" twice
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("test").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("test").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Search for "other"
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("other").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Open search and check history - should pre-fill with "other" (most recent)
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Search: other");
 
     // Press Up - should show "test" (only one "test" in history, not two)
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Search: test");
 
     // Press Up - should stay at "test" (no empty string before it)
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Search: test");
 
     // Cancel
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 }
 
 /// Test that incremental search highlights update when navigating history
@@ -1020,23 +1084,28 @@ fn test_history_updates_incremental_highlights() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("hello").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("foo").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Open search again - prompt pre-fills with "foo" (last history item)
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify prompt shows "foo" (pre-filled from last search)
     let screen = harness.screen_to_string();
@@ -1048,6 +1117,7 @@ fn test_history_updates_incremental_highlights() {
 
     // Press Up to navigate back in history to "hello"
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Verify "hello" appears on screen (highlights should update)
     let screen = harness.screen_to_string();
@@ -1062,6 +1132,7 @@ fn test_history_updates_incremental_highlights() {
 
     // Cancel
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 }
 
 /// Test that incremental highlighting works on second search (bug reproduction)
@@ -1079,6 +1150,7 @@ fn test_incremental_highlighting_on_second_search() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("hello").unwrap();
     harness.render().unwrap();
 
@@ -1097,11 +1169,13 @@ fn test_incremental_highlighting_on_second_search() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Second search: "foo"
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type "foo" incrementally
     harness.type_text("f").unwrap();
@@ -1128,6 +1202,7 @@ fn test_incremental_highlighting_on_second_search() {
 
     // Cancel
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 }
 
 /// Test that highlights disappear when search query becomes empty
@@ -1145,6 +1220,7 @@ fn test_highlights_clear_when_query_becomes_empty() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("hello").unwrap();
     harness.render().unwrap();
 
@@ -1160,6 +1236,7 @@ fn test_highlights_clear_when_query_becomes_empty() {
         harness
             .send_key(KeyCode::Backspace, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
     }
 
     // Verify highlights are cleared
@@ -1171,6 +1248,7 @@ fn test_highlights_clear_when_query_becomes_empty() {
 
     // Cancel
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 }
 
 /// Test that highlights clear when navigating to empty input via history
@@ -1188,15 +1266,18 @@ fn test_highlights_clear_on_history_to_empty() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("hello").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Open search again and start typing something new
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("foo").unwrap();
     harness.render().unwrap();
 
@@ -1206,6 +1287,7 @@ fn test_highlights_clear_on_history_to_empty() {
 
     // Navigate up to history (shows "hello")
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Should have highlights for "hello"
     let highlight_count_hello = harness.count_search_highlights();
@@ -1216,6 +1298,7 @@ fn test_highlights_clear_on_history_to_empty() {
 
     // Navigate down past the end (returns to "foo")
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Should have highlights for "foo" again
     let highlight_count_foo_again = harness.count_search_highlights();
@@ -1229,13 +1312,16 @@ fn test_highlights_clear_on_history_to_empty() {
         harness
             .send_key(KeyCode::Backspace, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
     }
 
     // Navigate up to "hello" in history
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Navigate down to empty input
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Highlights should be cleared for empty input
     let highlight_count_empty = harness.count_search_highlights();
@@ -1246,6 +1332,7 @@ fn test_highlights_clear_on_history_to_empty() {
 
     // Cancel
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 }
 
 /// Test that search options bar appears when search prompt is active
@@ -1270,6 +1357,7 @@ fn test_search_options_bar_appears() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify search options bar appears with checkboxes and shortcuts
     let screen = harness.screen_to_string();
@@ -1296,6 +1384,7 @@ fn test_search_options_bar_appears() {
 
     // Cancel the search
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Verify search options bar disappears
     let screen_after = harness.screen_to_string();
@@ -1320,6 +1409,7 @@ fn test_toggle_case_sensitive_in_search() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type search query (case-sensitive by default)
     harness.type_text("hello").unwrap();
@@ -1337,6 +1427,7 @@ fn test_toggle_case_sensitive_in_search() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify checkbox is now unchecked
     let screen_after_toggle = harness.screen_to_string();
@@ -1347,6 +1438,7 @@ fn test_toggle_case_sensitive_in_search() {
 
     // Cancel search
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 }
 
 /// Test toggling whole word match with Alt+W during search
@@ -1364,6 +1456,7 @@ fn test_toggle_whole_word_in_search() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type search query (whole word is OFF by default)
     harness.type_text("test").unwrap();
@@ -1381,6 +1474,7 @@ fn test_toggle_whole_word_in_search() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify checkbox is now checked
     let screen_after_toggle = harness.screen_to_string();
@@ -1391,6 +1485,7 @@ fn test_toggle_whole_word_in_search() {
 
     // Cancel search
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 }
 
 /// Test that search options bar also appears for replace prompts
@@ -1408,6 +1503,7 @@ fn test_search_options_bar_in_replace() {
     harness
         .send_key(KeyCode::Char('r'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify search options bar appears for replace prompt too
     let screen = harness.screen_to_string();
@@ -1422,6 +1518,7 @@ fn test_search_options_bar_in_replace() {
 
     // Cancel
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 }
 
 /// Test that status bar is hidden when suggestions popup is shown
@@ -1447,6 +1544,7 @@ fn test_status_bar_hidden_during_suggestions() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify suggestions are shown (Quick Open uses ">" prefix in hints)
     harness.assert_screen_contains(">command");
@@ -1459,6 +1557,7 @@ fn test_status_bar_hidden_during_suggestions() {
 
     // Cancel
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // After closing, status bar should be visible again
     let screen_after = harness.screen_to_string();
@@ -1572,6 +1671,7 @@ fn test_find_selection_next_with_selection() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify "foo" is selected
     let selected_text = harness.get_selected_text();
@@ -1912,6 +2012,7 @@ fn test_search_in_large_file() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Check that the search prompt appeared
     harness.assert_screen_contains("Search: ");
@@ -2014,6 +2115,7 @@ fn test_search_in_large_file_with_low_threshold() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Search for the unique string
     harness.type_text("FINDME_SPECIAL").unwrap();
@@ -2087,6 +2189,7 @@ fn test_f3_search_finds_matches_outside_viewport() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type search query
     harness.type_text("UNIQUE_MATCH").unwrap();
@@ -2170,12 +2273,14 @@ fn test_f3_continues_searching_after_buffer_modification() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     assert_eq!(harness.cursor_position(), 0, "Cursor should be at start");
 
     // Step 2: Search for "foo"
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("foo").unwrap();
     harness.render().unwrap();
 
@@ -2222,6 +2327,7 @@ fn test_f3_continues_searching_after_buffer_modification() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type "XXX " (4 characters) at the beginning
     // This shifts all "foo" positions by 4 bytes:
@@ -2312,6 +2418,7 @@ fn test_search_double_underscore() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Search for __init__
     harness.type_text("__init__").unwrap();
@@ -2353,6 +2460,7 @@ fn test_search_double_underscore_prefix() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("__").unwrap();
     harness.render().unwrap();
 
@@ -2391,6 +2499,7 @@ fn test_search_angle_bracket() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("Vec<").unwrap();
     harness.render().unwrap();
 
@@ -2427,6 +2536,7 @@ fn test_search_with_closing_angle_bracket() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("plugin_name<").unwrap();
     harness.render().unwrap();
 
@@ -2462,6 +2572,7 @@ fn test_esc_clears_search_highlights() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type search query
     harness.type_text("hello").unwrap();
@@ -2477,6 +2588,7 @@ fn test_esc_clears_search_highlights() {
 
     // Press ESC to cancel search
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Verify search prompt is gone
     let screen = harness.screen_to_string();
@@ -2510,18 +2622,21 @@ fn test_regex_replace_with_capture_group() {
     harness
         .send_key(KeyCode::Char('r'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Replace: ");
 
     // Toggle regex mode with Alt+R
     harness
         .send_key(KeyCode::Char('r'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Type the regex search pattern
     harness.type_text("bla(bla)").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should now show replacement prompt
     harness.assert_screen_contains("Replace 'bla(bla)' with: ");
@@ -2531,6 +2646,7 @@ fn test_regex_replace_with_capture_group() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Python: re.sub(r'bla(bla)', r'oo\1oo', 'blablabla') == 'ooblaoobla'
     let content = harness.get_buffer_content().unwrap();
@@ -2560,12 +2676,14 @@ fn test_regex_caret_anchor_matches_every_line() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Search: ");
 
     // Alt+R enables regex mode.
     harness
         .send_key(KeyCode::Char('r'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Search for the anchored pattern and submit.
     harness.type_text("^use").unwrap();
@@ -2621,6 +2739,7 @@ fn test_search_large_file_tick_performance() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Search for "x" — appears ~68 times per line across ~753K lines = many matches
     harness.type_text("x").unwrap();
@@ -2647,8 +2766,10 @@ fn test_search_large_file_tick_performance() {
 
     // First measure WITHOUT search (cancel search to get baseline)
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     // Clear search state
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     for i in 0..3 {
         let tick_start = std::time::Instant::now();
@@ -2672,6 +2793,7 @@ fn test_search_large_file_tick_performance() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("x").unwrap();
     harness.render().unwrap();
     harness
@@ -2761,6 +2883,7 @@ fn test_search_f3_navigates_all_matches_after_scroll() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("NEEDLE").unwrap();
     harness.render().unwrap();
 
@@ -2856,6 +2979,7 @@ fn test_search_f3_navigates_all_matches_large_file() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("NEEDLE").unwrap();
     harness.render().unwrap();
     harness
@@ -2910,6 +3034,7 @@ fn test_search_status_bar_line_number_updates_on_f3() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type search query and confirm
     harness.type_text("hello").unwrap();
@@ -2950,6 +3075,7 @@ fn test_clear_search_action() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type search query
     harness.type_text("hello").unwrap();
@@ -2970,6 +3096,7 @@ fn test_clear_search_action() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     harness.type_text("Clear Search").unwrap();
     harness.render().unwrap();

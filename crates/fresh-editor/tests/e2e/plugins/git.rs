@@ -298,6 +298,7 @@ fn test_git_grep_cancel() {
 
     // Cancel with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Prompt should be gone
     harness.assert_screen_not_contains("Git grep: ");
@@ -547,6 +548,7 @@ fn test_git_find_file_confirm_opens_file() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for file to actually load (async operation)
     harness
@@ -691,6 +693,7 @@ fn test_git_commands_via_command_palette() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     harness.assert_screen_contains("");
 
@@ -754,6 +757,7 @@ fn test_git_grep_opens_correct_file_and_jumps_to_line() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for file to actually load (async operation)
     harness
@@ -934,6 +938,7 @@ fn test_git_grep_cursor_position_accuracy() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for file to actually load AND cursor to be positioned (both are async operations)
     // The cursor should be on line 3 (0-indexed = line 2)
@@ -2861,6 +2866,7 @@ fn trigger_test_view_marker(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("Test View Marker").unwrap();
     // Wait for command to appear in suggestions (not just input line)
     harness
@@ -2873,6 +2879,7 @@ fn trigger_test_view_marker(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 }
 
 /// Helper to trigger test view marker with many virtual lines via command palette
@@ -2890,6 +2897,7 @@ fn trigger_test_view_marker_many_virtual_lines(harness: &mut EditorTestHarness) 
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness
         .type_text("Test View Marker (Many Virtual Lines)")
         .unwrap();
@@ -2904,6 +2912,7 @@ fn trigger_test_view_marker_many_virtual_lines(harness: &mut EditorTestHarness) 
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 }
 
 /// MINIMAL REPRODUCTION: View transform header at byte 0 should be visible

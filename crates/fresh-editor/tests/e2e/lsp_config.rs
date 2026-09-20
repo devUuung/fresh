@@ -84,6 +84,7 @@ fn test_start_lsp_command_works_when_config_disabled() -> anyhow::Result<()> {
     );
 
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Process async messages to allow LSP to start
     for _ in 0..20 {
@@ -174,6 +175,7 @@ fn test_settings_ui_lsp_enabled_change_takes_effect() -> anyhow::Result<()> {
 
     // Navigate to the result (Enter to select search result)
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // The LSP settings should be visible - look for "enabled" toggle
     // Navigate down to find the "enabled" toggle if needed
@@ -183,10 +185,12 @@ fn test_settings_ui_lsp_enabled_change_takes_effect() -> anyhow::Result<()> {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
+        harness.render()?;
     }
 
     // Toggle the enabled setting (Enter on a toggle)
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Should show modified indicator
     let screen = harness.screen_to_string();
@@ -196,9 +200,11 @@ fn test_settings_ui_lsp_enabled_change_takes_effect() -> anyhow::Result<()> {
     // Tab to footer, then navigate to Save button
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Find and click Save (or use Ctrl+S shortcut)
     harness.send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Process any async operations
     for _ in 0..5 {
@@ -216,6 +222,7 @@ fn test_settings_ui_lsp_enabled_change_takes_effect() -> anyhow::Result<()> {
 
     // Close settings if still open
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Now open a Rust file to trigger LSP
     harness.open_file(&test_file)?;
@@ -325,6 +332,7 @@ fn test_lsp_manager_config_updated_via_set_lsp_config() -> anyhow::Result<()> {
     harness.wait_for_prompt()?;
     harness.type_text("Start")?;
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Process async messages
     for _ in 0..20 {

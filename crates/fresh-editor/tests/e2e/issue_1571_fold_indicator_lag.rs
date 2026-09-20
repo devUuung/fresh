@@ -103,6 +103,7 @@ fn test_fold_indicator_follows_insert_before_fold() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // `fn main()` is now on content row 1.
     assert!(
@@ -190,6 +191,7 @@ fn test_fold_indicator_follows_delete_before_fold() {
     harness
         .send_key(KeyCode::Delete, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // `fn main()` is now on content row 0.
     assert!(

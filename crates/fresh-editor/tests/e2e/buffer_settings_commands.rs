@@ -20,6 +20,7 @@ fn run_command(harness: &mut EditorTestHarness, command_name: &str) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Type the command name
     harness.type_text(command_name).unwrap();
@@ -29,6 +30,7 @@ fn run_command(harness: &mut EditorTestHarness, command_name: &str) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 }
 
 /// Test that "Toggle Indentation" command toggles between spaces and tabs
@@ -54,6 +56,7 @@ fn test_toggle_indentation_command() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Run "Toggle Indentation" command to switch to spaces
     run_command(&mut harness, "Toggle Indentation: Spaces");
@@ -76,6 +79,7 @@ fn test_toggle_indentation_command() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     run_command(&mut harness, "Toggle Indentation: Spaces");
 
@@ -326,6 +330,7 @@ fn test_set_language_updates_whitespace_tab_override() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let after = harness.screen_to_string();
     assert!(
@@ -383,11 +388,13 @@ fn test_set_tab_size_command() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("Set Tab Size").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Clear existing text and type "8"
     harness
@@ -397,6 +404,7 @@ fn test_set_tab_size_command() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Get new offset (tab_size=8)
     let screen_8 = harness.screen_to_string();
@@ -455,6 +463,7 @@ fn test_reset_buffer_settings_command() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Reset buffer settings
     run_command(&mut harness, "Reset Buffer Settings");
@@ -596,6 +605,7 @@ fn test_toggle_line_numbers_persists_across_file_changes() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Step 9: Verify line numbers are still disabled after saving
     let screen_after_save = harness.screen_to_string();

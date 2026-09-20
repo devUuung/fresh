@@ -48,6 +48,7 @@ fn test_scroll_clearing_at_bottom_of_file() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     println!("\n--- After jumping to end (Ctrl+End) ---");
     let screen_at_end = harness.screen_to_string();
@@ -69,6 +70,7 @@ fn test_scroll_clearing_at_bottom_of_file() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
 
         let screen_after = harness.screen_to_string();
 
@@ -147,6 +149,7 @@ fn test_scroll_clearing_at_bottom_of_file() {
     // Try Down arrow multiple times at the bottom
     for _ in 1..=10 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
     }
 
     let screen_after_down = harness.screen_to_string();
@@ -310,6 +313,7 @@ fn test_mouse_wheel_after_keyboard_navigation() {
     println!("\n--- Navigating with keyboard (Down arrow) ---");
     for i in 1..=10 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
         println!("After Down #{}", i);
     }
 
@@ -408,6 +412,7 @@ fn test_leftover_characters_after_last_line() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Find which row contains the last line of the file
     let screen_str = harness.screen_to_string();
@@ -469,6 +474,7 @@ fn test_leftover_characters_after_last_line() {
 
     for _ in 0..10 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
     }
 
     let screen_after = harness.screen_to_string();
@@ -559,6 +565,7 @@ fn test_scroll_clearing_render_buffer_analysis() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Capture the render buffer before scrolling attempts
     let buffer_before = harness.buffer().clone();
@@ -568,6 +575,7 @@ fn test_scroll_clearing_render_buffer_analysis() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
     }
 
     // Capture the render buffer after scrolling attempts
@@ -773,9 +781,11 @@ fn test_tab_cursor_positioning_and_rendering() {
     // Line 3 starts with three tabs followed by text
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Move to beginning of line
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let screen_at_start = harness.screen_to_string();
     println!("\n--- Cursor at start of line with tabs ---");
@@ -822,6 +832,7 @@ fn test_tab_cursor_positioning_and_rendering() {
         harness
             .send_key(KeyCode::Right, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
 
         let current_screen = harness.screen_to_string();
 
@@ -836,6 +847,7 @@ fn test_tab_cursor_positioning_and_rendering() {
     // Now move cursor back to start and test that cursor is rendered
     // at the correct position (before the tab, not on all tab spaces)
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let screen_back_at_start = harness.screen_to_string();
 
@@ -906,6 +918,7 @@ fn test_cursor_before_first_tab() {
     // second goes to column 0 (before tabs).
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Get the screen cursor position from the harness
     let (cursor_x, cursor_y) = harness.screen_cursor_position();

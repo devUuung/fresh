@@ -1345,6 +1345,7 @@ fn test_fold_unfold_at_end_of_large_file_cursor() {
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
     harness.render().unwrap();
+    harness.render().unwrap();
 
     // Precondition: both blocks and THE_END should be visible.
     harness.assert_screen_contains("fn block_a()");
@@ -1457,6 +1458,7 @@ fn test_fold_unfold_function_body_at_end_of_large_file() {
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
     harness.render().unwrap();
+    harness.render().unwrap();
 
     // Everything should be visible after Ctrl+End scrolls to the end.
     harness.assert_screen_contains("fn my_test(");
@@ -1561,6 +1563,7 @@ fn test_fold_unfold_at_end_of_large_file_gutter_click() {
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
     harness.render().unwrap();
+    harness.render().unwrap();
 
     harness.assert_screen_contains("fn block_a()");
     harness.assert_screen_contains("fn block_b()");
@@ -1639,6 +1642,7 @@ fn test_page_down_advances_a_full_page_across_collapsed_folds() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
         let after = visible_rows(harness);
         before
             .iter()

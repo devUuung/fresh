@@ -42,6 +42,7 @@ fn assert_left_cell(
     expected_y: u16,
 ) -> (u16, u16) {
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let (x, y) = harness.screen_cursor_position();
     assert_eq!(harness.get_cell(x, y).as_deref(), Some(expected_cell));
@@ -58,6 +59,7 @@ fn assert_cursor_extent(show_vertical_scrollbar: bool) {
     // End may invoke a pre-render buffer-aware visibility pass; rendering then
     // invokes the renderer/layout-only pass with the renderer-synced content width.
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let screen_width = harness
         .screen_to_string()

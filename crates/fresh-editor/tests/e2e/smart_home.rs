@@ -39,6 +39,7 @@ fn test_smart_home_respects_soft_wrap() {
     // visual row instead, which is simpler.
     // Position the cursor past the first visual row (at char 34+).
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Now cursor should be at the end of the first visual line (not the end of
     // the physical line, because line_wrap visual End stops at visual boundary).
@@ -65,6 +66,7 @@ fn test_smart_home_respects_soft_wrap() {
     // Press Home — should go to start of the visual (wrapped) line, NOT to
     // byte 0 of the physical line.
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let pos_after_home = harness.cursor_position();
 
     // The position must still be in the second visual row (not the physical

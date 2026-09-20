@@ -18,6 +18,7 @@ fn test_macro_record_and_play_last() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show prompt for register
     harness.assert_screen_contains("Record macro (0-9):");
@@ -27,6 +28,7 @@ fn test_macro_record_and_play_last() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show recording indicator
     harness.assert_screen_contains("Recording");
@@ -48,6 +50,7 @@ fn test_macro_record_and_play_last() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show macro saved message
     harness.assert_screen_contains("Macro");
@@ -56,6 +59,7 @@ fn test_macro_record_and_play_last() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Now play the last recorded macro via command palette
     harness
@@ -67,6 +71,7 @@ fn test_macro_record_and_play_last() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // The macro should have played and inserted "hello" again
     // We should now have "hello" on line 1 and "hello" on line 2
@@ -107,6 +112,7 @@ fn test_macro_with_multiple_cursors_no_overflow() {
 
     // Move cursor up to line 2
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Start recording macro on register 0 via command palette
     harness
@@ -117,10 +123,12 @@ fn test_macro_with_multiple_cursors_no_overflow() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("0").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should be recording
     harness.assert_screen_contains("Recording");
@@ -134,6 +142,7 @@ fn test_macro_with_multiple_cursors_no_overflow() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Type some text (with multiple cursors, should appear on multiple lines)
     harness.type_text("X").unwrap();
@@ -148,6 +157,7 @@ fn test_macro_with_multiple_cursors_no_overflow() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show macro saved
     harness.assert_screen_contains("Macro");
@@ -161,6 +171,7 @@ fn test_macro_with_multiple_cursors_no_overflow() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let macro_list = harness.screen_to_string();
     println!("=== MACRO LIST ===\n{}\n==================", macro_list);
 
@@ -168,9 +179,11 @@ fn test_macro_with_multiple_cursors_no_overflow() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Clear cursors by pressing Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Now try to play the last macro - this used to cause stack overflow
     harness
@@ -181,6 +194,7 @@ fn test_macro_with_multiple_cursors_no_overflow() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // If we got here without crashing, the test passed
     // The macro should have executed (adding cursor and typing X)
@@ -212,6 +226,7 @@ fn test_play_last_macro_when_none_recorded() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show message that no macro was recorded
     let screen = harness.screen_to_string();
@@ -249,10 +264,12 @@ fn test_macro_move_line_end_uses_current_line_length() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("0").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Recording");
 
     // Type "ab"
@@ -261,6 +278,7 @@ fn test_macro_move_line_end_uses_current_line_length() {
 
     // Move left 1 (cursor between 'a' and 'b')
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Type "." → line becomes "a.b"
     harness.type_text(".").unwrap();
@@ -268,6 +286,7 @@ fn test_macro_move_line_end_uses_current_line_length() {
 
     // MoveLineEnd → cursor should be after 'b'
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Type "!" as end-of-line marker → "a.b!"
     harness.type_text("!").unwrap();
@@ -282,6 +301,7 @@ fn test_macro_move_line_end_uses_current_line_length() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify the recording produced the expected result: "a.b!"
     harness.assert_screen_contains("a.b!");
@@ -291,6 +311,7 @@ fn test_macro_move_line_end_uses_current_line_length() {
     // The macro will insert more text, extending the line, but if MoveLineEnd
     // consults the stale cached layout it will jump to the OLD end of line.
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // --- Play the macro on the existing line ---
     harness
@@ -301,6 +322,7 @@ fn test_macro_move_line_end_uses_current_line_length() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Expected: macro inserts "ab" at beginning → "aba.b!"
     //           MoveLeft → cursor between first 'a' and 'b'
@@ -340,10 +362,12 @@ fn test_macro_save_to_init_shows_confirmation() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("0").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Recording");
     harness.type_text("abc").unwrap();
     harness.render().unwrap();
@@ -357,6 +381,7 @@ fn test_macro_save_to_init_shows_confirmation() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Save to init.ts via the palette.
     harness
@@ -367,6 +392,7 @@ fn test_macro_save_to_init_shows_confirmation() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Save macro to init.ts");
 
     // Choose register 0.
@@ -374,6 +400,7 @@ fn test_macro_save_to_init_shows_confirmation() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // The status line confirms the macro was persisted to init.ts.
     harness.assert_screen_contains("saved to init.ts");
@@ -396,10 +423,12 @@ fn test_macro_playback_is_undoable() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("0").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Type some text
     harness.type_text("abc").unwrap();
@@ -414,11 +443,13 @@ fn test_macro_playback_is_undoable() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Move to new line
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify initial state - should have "abc" on first line
     harness.assert_screen_contains("abc");
@@ -432,6 +463,7 @@ fn test_macro_playback_is_undoable() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should now have "abc" twice
     let screen = harness.screen_to_string();
@@ -448,6 +480,7 @@ fn test_macro_playback_is_undoable() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // After one undo exactly the recorded "abc" remains (the replayed one is
     // gone wholesale — not just its last char).

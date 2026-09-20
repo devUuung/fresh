@@ -79,6 +79,7 @@ fn typing_below_a_conceal_that_spans_a_line_break_keeps_the_editor_alive() {
         harness
             .send_key(KeyCode::Right, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
     }
     let screen = harness.screen_to_string();
     assert!(

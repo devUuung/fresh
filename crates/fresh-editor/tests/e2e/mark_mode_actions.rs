@@ -66,6 +66,7 @@ fn test_cancel_mark_soft_exits_preserving_anchor() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     assert!(
         !harness.has_selection(),
@@ -188,6 +189,7 @@ fn test_cancel_mark_no_interference_with_shift_selections() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::SHIFT)
         .unwrap();
+    harness.render().unwrap();
 
     assert!(
         harness.has_selection(),
@@ -341,6 +343,7 @@ fn test_cancel_mark_with_secondary_cursors() {
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Set mark on all cursors
     harness

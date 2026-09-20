@@ -18,6 +18,7 @@ fn open_terminal_command(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Command");
 
     for _ in 0..30 {
@@ -25,12 +26,14 @@ fn open_terminal_command(harness: &mut EditorTestHarness) {
             return;
         }
         harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
     }
     for _ in 0..30 {
         if find_command_row(harness).is_some() {
             return;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
     }
     panic!(
         "Could not focus the Terminal -> Command row.\nScreen:\n{}",
@@ -79,6 +82,7 @@ fn test_settings_text_field_click_positions_cursor() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("[abcXYZ");
 
     // Click on the "X" cell (value index 3): the caret should land before
@@ -140,6 +144,7 @@ fn test_settings_entry_dialog_text_click_positions_cursor() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let (ac, ar) = find_add_new(&harness).unwrap_or_else(|| {
         panic!(

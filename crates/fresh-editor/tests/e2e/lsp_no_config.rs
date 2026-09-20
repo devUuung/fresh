@@ -44,6 +44,7 @@ fn test_start_lsp_disabled_for_unconfigured_language() -> anyhow::Result<()> {
 
     // Try to execute the command - it should be disabled
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Should show "not available" since the command is disabled for this language
     let screen = harness.screen_to_string();
@@ -98,6 +99,7 @@ fn test_toggle_lsp_disabled_for_unconfigured_language() -> anyhow::Result<()> {
 
     // Try to execute the command - it should be disabled
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Should show "not available" since the command is disabled for this language
     let screen = harness.screen_to_string();

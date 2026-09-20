@@ -111,6 +111,7 @@ fn focus_category(h: &mut EditorTestHarness, name: &str) {
             return;
         }
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        h.render().unwrap();
     }
     panic!(
         "category {:?} never became selected. Screen:\n{}",
@@ -142,6 +143,7 @@ fn settings_save_fires_config_changed_with_the_new_value() {
     harness.open_settings().unwrap();
     focus_category(&mut harness, &format!("Plugin: {}", PLUGIN_NAME));
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();

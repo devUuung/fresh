@@ -62,6 +62,7 @@ fn failed_settings_save_shows_modal_and_keeps_file() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // A prominent popup must be on screen with the failure title — not just the
     // status bar. The title only appears via the popup, so this distinguishes
@@ -80,6 +81,7 @@ fn failed_settings_save_shows_modal_and_keeps_file() {
     // Acknowledging the modal (Esc) dismisses it AND opens the offending
     // config file in a buffer so the user can fix it.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.assert_screen_not_contains("Couldn't save settings");
     // The config file's contents are now on screen (the malformed token and
     // the filename tab), confirming it was opened in a buffer.

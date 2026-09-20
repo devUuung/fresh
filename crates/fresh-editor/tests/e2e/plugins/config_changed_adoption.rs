@@ -27,6 +27,7 @@ fn focus_category(h: &mut EditorTestHarness, name: &str) {
             return;
         }
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        h.render().unwrap();
     }
     panic!(
         "category {:?} never became selected. Screen:\n{}",
@@ -45,10 +46,13 @@ fn toggle_plugin_setting(h: &mut EditorTestHarness, category: &str, steps: usize
     h.open_settings().unwrap();
     focus_category(h, category);
     h.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
     for _ in 0..steps {
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        h.render().unwrap();
     }
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
     h.send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
     h.wait_until(|h| h.screen_to_string().contains("Settings saved"))
@@ -119,6 +123,7 @@ fn vi_mode_arrow_keys_setting_applies_without_restart() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let moved = status_col(&harness);
     assert!(
         moved > before,
@@ -135,6 +140,7 @@ fn vi_mode_arrow_keys_setting_applies_without_restart() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     assert_eq!(
         status_col(&harness),
         after_save,

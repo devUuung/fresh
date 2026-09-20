@@ -38,10 +38,12 @@ fn run_command(harness: &mut EditorTestHarness, command: &str) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text(command).unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 }
 
 /// Test: Open split, open terminal in split, close all other tabs, then close buffer
@@ -75,6 +77,7 @@ fn test_close_terminal_as_only_tab_in_split() {
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Close the [No Name] buffer in this split so terminal is the only tab
     // First switch to it
@@ -149,6 +152,7 @@ fn test_close_buffer_in_one_split_leaves_other_split() {
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Create a vertical split - the new split will also show the terminal
     run_command(&mut harness, "split vert");

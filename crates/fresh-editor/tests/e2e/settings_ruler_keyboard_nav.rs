@@ -21,15 +21,18 @@ fn navigate_to_rulers(harness: &mut EditorTestHarness) {
     // Navigate to "Editor" category (2 Down from General)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Editor");
 
     // Tab to settings panel
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Use search to jump directly to rulers
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("rulers").unwrap();
     harness.render().unwrap();
 
@@ -37,6 +40,7 @@ fn navigate_to_rulers(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify we can see the Rulers setting
     harness.assert_screen_contains("Rulers");
@@ -56,6 +60,7 @@ fn test_settings_rulers_tab_exits_text_editing_mode() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Type a ruler value
     harness.type_text("80").unwrap();
@@ -65,6 +70,7 @@ fn test_settings_rulers_tab_exits_text_editing_mode() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify the ruler was added
     harness.assert_screen_contains("80");
@@ -76,6 +82,7 @@ fn test_settings_rulers_tab_exits_text_editing_mode() {
     // Bug: Tab is consumed silently while in TextList editing mode, so
     // the screen doesn't change and focus stays trapped.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let screen_after_tab = harness.screen_to_string();
 
@@ -108,17 +115,20 @@ fn test_settings_rulers_escape_then_arrows_navigate_settings() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     harness.assert_screen_contains("120");
 
     // Press Escape to exit editing mode
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Capture screen state with focus on Rulers
     let screen_on_rulers = harness.screen_to_string();
 
     // Press Down — should move to the next setting below Rulers
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let screen_after_down = harness.screen_to_string();
 
@@ -131,6 +141,7 @@ fn test_settings_rulers_escape_then_arrows_navigate_settings() {
 
     // Press Up to go back — should return to Rulers (or the setting above)
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let screen_after_up = harness.screen_to_string();
 
@@ -160,6 +171,7 @@ fn test_settings_rulers_up_down_trapped_in_editing_mode() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // We're now in editing mode on the add-new row.
     // Capture screen state.
@@ -168,14 +180,17 @@ fn test_settings_rulers_up_down_trapped_in_editing_mode() {
     // Press Down — in editing mode this calls focus_next() which does nothing
     // when already on the add-new row (last position). The screen won't change.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let screen_after_down = harness.screen_to_string();
 
     // Press Up — moves focus to the "80" item row
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Press Up again — we're on item 0, focus_prev() does nothing (stays at 0)
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let _screen_after_ups = harness.screen_to_string();
 

@@ -52,6 +52,7 @@ fn test_replace_on_readonly_buffer_does_not_modify() {
     harness
         .send_key(KeyCode::Char('r'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // The Replace prompt must not appear on a read-only buffer; the
     // editor should refuse the action and post the standard status.
@@ -84,6 +85,7 @@ fn test_query_replace_on_readonly_buffer_does_not_modify() {
             KeyModifiers::CONTROL | KeyModifiers::ALT,
         )
         .unwrap();
+    harness.render().unwrap();
 
     harness.assert_screen_not_contains("Query replace:");
     assert_editing_disabled_status(&harness);

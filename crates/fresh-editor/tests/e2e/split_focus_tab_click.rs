@@ -33,10 +33,12 @@ fn test_split_focus_via_tab_click_cursor_position() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify split happened - should see the vertical separator
     let screen = harness.screen_to_string();

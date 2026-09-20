@@ -1161,6 +1161,7 @@ fn test_edit_scan_edit_line_numbers_stay_exact() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let screen = harness.screen_to_string();
     assert!(
         screen.contains("PRE_SCAN_EDIT"),
@@ -1308,6 +1309,7 @@ fn test_large_file_gutter_indicators_byte_offset_mode() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // ── Step 4: Verify indicators appear without line scan ──
     let screen = harness.screen_to_string();
@@ -1502,6 +1504,7 @@ fn test_large_file_gutter_indicators_after_line_scan() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Allow the plugin some time to process (advance test time)
     harness.sleep(std::time::Duration::from_millis(200));

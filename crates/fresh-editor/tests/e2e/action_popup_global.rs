@@ -286,6 +286,7 @@ fn action_popups_queue_and_each_resolves_independently() {
 
     // Esc dismisses the top (fires action_popup_result for 'pkg-install').
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Now the first popup (`devcontainer-attach`) takes its place.
     let frame2 = harness.screen_to_string();
@@ -302,6 +303,7 @@ fn action_popups_queue_and_each_resolves_independently() {
 
     // Dismiss the remaining popup too.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let frame3 = harness.screen_to_string();
     assert!(
@@ -337,6 +339,7 @@ fn action_popups_queue_confirms_preserve_per_popup_identity() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let after_first_confirm = harness.screen_to_string();
     assert!(
@@ -354,6 +357,7 @@ fn action_popups_queue_confirms_preserve_per_popup_identity() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let after_second_confirm = harness.screen_to_string();
     assert!(
         !after_second_confirm.contains("First popup body"),

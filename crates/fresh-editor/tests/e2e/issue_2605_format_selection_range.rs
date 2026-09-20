@@ -206,9 +206,11 @@ fn setup(
 
 fn run_format_buffer(harness: &mut EditorTestHarness) -> anyhow::Result<()> {
     harness.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)?;
+    harness.render()?;
     harness.type_text("Format Buffer")?;
     harness.wait_for_screen_contains("Format Buffer")?;
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
     Ok(())
 }
 
@@ -228,6 +230,7 @@ fn test_selection_routes_to_lsp_range_formatting() -> anyhow::Result<()> {
 
     // Select the whole first line: from (0,0) down to (1,0).
     harness.send_key(KeyCode::Down, KeyModifiers::SHIFT)?;
+    harness.render()?;
     assert!(
         harness.has_selection(),
         "precondition: a selection should be active"

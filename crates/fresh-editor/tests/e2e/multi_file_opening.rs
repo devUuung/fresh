@@ -34,23 +34,27 @@ fn test_open_multiple_files() {
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_buffer_content("Content of file 2");
 
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_buffer_content("Content of file 1");
 
     // Switch back to file2
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_buffer_content("Content of file 2");
 
     // Switch to file3
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_buffer_content("Content of file 3");
 }
 
@@ -97,6 +101,7 @@ fn test_multiple_files_maintain_cursor_positions() {
     // Move cursor down a few times to change position
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let pos1_after_move = harness.cursor_position();
 
     // Cursor should have moved
@@ -111,6 +116,7 @@ fn test_multiple_files_maintain_cursor_positions() {
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_buffer_content("Line 1\nLine 2\nLine 3\nLine 4\nLine 5");
 
     // Cursor position should be restored to where we left it in file1
@@ -124,6 +130,7 @@ fn test_multiple_files_maintain_cursor_positions() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Cursor position in file2 should be restored
     let pos2_restored = harness.cursor_position();
@@ -162,11 +169,13 @@ fn test_open_files_with_special_characters() {
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_buffer_content("Content 2");
 
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_buffer_content("Content 1");
 }
 
@@ -203,6 +212,7 @@ fn test_open_many_files() {
             harness
                 .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
                 .unwrap();
+            harness.render().unwrap();
         }
     }
 
@@ -211,6 +221,7 @@ fn test_open_many_files() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::CONTROL)
             .unwrap();
+        harness.render().unwrap();
         harness.assert_buffer_content(&format!("Content of file {}", i));
     }
 }
@@ -275,18 +286,21 @@ fn test_multiple_files_tab_order() {
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_buffer_content("Bravo");
 
     // From bravo: PageUp goes to alpha
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_buffer_content("Alpha");
 
     // From alpha: PageUp wraps to charlie
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_buffer_content("Charlie");
 }
 
@@ -322,5 +336,6 @@ fn test_open_files_from_different_directories() {
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_buffer_content("fn main() {}");
 }

@@ -459,6 +459,7 @@ fn arrow_down_never_revisits_a_row_across_the_read_boundary() {
     let mut previous = 0usize;
     for press in 1..=140 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
         let screen = harness.screen_to_string();
         let at =
             status_bar_cursor_byte(&screen).expect("the status bar reports the cursor's position");
@@ -596,6 +597,7 @@ fn arrow_down_at_the_last_row_does_not_jump_back_to_a_read_boundary() {
     let mut high_water = 0usize;
     for press in 1..=PRESSES {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
         let screen = harness.screen_to_string();
         let at =
             status_bar_cursor_byte(&screen).expect("the status bar reports the cursor's position");

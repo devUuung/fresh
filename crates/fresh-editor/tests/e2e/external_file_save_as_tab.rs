@@ -59,6 +59,7 @@ fn test_save_as_external_file_has_tab_after_restore() {
         harness
             .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
             .unwrap();
+        harness.render().unwrap();
         harness.assert_screen_contains("Save as:");
 
         // Type the external path and press Enter
@@ -66,6 +67,7 @@ fn test_save_as_external_file_has_tab_after_restore() {
         harness
             .send_key(KeyCode::Enter, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
 
         // The tab should now show "scratch.txt"
         harness.assert_screen_contains("scratch.txt");

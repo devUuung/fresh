@@ -54,6 +54,7 @@ fn test_commit_editmsg_reopens_at_start_after_regeneration() {
         harness.open_file(&msg).unwrap();
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        harness.render().unwrap();
         harness.assert_screen_contains("Ln 3,");
         harness.editor_mut().save_workspace().unwrap();
     }

@@ -55,6 +55,7 @@ fn list_boundary_keyrepeat_fires_no_spurious_select() {
     // Mount the focusable 3-item list (selection starts at index 0).
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
     h.type_text("TestSel: Mount").unwrap();
     h.render().unwrap();
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
@@ -74,6 +75,7 @@ fn list_boundary_keyrepeat_fires_no_spurious_select() {
     // stays at 2. With the bug each press ticked it (SELECTS=3,4,5…).
     for _ in 0..4 {
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+        h.render().unwrap();
     }
     // Give the plugin event queue ample time to deliver any (buggy)
     // spurious selects before asserting they did not arrive.

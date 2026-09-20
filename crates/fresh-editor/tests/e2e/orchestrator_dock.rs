@@ -193,6 +193,7 @@ fn palette_opened_from_dock_serves_the_editor_buffer() {
         .unwrap();
     h.wait_for_prompt().unwrap();
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
     h.type_text("UNIQUELINE").unwrap();
     h.render().unwrap();
 
@@ -301,6 +302,7 @@ fn editor_click_blurs_dock_when_a_header_widget_is_focused() {
     // stay in it, and the subsequent editor click must still blur.
     h.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
     h.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
     h.wait_until(|h| h.screen_to_string().contains("Manage workspaces"))
         .unwrap();
@@ -953,6 +955,7 @@ fn dock_slash_filters_and_enter_returns_to_list() {
     // Enter in the filter returns to the list (does NOT dive) — the dock
     // stays visible and focused.
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
+    h.render().unwrap();
     h.assert_screen_contains("+ New");
     h.assert_screen_contains("gamma");
 }
@@ -1794,6 +1797,7 @@ fn dock_new_session_in_uncommitted_repo_surfaces_real_git_error() {
     let mut guard = 0;
     while !h.screen_to_string().contains("▸ [ Create Workspace ]") {
         h.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+        h.render().unwrap();
         guard += 1;
         assert!(
             guard < 30,
@@ -3777,6 +3781,7 @@ fn view_menu_row_toggles_the_dock_with_a_live_checkbox() {
     // together with their checkbox glyph so the *menu* rows are found, not
     // the file explorer panel's own "File Explorer" title bar.)
     h.send_key(KeyCode::Char('v'), KeyModifiers::ALT).unwrap();
+    h.render().unwrap();
     h.assert_screen_contains("☐ Orchestrator Dock");
     let explorer_row = row_of(&h, "File Explorer");
     assert_eq!(
@@ -3797,6 +3802,7 @@ fn view_menu_row_toggles_the_dock_with_a_live_checkbox() {
     // reads the live "a dock panel is mounted" context key rather than
     // anything the plugin remembers.
     h.send_key(KeyCode::Char('v'), KeyModifiers::ALT).unwrap();
+    h.render().unwrap();
     h.assert_screen_contains("☑ Orchestrator Dock");
 
     // ...and the same row puts it away again.

@@ -72,6 +72,7 @@ fn test_save_shebang_detection_outside_workdir() {
 
     // Move down one line so we don't break the shebang when editing
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Go to end of line and add a comment
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
@@ -96,6 +97,7 @@ fn test_save_shebang_detection_outside_workdir() {
     // Scroll down and back to force buffer re-render with current highlighter
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     eprintln!("\n=== AFTER SAVE (with re-render) ===");
     eprintln!("{}", harness.screen_to_string());
@@ -159,6 +161,7 @@ fn test_save_as_detects_language() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for the Save As prompt to appear
     harness.wait_for_screen_contains("Save as:").unwrap();
@@ -171,6 +174,7 @@ fn test_save_as_detects_language() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Wait for "Saved as" message or file existence
     let file_path = project_dir.join(filename);

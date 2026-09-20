@@ -37,11 +37,13 @@ fn open_test_bg(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("TestBG: Create").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     harness
         .wait_until(|h| {
@@ -76,11 +78,13 @@ fn run_which(harness: &mut EditorTestHarness) -> Option<&'static str> {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("TestBG: Which").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     harness
         .wait_until(|h| parse_which_seq(h).is_some_and(|s| s > prev_seq))

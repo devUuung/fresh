@@ -56,6 +56,7 @@ fn test_down_after_alt_n_wraparound_keeps_cursor_visible() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.type_text("TARGET").unwrap();
     harness.render().unwrap();
     harness

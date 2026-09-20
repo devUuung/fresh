@@ -331,6 +331,7 @@ fn test_backspace_utf8_file_save_roundtrip() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify the file contains only a newline (euro sign fully deleted)
     let saved = std::fs::read(&euro_path).unwrap();
@@ -360,6 +361,7 @@ fn test_backspace_utf8_file_save_roundtrip() {
     harness2
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
+    harness2.render().unwrap();
 
     // Verify
     let saved2 = std::fs::read(&norwegian_path).unwrap();
@@ -403,6 +405,7 @@ fn test_thai_grapheme_cluster_movement() {
 
     // Move to start
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     assert_eq!(
         harness.cursor_position(),
         0,
@@ -417,6 +420,7 @@ fn test_thai_grapheme_cluster_movement() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let pos1 = harness.cursor_position();
     let (x1, y1) = harness.screen_cursor_position();
     println!(
@@ -434,6 +438,7 @@ fn test_thai_grapheme_cluster_movement() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let pos2 = harness.cursor_position();
     let (x2, y2) = harness.screen_cursor_position();
     println!(
@@ -456,6 +461,7 @@ fn test_thai_grapheme_cluster_movement() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let pos3 = harness.cursor_position();
     let (x3, y3) = harness.screen_cursor_position();
     println!(
@@ -475,6 +481,7 @@ fn test_thai_grapheme_cluster_movement() {
     // Now go back with Left arrows
     // Press Left - should move before 'b' (byte 11->10, visual 3->2)
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let pos_l1 = harness.cursor_position();
     let (xl1, _) = harness.screen_cursor_position();
     println!("After 1st Left: buffer pos={}, screen x={}", pos_l1, xl1);
@@ -483,6 +490,7 @@ fn test_thai_grapheme_cluster_movement() {
 
     // Press Left - should skip entire Thai cluster back (byte 10->1, visual 2->1)
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let pos_l2 = harness.cursor_position();
     let (xl2, _) = harness.screen_cursor_position();
     println!("After 2nd Left: buffer pos={}, screen x={}", pos_l2, xl2);
@@ -500,6 +508,7 @@ fn test_thai_grapheme_cluster_movement() {
 
     // Press Left - should move before 'a' (byte 1->0, visual 1->0)
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let pos_l3 = harness.cursor_position();
     let (xl3, _) = harness.screen_cursor_position();
     println!("After 3rd Left: buffer pos={}, screen x={}", pos_l3, xl3);
@@ -618,6 +627,7 @@ fn test_thai_file_open_and_movement() {
 
     // Move to start of file
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Get initial position
     let initial_pos = harness.cursor_position();
@@ -632,6 +642,7 @@ fn test_thai_file_open_and_movement() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let pos1 = harness.cursor_position();
     let (x1, _) = harness.screen_cursor_position();
@@ -657,6 +668,7 @@ fn test_thai_file_open_and_movement() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     let pos2 = harness.cursor_position();
     let (x2, _) = harness.screen_cursor_position();
@@ -677,6 +689,7 @@ fn test_thai_file_open_and_movement() {
 
     // Now go back with Left arrow - should skip back over "นี่"
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let pos_l1 = harness.cursor_position();
     let (xl1, _) = harness.screen_cursor_position();
@@ -696,6 +709,7 @@ fn test_thai_file_open_and_movement() {
 
     // Left again - should go back to start
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let pos_l2 = harness.cursor_position();
     let (xl2, _) = harness.screen_cursor_position();
@@ -726,6 +740,7 @@ fn test_search_prompt_grapheme_movement() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify search prompt is open
     harness.assert_screen_contains("Search:");
@@ -745,6 +760,7 @@ fn test_search_prompt_grapheme_movement() {
 
     // Press Left once - should move back by 1 (past 'b')
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let (x1, _) = harness.screen_cursor_position();
     println!("After 1st Left: x={}", x1);
     assert_eq!(
@@ -755,6 +771,7 @@ fn test_search_prompt_grapheme_movement() {
 
     // Press Left again - should skip entire Thai cluster
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let (x2, _) = harness.screen_cursor_position();
     println!("After 2nd Left: x={}", x2);
     assert_eq!(
@@ -765,6 +782,7 @@ fn test_search_prompt_grapheme_movement() {
 
     // Press Left again - should move before 'a'
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let (x3, _) = harness.screen_cursor_position();
     println!("After 3rd Left: x={}", x3);
     assert_eq!(x3, end_x - 3, "3rd Left should move before 'a'");
@@ -779,6 +797,7 @@ fn test_search_prompt_grapheme_movement() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let (final_x, _) = harness.screen_cursor_position();
     assert_eq!(
         final_x, end_x,
@@ -802,6 +821,7 @@ fn test_file_open_prompt_grapheme_movement() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify file open prompt is open (prompt shows "Open:" at bottom)
     harness.assert_screen_contains("Open file:");
@@ -812,6 +832,7 @@ fn test_file_open_prompt_grapheme_movement() {
     harness
         .send_key(KeyCode::Delete, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Type Thai text: "ที่นี่" (2 grapheme clusters, 6 code points)
     // Each cluster is 3 code points (base + vowel + tone)
@@ -828,6 +849,7 @@ fn test_file_open_prompt_grapheme_movement() {
 
     // Press Left once - should skip entire second Thai cluster "นี่"
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let (x1, _) = harness.screen_cursor_position();
     println!("After 1st Left: x={}", x1);
     assert_eq!(
@@ -838,6 +860,7 @@ fn test_file_open_prompt_grapheme_movement() {
 
     // Press Left again - should skip entire first Thai cluster "ที่"
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let (x2, _) = harness.screen_cursor_position();
     println!("After 2nd Left: x={}", x2);
     assert_eq!(
@@ -853,6 +876,7 @@ fn test_file_open_prompt_grapheme_movement() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let (final_x, _) = harness.screen_cursor_position();
     assert_eq!(
         final_x, end_x,
@@ -891,6 +915,7 @@ fn test_settings_search_grapheme_movement() {
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Type Thai text: "aที่b" (a + Thai cluster + b)
     let thai_text = "aที่b";
@@ -910,6 +935,7 @@ fn test_settings_search_grapheme_movement() {
 
     // Press Left once - should move back by 1 (past 'b')
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let (x1, _) = harness.screen_cursor_position();
     println!("After 1st Left: x={}", x1);
     assert_eq!(
@@ -920,6 +946,7 @@ fn test_settings_search_grapheme_movement() {
 
     // Press Left again - should skip entire Thai cluster
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let (x2, _) = harness.screen_cursor_position();
     println!("After 2nd Left: x={}", x2);
     assert_eq!(
@@ -930,6 +957,7 @@ fn test_settings_search_grapheme_movement() {
 
     // Press Left again - should move before 'a'
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let (x3, _) = harness.screen_cursor_position();
     println!("After 3rd Left: x={}", x3);
     assert_eq!(x3, end_x - 3, "3rd Left should move before 'a'");
@@ -944,6 +972,7 @@ fn test_settings_search_grapheme_movement() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
     let (final_x, _) = harness.screen_cursor_position();
     assert_eq!(
         final_x, end_x,
@@ -979,6 +1008,7 @@ fn test_main_editor_left_arrow_grapheme_movement() {
 
     // Press Left arrow ONCE - should skip entire grapheme cluster back to position 0
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let pos_after_left = harness.cursor_position();
     println!("After 1 Left: cursor at byte {}", pos_after_left);
@@ -1016,6 +1046,7 @@ fn test_left_arrow_at_long_position_file_loaded() {
 
     // Move to end of line (position 69)
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     let pos_end = harness.cursor_position();
     println!("At end: cursor at byte {}", pos_end);
@@ -1031,6 +1062,7 @@ fn test_left_arrow_at_long_position_file_loaded() {
 
     // Press Left - should move to position 66 (before last บ)
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let pos1 = harness.cursor_position();
     println!("After 1st Left: cursor at byte {}", pos1);
     assert_eq!(
@@ -1040,6 +1072,7 @@ fn test_left_arrow_at_long_position_file_loaded() {
 
     // Press Left again - should move to position 63
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let pos2 = harness.cursor_position();
     println!("After 2nd Left: cursor at byte {}", pos2);
     assert_eq!(
@@ -1049,6 +1082,7 @@ fn test_left_arrow_at_long_position_file_loaded() {
 
     // Press Left again - should move to position 60 (ะ is single code point)
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let pos3 = harness.cursor_position();
     println!("After 3rd Left: cursor at byte {}", pos3);
     assert_eq!(
@@ -1063,6 +1097,7 @@ fn test_left_arrow_at_long_position_file_loaded() {
 
     // Press Left again from position 60
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let pos4 = harness.cursor_position();
     println!("After 4th Left: cursor at byte {}", pos4);
     assert_eq!(
@@ -1073,12 +1108,14 @@ fn test_left_arrow_at_long_position_file_loaded() {
     // Keep pressing to test grapheme cluster movement
     // Position 54-57: ง (U+0E07, single code point)
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let pos5 = harness.cursor_position();
     println!("After 5th Left: cursor at byte {}", pos5);
     assert_eq!(pos5, 54, "After Left from 57, should be at 54 (skipped ง)");
 
     // Position 45-54: ตั้ is a grapheme cluster with base + vowel + tone = 3 code points = 9 bytes
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
     let pos6 = harness.cursor_position();
     println!("After 6th Left: cursor at byte {}", pos6);
 

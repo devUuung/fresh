@@ -263,6 +263,7 @@ fn showing_the_explorer_opens_a_section_the_reader_collapsed() {
     // **Hide the column** (`Ctrl+B`): every section goes with it.
     h.send_key(KeyCode::Char('b'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
     assert!(
         row_of(&h, "File Explorer").is_none() && row_of(&h, "Outline").is_none(),
         "the whole column is hidden\n{}",
@@ -273,6 +274,7 @@ fn showing_the_explorer_opens_a_section_the_reader_collapsed() {
     // collapsed into opens with it.
     h.send_key(KeyCode::Char('b'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
     assert!(
         row_of(&h, "▼ File Explorer").is_some(),
         "the explorer's section is open again\n{}",
@@ -303,6 +305,7 @@ fn showing_the_explorer_opens_a_section_the_reader_collapsed() {
         .unwrap();
     h.send_key(KeyCode::Char('e'), KeyModifiers::CONTROL)
         .unwrap();
+    h.render().unwrap();
     assert!(
         row_of(&h, "a.txt").is_some(),
         "focus put the tree back on screen\n{}",

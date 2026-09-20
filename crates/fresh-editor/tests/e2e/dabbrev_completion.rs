@@ -29,6 +29,7 @@ fn send_dabbrev(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 }
 
 // =============================================================================
@@ -229,6 +230,7 @@ fn send_ctrl_space(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 }
 
 /// When no LSP is active, Ctrl+Space should show a popup with buffer-word results.
@@ -273,6 +275,7 @@ fn test_popup_buffer_word_accept() {
 
     // Accept the first item with Tab.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Popup should close.
     assert!(!harness.editor().active_state().popups.is_visible());
@@ -299,6 +302,7 @@ fn test_popup_buffer_word_dismiss() {
 
     // Press Escape to dismiss.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     assert!(!harness.editor().active_state().popups.is_visible());
     let content = harness.get_buffer_content().unwrap();

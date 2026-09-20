@@ -15,6 +15,7 @@ fn test_alt_x_opens_explorer_menu() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Explorer menu dropdown should now be visible with its items
     harness.assert_screen_contains("New File");
@@ -32,6 +33,7 @@ fn test_explorer_menu_items() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify all expected menu items are present
     harness.assert_screen_contains("New File");
@@ -57,6 +59,7 @@ fn test_explorer_menu_checkbox_states() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
 
@@ -85,6 +88,7 @@ fn test_explorer_menu_checkbox_updates_on_toggle() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Navigate to Show Hidden Files and select it. Menu items with
     // separators skipped (clipboard is empty so Paste is hidden):
@@ -98,11 +102,13 @@ fn test_explorer_menu_checkbox_updates_on_toggle() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Now open Explorer menu again to check checkbox state
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
 
@@ -124,10 +130,12 @@ fn test_escape_closes_explorer_menu() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("New Folder");
 
     // Press Escape to close
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Menu should be closed
     harness.assert_screen_not_contains("New Folder");
@@ -143,14 +151,18 @@ fn test_explorer_menu_navigation() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Navigate down through the menu items
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Navigate up
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Menu should still be visible
     harness.assert_screen_contains("New File");
@@ -171,12 +183,14 @@ fn test_explorer_menu_left_right_navigation() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("New Folder");
 
     // Navigate right to Help menu
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should now show Help menu items
     harness.assert_screen_contains("Show Fresh Manual");
@@ -184,6 +198,7 @@ fn test_explorer_menu_left_right_navigation() {
 
     // Navigate left back to Explorer menu
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Should now show Explorer menu items again
     harness.assert_screen_contains("New Folder");
@@ -293,6 +308,7 @@ fn test_explorer_menu_new_file_action() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // "New File" should be the first item, so just press Enter
     harness
@@ -325,9 +341,11 @@ fn test_explorer_menu_new_folder_action() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Navigate to "New Folder" (second item)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Press Enter to execute
     harness
@@ -400,6 +418,7 @@ fn test_explorer_menu_toggle_hidden_via_menu() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Navigate to "Show Hidden Files". With separators auto-skipped and
     // an empty clipboard (Paste hidden), the Explorer menu shows:
@@ -415,6 +434,7 @@ fn test_explorer_menu_toggle_hidden_via_menu() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Status bar should show toggle message
     let screen = harness.screen_to_string();
@@ -464,11 +484,13 @@ fn test_explorer_menu_items_disabled_when_not_focused() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Try to execute "New File" action (first item) - should not work when explorer not focused
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Menu should close but no file should be created since explorer isn't focused
     let project_root = harness.project_dir().unwrap();
@@ -519,6 +541,7 @@ fn test_new_folder_enters_rename_mode() {
 
     // Cancel the rename (ESC) and verify folder still exists with default name
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     assert!(
         !harness.editor().is_prompting(),
@@ -576,6 +599,7 @@ fn test_rename_prompt_escape_aborts() {
 
     // Press ESC to abort
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Should no longer be prompting
     assert!(
@@ -688,9 +712,11 @@ fn test_new_folder_via_menu_affects_filesystem() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     // Navigate to New Folder (second item)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Execute - enters rename mode
     harness
@@ -846,6 +872,7 @@ fn test_navigation_after_rename_completes() {
 
     // Navigate to first file and rename it
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Use F2 key to trigger rename (user-facing action)
     harness.send_key(KeyCode::F(2), KeyModifiers::NONE).unwrap();
@@ -869,12 +896,15 @@ fn test_navigation_after_rename_completes() {
 
     // Navigate down to the next file - this should work after rename
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Navigate down again
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Navigate up - should work to go back
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Navigation should work without errors
     // File explorer should still be focused
@@ -931,8 +961,10 @@ fn test_new_folder_navigation_after_rename() {
 
     // Try navigating - should work
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Verify the folder was created on filesystem
     assert!(
@@ -964,6 +996,7 @@ fn test_focus_returns_after_rename() {
 
     // Navigate to aaa_file.txt
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Verify file explorer has focus before rename
     assert!(
@@ -994,6 +1027,7 @@ fn test_focus_returns_after_rename() {
     // CRITICAL: Navigate to bbb_file.txt using arrow keys and open it
     // This tests that navigation works after rename
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     // Press Enter to open the file
     harness
@@ -1026,6 +1060,7 @@ fn test_copy_file_shows_copied_status() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // "Copied: copy_me.txt" is the locale string for explorer.copied
     harness.assert_screen_contains("Copied:");
@@ -1047,6 +1082,7 @@ fn test_cut_file_shows_cut_status() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // "Marked for cut: cut_me.txt" is the locale string for explorer.cut
     harness.assert_screen_contains("Marked for cut:");
@@ -1065,6 +1101,7 @@ fn test_paste_empty_clipboard_shows_error() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -1098,10 +1135,12 @@ fn test_copy_paste_file_to_subdirectory() {
 
     // Navigate up to subdir and paste into it
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Verify file was copied
     assert!(
@@ -1138,10 +1177,12 @@ fn test_cut_paste_moves_file() {
 
     // Navigate back to dest and paste into it
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
+    harness.render().unwrap();
 
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // File should be at new location
     assert!(
@@ -1158,6 +1199,7 @@ fn test_cut_paste_moves_file() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Nothing to paste");
 }
 
@@ -1185,6 +1227,7 @@ fn test_copy_to_same_dir_auto_renames() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Should have auto-renamed to "original copy.txt"
     assert!(
@@ -1222,6 +1265,7 @@ fn test_cut_paste_same_location_cancels_cut() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -1251,6 +1295,7 @@ fn test_edit_menu_shows_file_copy_cut_paste_when_explorer_focused() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::ALT)
         .unwrap();
+    harness.render().unwrap();
 
     harness.assert_screen_contains("Copy");
     harness.assert_screen_contains("Cut");
@@ -1280,6 +1325,7 @@ fn test_rename_rejects_slash_in_name() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Should show an error and NOT rename the file
     assert!(
@@ -1315,6 +1361,7 @@ fn test_rename_rejects_dot_names() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     // Original should still exist (rename was rejected)
     assert!(
@@ -1348,12 +1395,14 @@ fn test_clipboard_cleared_after_cut_paste() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Moved:");
 
     // A second Ctrl+V should now show the empty-clipboard error.
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Nothing to paste");
 }
 
@@ -1388,6 +1437,7 @@ fn test_paste_conflict_overwrite() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     assert_eq!(
         fs::read_to_string(project_root.join("subdir").join("src.txt")).unwrap(),
@@ -1426,6 +1476,7 @@ fn test_paste_conflict_cancel() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::NONE)
         .unwrap();
+    harness.render().unwrap();
 
     assert_eq!(
         fs::read_to_string(project_root.join("dest").join("file.txt")).unwrap(),
@@ -1472,6 +1523,7 @@ fn test_paste_does_not_collapse_destination_directory() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Navigate to paste_dst and paste
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap(); // → existing.txt
@@ -1479,6 +1531,7 @@ fn test_paste_does_not_collapse_destination_directory() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // paste_src.txt should now be in paste_dst
     assert!(
@@ -1516,12 +1569,14 @@ fn test_explorer_focus_preserved_after_paste() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Navigate to focus_dst and paste
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap(); // → focus_dst
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Pasted item should be visible on screen (focus stayed in the explorer
     // so the tree re-rendered with the new child).
@@ -1533,6 +1588,7 @@ fn test_explorer_focus_preserved_after_paste() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Copied:");
 }
 
@@ -1561,6 +1617,7 @@ fn test_shift_down_extends_selection() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     harness.assert_screen_contains("Copied 2 items");
 }
@@ -1584,6 +1641,7 @@ fn test_ctrl_a_selects_all() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // Root is excluded from the clipboard, so the three files are copied.
     harness.assert_screen_contains("Copied 3 items");
@@ -1613,6 +1671,7 @@ fn test_space_toggles_selection() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Copied 2 items");
 
     // Toggle beta.txt back out of the selection: only alpha.txt remains
@@ -1623,6 +1682,7 @@ fn test_space_toggles_selection() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Copied:");
     harness.assert_screen_contains("alpha.txt");
 }
@@ -1652,6 +1712,7 @@ fn test_escape_clears_multi_selection() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     let screen = harness.screen_to_string();
     assert!(
         screen.contains("Copied:") && screen.contains("esc_a.txt"),
@@ -1688,6 +1749,7 @@ fn test_copy_multi_selection_stores_multiple_paths() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Copied 2 items");
 
     // Paste into out/ — both files should land there.
@@ -1696,6 +1758,7 @@ fn test_copy_multi_selection_stores_multiple_paths() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     assert!(project_root.join("out").join("multi_a.txt").exists());
     assert!(project_root.join("out").join("multi_b.txt").exists());
@@ -1763,6 +1826,7 @@ fn test_navigation_clears_multi_selection() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -1806,6 +1870,7 @@ fn test_multi_paste_per_conflict_overwrite_all() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Copied 2 items");
 
     // Navigate to dst/ and paste — both conflict
@@ -1924,6 +1989,7 @@ fn test_multi_paste_no_conflict() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
     harness.assert_screen_contains("Copied 2 items");
 
     // Navigate to out/ and paste
@@ -1932,6 +1998,7 @@ fn test_multi_paste_no_conflict() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
+    harness.render().unwrap();
 
     // No conflict prompt should appear — multi-paste status is shown directly.
     harness.assert_screen_contains("Pasted 2 items");

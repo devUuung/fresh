@@ -128,6 +128,7 @@ fn test_lsp_completion_replaces_word() -> anyhow::Result<()> {
 
     // Confirm selection with Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Buffer should now contain the full word, not "test_ftest_function"
     let buffer_after = harness.get_buffer_content().unwrap();
@@ -236,9 +237,11 @@ fn test_lsp_completion_popup() -> anyhow::Result<()> {
 
     // Navigate down in popup
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Select second item and confirm
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify the completion was inserted
     let buffer_content = harness.get_buffer_content().unwrap();
@@ -401,9 +404,11 @@ fn test_lsp_completion_navigation() -> anyhow::Result<()> {
     // Navigate down twice
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Confirm selection (should insert item3)
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify item3 was inserted
     let buffer_content = harness.get_buffer_content().unwrap();
@@ -455,6 +460,7 @@ fn test_lsp_completion_cancel() -> anyhow::Result<()> {
 
     // Press Escape to cancel
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify original text is unchanged
     let buffer_content = harness.get_buffer_content().unwrap();
@@ -518,6 +524,7 @@ fn test_lsp_completion_after_dot() -> anyhow::Result<()> {
 
     // Confirm selection (should insert "len" after the dot)
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify "args." is preserved and "len" is appended
     let buffer_content = harness.get_buffer_content().unwrap();
@@ -573,6 +580,7 @@ fn test_lsp_completion_after_dot_with_partial() -> anyhow::Result<()> {
 
     // Confirm selection (should replace "le" with "length")
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify "args." is preserved and "le" is replaced with "length"
     let buffer_content = harness.get_buffer_content().unwrap();
@@ -667,6 +675,7 @@ fn test_lsp_completion_filtering() -> anyhow::Result<()> {
 
     // Confirm first selection (test_function)
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify completion replaced "test_" with "test_function"
     let buffer_content = harness.get_buffer_content().unwrap();
@@ -823,9 +832,11 @@ fn test_lsp_waiting_indicator() -> anyhow::Result<()> {
     // Position cursor inside the function
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Request completion using Ctrl+Space
     harness.send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Process async messages to get LSP response
     for _ in 0..10 {
@@ -1331,6 +1342,7 @@ fn test_lsp_completion_popup_hides_background() -> anyhow::Result<()> {
     harness.send_key(KeyCode::Up, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::Up, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::Home, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Show a completion popup that will overlap with the buffer text
     harness.apply_event(Event::ShowPopup {
@@ -1472,15 +1484,18 @@ fn test_lsp_completion_canceled_on_cursor_move() -> anyhow::Result<()> {
     // Position cursor after "test_"
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Request completion (sets pending request)
     harness.send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Process async messages briefly
     harness.process_async_and_render()?;
 
     // Move cursor (should cancel the request)
     harness.send_key(KeyCode::Left, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify pending request is cleared in editor
     let editor = harness.editor();
@@ -1542,12 +1557,14 @@ fn test_lsp_cursor_animation() -> anyhow::Result<()> {
     // Position cursor after "test_"
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Get screen before LSP request
     let screen_before = harness.screen_to_string();
 
     // Request completion
     harness.send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Process async messages to get LSP response
     for _ in 0..10 {
@@ -1616,9 +1633,11 @@ fn test_lsp_completion_canceled_on_text_edit() -> anyhow::Result<()> {
     // Position cursor after "test_"
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Request completion
     harness.send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Process async messages briefly
     harness.process_async_and_render()?;
@@ -1798,6 +1817,7 @@ edition = "2021"
 
     // Press F2 to enter rename mode
     harness.send_key(KeyCode::F(2), KeyModifiers::NONE)?;
+    harness.render()?;
 
     println!("Entered rename mode");
 
@@ -1826,6 +1846,7 @@ edition = "2021"
 
     // Press Enter to confirm rename - this will send LSP request
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     println!("Pressed Enter to confirm rename");
 
@@ -2313,10 +2334,12 @@ fn test_lsp_diagnostics_non_blocking() -> anyhow::Result<()> {
     // Position cursor on line 2 where we'll type
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Save the file - this will trigger textDocument/didSave
     // The fake LSP server will NEVER respond to this
     harness.send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // CRITICAL TEST: Immediately type characters - the LSP is stuck but typing should work!
     // No sleeps, no waits - just type and verify it works
@@ -2524,6 +2547,7 @@ fn test_rust_analyzer_rename_real_scenario() -> anyhow::Result<()> {
 
     // Press F2 to enter rename mode
     harness.send_key(KeyCode::F(2), KeyModifiers::NONE)?;
+    harness.render()?;
 
     eprintln!("Entered rename mode");
 
@@ -2536,6 +2560,7 @@ fn test_rust_analyzer_rename_real_scenario() -> anyhow::Result<()> {
     // Press Enter to confirm rename
     eprintln!("\nPressing Enter to confirm rename...");
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
     let _ = harness.editor_mut().process_async_messages();
 
     // Wait INDEFINITELY for LSP response (no timeout)
@@ -2904,6 +2929,7 @@ edition = "2021"
     // Step 2: Start rename with F2 (direct action, not command palette)
     eprintln!("Pressing F2 to start rename...");
     harness.send_key(KeyCode::F(2), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Step 3: Type new name (clear and type "value")
     // The prompt should be pre-filled with "val"
@@ -2918,6 +2944,7 @@ edition = "2021"
     // Step 4: Approve with Enter
     eprintln!("Pressing Enter to confirm rename...");
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Wait for LSP response
     eprintln!("Waiting for first rename response...");
@@ -2968,6 +2995,7 @@ edition = "2021"
     // Step 2: Start rename with F2 (direct action)
     eprintln!("Pressing F2 to start rename...");
     harness.send_key(KeyCode::F(2), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Step 3: Type new name (clear and type "data")
     // The prompt should be pre-filled with "value"
@@ -2982,6 +3010,7 @@ edition = "2021"
     // Step 4: Approve with Enter
     eprintln!("Pressing Enter to confirm rename...");
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Wait for LSP response
     eprintln!("Waiting for second rename response...");
@@ -3265,6 +3294,7 @@ fn test_lsp_crash_detection_and_restart() -> anyhow::Result<()> {
         // Send a no-op key to trigger async message processing
         // (render() alone doesn't process async messages)
         harness.send_key(KeyCode::Null, KeyModifiers::NONE)?;
+        harness.render()?;
 
         // Check the screen for crash-related status messages
         let screen = harness.screen_to_string();
@@ -3334,6 +3364,7 @@ fn test_lsp_crash_detection_and_restart() -> anyhow::Result<()> {
 
     // Process messages to trigger the restart
     harness.send_key(KeyCode::Null, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Check the screen for restart activity
     let final_screen = harness.screen_to_string();
@@ -3363,6 +3394,7 @@ fn test_lsp_restart_command_exists() -> anyhow::Result<()> {
         KeyCode::Char('P'),
         KeyModifiers::CONTROL | KeyModifiers::SHIFT,
     )?;
+    harness.render()?;
 
     // Type to search for restart command
     harness.type_text("Restart LSP")?;
@@ -3380,6 +3412,7 @@ fn test_lsp_restart_command_exists() -> anyhow::Result<()> {
 
     // Close the command palette
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE)?;
+    harness.render()?;
 
     eprintln!("\n✅ SUCCESS: Restart LSP Server command exists in command palette!");
 
@@ -3444,6 +3477,7 @@ fn test_pull_diagnostics_message_handling() -> anyhow::Result<()> {
 
     // Process async messages
     harness.send_key(KeyCode::Null, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify the diagnostic was applied (check for overlay)
     let buffer_content = harness.get_buffer_content().unwrap();
@@ -3487,6 +3521,7 @@ fn test_pull_diagnostics_unchanged_response() -> anyhow::Result<()> {
 
     // Process async messages
     harness.send_key(KeyCode::Null, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Should not panic or error
     eprintln!("\n✅ SUCCESS: Unchanged pull diagnostics response was handled correctly!");
@@ -3547,6 +3582,7 @@ fn test_pull_diagnostics_auto_trigger_after_open() -> anyhow::Result<()> {
     for _ in 0..50 {
         // Process any async messages
         harness.send_key(KeyCode::Null, KeyModifiers::NONE)?;
+        harness.render()?;
 
         // Check if we received the diagnostic overlay
         let overlays = harness.editor().active_state().overlays.all();
@@ -3628,6 +3664,7 @@ fn test_pull_diagnostics_result_id_tracking() -> anyhow::Result<()> {
     let mut initial_diagnostic_found = false;
     for _ in 0..50 {
         harness.send_key(KeyCode::Null, KeyModifiers::NONE)?;
+        harness.render()?;
 
         let overlays = harness.editor().active_state().overlays.all();
         for overlay in overlays {
@@ -3654,10 +3691,12 @@ fn test_pull_diagnostics_result_id_tracking() -> anyhow::Result<()> {
     // Now make a change - this should trigger another pull diagnostics request
     // with the previous result_id, and the server should return "unchanged"
     harness.send_key(KeyCode::Char('a'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Wait a bit for the second request/response cycle
     for _ in 0..30 {
         harness.send_key(KeyCode::Null, KeyModifiers::NONE)?;
+        harness.render()?;
         harness.sleep(std::time::Duration::from_millis(100));
     }
 
@@ -3804,6 +3843,7 @@ fn test_inlay_hints_position_tracking() -> anyhow::Result<()> {
     // Now insert text before the hint position
     // Move cursor to beginning
     harness.send_key(KeyCode::Home, KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Insert "const " at the beginning
     harness.type_text("const ")?;
@@ -3875,6 +3915,7 @@ fn test_inlay_hint_cleared_when_range_deleted() -> anyhow::Result<()> {
     harness.send_key(KeyCode::Home, KeyModifiers::CONTROL)?;
     harness.send_key(KeyCode::End, KeyModifiers::CONTROL | KeyModifiers::SHIFT)?;
     harness.send_key(KeyCode::Delete, KeyModifiers::NONE)?;
+    harness.render()?;
 
     let screen_after = harness.screen_to_string();
     assert!(
@@ -4819,9 +4860,11 @@ fn test_popup_home_key_selects_first_item() -> anyhow::Result<()> {
 
     // Press Home to jump to first item
     harness.send_key(KeyCode::Home, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Confirm selection
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify item_0 was inserted (first item)
     let buffer_content = harness.get_buffer_content().unwrap();
@@ -4870,9 +4913,11 @@ fn test_popup_end_key_selects_last_item() -> anyhow::Result<()> {
 
     // Press End to jump to last item
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Confirm selection
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify item_19 was inserted (last item)
     let buffer_content = harness.get_buffer_content().unwrap();
@@ -5267,6 +5312,7 @@ fn test_completion_type_to_filter_basic() -> anyhow::Result<()> {
 
     // Type 's' to filter to "tes" - should filter out "temp_file"
     harness.send_key(KeyCode::Char('s'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify filtering occurred
     let buffer = harness.get_buffer_content().unwrap();
@@ -5390,6 +5436,7 @@ fn test_completion_type_to_filter_uppercase() -> anyhow::Result<()> {
 
     // Type uppercase 'W' (with SHIFT modifier) to filter - should filter out ReadLine
     harness.send_key(KeyCode::Char('W'), KeyModifiers::SHIFT)?;
+    harness.render()?;
 
     // Verify buffer contains the typed character
     let buffer = harness.get_buffer_content().unwrap();
@@ -5418,6 +5465,7 @@ fn test_completion_type_to_filter_uppercase() -> anyhow::Result<()> {
 
     // Type another uppercase letter to narrow down further
     harness.send_key(KeyCode::Char('r'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     let buffer = harness.get_buffer_content().unwrap();
     assert_eq!(buffer, "Console.Wr", "Buffer should contain 'Console.Wr'");
@@ -5492,6 +5540,7 @@ fn test_completion_type_to_filter_closes_on_no_match() -> anyhow::Result<()> {
 
     // Type 'x' - no items start with "tex"
     harness.send_key(KeyCode::Char('x'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify popup is closed (no matches)
     assert!(
@@ -5575,6 +5624,7 @@ fn test_completion_backspace_refilters() -> anyhow::Result<()> {
 
     // Press backspace to change prefix from "tes" to "te"
     harness.send_key(KeyCode::Backspace, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify buffer has shorter prefix
     let buffer = harness.get_buffer_content().unwrap();
@@ -5699,6 +5749,7 @@ fn test_completion_type_to_filter_preserves_selection() -> anyhow::Result<()> {
 
     // Navigate to test_beta (second item)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify test_beta is selected
     assert!(
@@ -5709,6 +5760,7 @@ fn test_completion_type_to_filter_preserves_selection() -> anyhow::Result<()> {
 
     // Type 's' to filter (all items still match "tes")
     harness.send_key(KeyCode::Char('s'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify selection is preserved
     let screen = harness.screen_to_string();
@@ -5784,6 +5836,7 @@ fn test_completion_enter_dismisses_and_inserts_newline() -> anyhow::Result<()> {
 
     // Press Enter - should close popup and insert newline, NOT accept completion
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify popup is closed
     assert!(
@@ -5863,6 +5916,7 @@ fn test_completion_tab_accepts() -> anyhow::Result<()> {
 
     // Press Tab - should accept completion
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify popup is closed
     assert!(
@@ -5922,6 +5976,7 @@ fn test_completion_snippet_cursor_position() -> anyhow::Result<()> {
 
     // Confirm selection
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify the snippet was expanded correctly
     let buffer = harness.get_buffer_content().unwrap();
@@ -5975,6 +6030,7 @@ fn test_completion_snippet_with_default() -> anyhow::Result<()> {
 
     // Confirm selection
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify the snippet was expanded with default text
     let buffer = harness.get_buffer_content().unwrap();
@@ -6031,6 +6087,7 @@ fn test_completion_plain_text_no_snippet() -> anyhow::Result<()> {
 
     // Confirm selection
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Verify plain text was inserted
     let buffer = harness.get_buffer_content().unwrap();
@@ -6197,6 +6254,7 @@ fn test_typing_does_not_autostart_lsp_when_disabled() -> anyhow::Result<()> {
 
     // Type a character - this should NOT start the LSP
     harness.send_key(KeyCode::Char('x'), crossterm::event::KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Process any async messages
     for _ in 0..5 {
@@ -6281,9 +6339,11 @@ fn test_completion_triggered_on_trigger_character() -> anyhow::Result<()> {
     // Move to end of "foo" on line 2
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Type a trigger character (`.` is a trigger character in the fake LSP server)
     harness.send_key(KeyCode::Char('.'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Wait for completion request to be logged
     harness.wait_until(|_| {
@@ -6366,9 +6426,11 @@ fn test_completion_triggered_on_word_char_with_quick_suggestions() -> anyhow::Re
     // Move to the empty line
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Type a word character (letter)
     harness.send_key(KeyCode::Char('p'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Wait for completion request
     harness.wait_until(|_| {
@@ -6449,6 +6511,7 @@ fn test_completion_not_triggered_on_word_char_without_quick_suggestions() -> any
     // Move to the empty line
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Type multiple word characters
     harness.type_text("print")?;
@@ -6535,9 +6598,11 @@ fn test_completion_not_triggered_on_non_word_char() -> anyhow::Result<()> {
     // Move to end of "foo"
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Type a space (non-word, non-trigger character)
     harness.send_key(KeyCode::Char(' '), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Process async messages and give some time
     for _ in 0..10 {
@@ -6602,6 +6667,7 @@ fn test_completion_ctrl_space_toggles_popup_off() -> anyhow::Result<()> {
 
     // Press Ctrl+Space - should dismiss the popup (toggle off)
     harness.send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Verify popup is closed
     assert!(
@@ -6678,6 +6744,7 @@ fn test_completion_no_auto_show_by_default() -> anyhow::Result<()> {
     // Move to the empty line
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Type word characters — should NOT trigger completion since auto_show is false
     harness.type_text("print")?;
@@ -6685,6 +6752,7 @@ fn test_completion_no_auto_show_by_default() -> anyhow::Result<()> {
 
     // Also try a trigger character
     harness.send_key(KeyCode::Char('.'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Give time for any async trigger
     for _ in 0..10 {
@@ -6760,9 +6828,11 @@ fn test_completion_auto_show_when_enabled() -> anyhow::Result<()> {
     // Move to the empty line
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Type a word character
     harness.send_key(KeyCode::Char('p'), KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Wait for completion request (should be triggered)
     harness.wait_until(|_| {
@@ -6793,6 +6863,7 @@ fn test_completion_popup_shows_accept_key_hint() -> anyhow::Result<()> {
     // First set up buffer words so the popup has items
     // We need to type a word that will have completions, then trigger
     harness.send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // The buffer-word completion may or may not find items for "tes".
     // Let's use a more reliable approach: type a full word, then type a prefix.
@@ -6808,6 +6879,7 @@ fn test_completion_popup_shows_accept_key_hint() -> anyhow::Result<()> {
 
     // Trigger completion via Ctrl+Space
     harness.send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Check that the popup is visible and contains the hint
     let popup_visible = harness.editor().active_state().popups.is_visible();
@@ -7515,6 +7587,7 @@ fn test_hover_popup_click_dismissal() -> anyhow::Result<()> {
 
     // Move cursor to beginning of line 1
     harness.send_key(KeyCode::Home, KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Record initial cursor position (currently unused but kept for future assertions)
     let _initial_cursor = harness.cursor_position();
@@ -7574,6 +7647,7 @@ fn test_hover_popup_click_inside_does_not_move_cursor() -> anyhow::Result<()> {
 
     // Move cursor to a known position (beginning of file)
     harness.send_key(KeyCode::Home, KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     let cursor_before = harness.cursor_position();
 
@@ -7724,6 +7798,7 @@ fn test_hover_popup_double_click_inside_blocked() -> anyhow::Result<()> {
 
     // Move cursor to start
     harness.send_key(KeyCode::Home, KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     let cursor_before = harness.cursor_position();
 
@@ -7945,12 +8020,14 @@ fn test_lsp_toggle_for_buffer() -> anyhow::Result<()> {
 
     // Execute the command
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Toggle LSP back using command palette
     harness.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)?;
     harness.wait_for_prompt()?;
     harness.type_text("Toggle LSP")?;
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     Ok(())
 }
@@ -8529,6 +8606,7 @@ log("STOPPED")
     harness.send_key(KeyCode::End, KeyModifiers::CONTROL)?;
     harness.type_text(" ")?;
     harness.send_key(KeyCode::Backspace, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Wait for LSP to start and send initial diagnostics
     for _ in 0..30 {
@@ -8832,6 +8910,7 @@ log("STOPPED")
     harness.send_key(KeyCode::End, KeyModifiers::CONTROL)?;
     harness.type_text(" ")?;
     harness.send_key(KeyCode::Backspace, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Wait for LSP to start and send initial diagnostics
     for _ in 0..30 {
@@ -9239,6 +9318,7 @@ done
     harness.send_key(KeyCode::Backspace, KeyModifiers::NONE)?;
     harness.type_text(":6")?;
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Invoke "Delete Line" via the command palette so we don't depend
     // on any particular keybinding.
@@ -9246,6 +9326,7 @@ done
     harness.wait_for_screen_contains(">command")?;
     harness.type_text("Delete Line")?;
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     harness.wait_until(|h| {
         h.get_buffer_content()
@@ -9455,9 +9536,11 @@ done
 
     // Move cursor to line 1 (the function definition)
     harness.send_key(KeyCode::Home, KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Toggle comment on line 1 with Ctrl+/
     harness.send_key(KeyCode::Char('/'), KeyModifiers::CONTROL)?;
+    harness.render()?;
 
     // Verify line 1 is now commented
     let content = harness.get_buffer_content().unwrap();
@@ -9638,6 +9721,7 @@ done
     harness.type_text("Start")?;
     harness.render()?;
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Wait for the fake LSP to receive the initialize request and log the rootUri
     harness.wait_until(|_| {
@@ -9779,6 +9863,7 @@ fn test_restart_lsp_prompt_shows_suggestions() -> anyhow::Result<()> {
 
     // Dismiss the prompt
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE)?;
+    harness.render()?;
 
     Ok(())
 }
@@ -9935,6 +10020,7 @@ fn test_stop_lsp_via_prompt_no_warning() -> anyhow::Result<()> {
 
     // Confirm with Enter (the single server should be pre-selected)
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
+    harness.render()?;
 
     // Wait for LSP to stop
     harness
@@ -10154,6 +10240,7 @@ fn test_completion_offers_unimported_symbol_and_applies_auto_import() -> anyhow:
     // completion explicitly.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
+    harness.render()?;
     harness.send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)?;
 
     // The unimported symbol must be offered, tagged with its import path
@@ -10258,6 +10345,7 @@ fn test_no_hover_requests_while_modal_dialog_open() -> anyhow::Result<()> {
 
     // Open the Open File dialog.
     harness.send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)?;
+    harness.render()?;
     harness.assert_screen_contains("Open file:");
 
     // Mouse motion over the dialog area must not arm a hover for the buffer
@@ -10276,12 +10364,14 @@ fn test_no_hover_requests_while_modal_dialog_open() -> anyhow::Result<()> {
     // A hover armed just before the dialog opened must not fire underneath
     // it: close the dialog, arm a hover, reopen, then run the timer.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE)?;
+    harness.render()?;
     harness.mouse_move(6, 3)?;
     assert!(
         harness.editor().get_mouse_hover_state().is_some(),
         "hover should be armed again once the dialog is closed"
     );
     harness.send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)?;
+    harness.render()?;
     harness.assert_screen_contains("Open file:");
     assert!(
         !harness.editor_mut().check_mouse_hover_timer(),

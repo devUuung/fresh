@@ -113,12 +113,14 @@ fn table_top_border_survives_paging_away_and_back() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
     }
 
     for _ in 0..3 {
         harness
             .send_key(KeyCode::PageUp, KeyModifiers::NONE)
             .unwrap();
+        harness.render().unwrap();
     }
     harness
         .wait_until_stable(|h| h.screen_to_string().contains("Key"))
