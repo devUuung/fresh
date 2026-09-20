@@ -157,12 +157,6 @@ fn load_startup_plugins(
         return HashMap::new();
     }
 
-    // The bundled plugins were prepared at build time; hand the runtime that
-    // table before it reads any plugin, so it looks them up instead of
-    // re-running oxc over sources that have not changed since compile time.
-    #[cfg(feature = "plugins")]
-    crate::services::plugins::prepared::register();
-
     let mut plugin_dirs: Vec<std::path::PathBuf> = vec![];
 
     // Embedded plugins. `enable_embedded_plugins` lets tests opt out so

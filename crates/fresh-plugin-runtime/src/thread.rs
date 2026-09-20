@@ -1416,7 +1416,11 @@ async fn handle_request(
 struct PreparedPlugin {
     name: String,
     path: PathBuf,
-    js_code: String,
+    /// Transpiled JS. `None` when the plugin was served from the compiled
+    /// cache, where the transpile never had to happen.
+    js_code: Option<String>,
+    /// The compiled form, when a previous run left one behind.
+    bytecode: Option<Vec<u8>>,
     i18n: Option<HashMap<String, HashMap<String, String>>>,
     dependencies: Vec<String>,
     /// `.d.ts` emit for the plugin source, produced by oxc's
@@ -1443,23 +1447,18 @@ fn prepare_plugin(path: &Path) -> Result<PreparedPlugin> {
     let source = std::fs::read_to_string(path)
         .map_err(|e| anyhow!("Failed to read plugin {}: {}", path.display(), e))?;
 
-    let file_name = path
-        .file_name()
-        .and_then(|s| s.to_str())
-        .unwrap_or_default();
-
-    // Plugins shipped with the editor were prepared by `build.rs`; the table
-    // is keyed on the source, so a hit means oxc already answered this exact
-    // question at compile time. A user-installed plugin misses and takes the
-    // pipeline below, exactly as before.
-    if let Some(entry) = crate::lookup_prepared_plugin(file_name, &source) {
+    // A previous run may have left the compiled form and the derived metadata
+    // behind. On a hit neither oxc nor QuickJS has anything to do: the
+    // transpile and the parse were both settled last time.
+    if let Some(cached) = crate::backend::quickjs_backend::read_compiled_plugin(path, &source) {
         return Ok(PreparedPlugin {
             name: plugin_name,
             path: path.to_path_buf(),
-            js_code: entry.js_code.to_string(),
+            js_code: None,
+            bytecode: Some(cached.bytecode),
             i18n: read_plugin_i18n(path),
-            dependencies: entry.dependencies.iter().map(|d| d.to_string()).collect(),
-            declarations: entry.declarations.map(|d| d.to_string()),
+            dependencies: cached.dependencies,
+            declarations: cached.declarations,
         });
     }
 
@@ -1469,7 +1468,8 @@ fn prepare_plugin(path: &Path) -> Result<PreparedPlugin> {
     Ok(PreparedPlugin {
         name: plugin_name,
         path: path.to_path_buf(),
-        js_code: prepared.js_code,
+        js_code: Some(prepared.js_code),
+        bytecode: None,
         i18n: read_plugin_i18n(path),
         dependencies: prepared.dependencies,
         declarations: prepared.declarations,
@@ -1511,9 +1511,14 @@ fn execute_prepared_plugin(
         .ok_or_else(|| anyhow!("Invalid path encoding"))?;
 
     let exec_start = std::time::Instant::now();
-    runtime
-        .borrow_mut()
-        .execute_prepared(&prepared.js_code, path_str)?;
+    runtime.borrow_mut().execute_prepared(
+        prepared.bytecode.as_deref(),
+        prepared.js_code.as_deref(),
+        &prepared.path,
+        path_str,
+        prepared.declarations.as_deref(),
+        &prepared.dependencies,
+    )?;
     let exec_elapsed = exec_start.elapsed();
 
     tracing::debug!(

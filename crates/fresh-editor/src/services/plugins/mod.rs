@@ -18,8 +18,6 @@ pub mod manifest;
 #[cfg(feature = "embed-plugins")]
 pub mod embedded;
 pub mod plugin_dev_workspace;
-#[cfg(feature = "plugins")]
-pub mod prepared;
 
 // Re-export the main interface
 pub use manager::PluginManager;

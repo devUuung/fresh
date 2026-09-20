@@ -9245,22 +9245,40 @@ fn install_console<'js>(
     Ok(())
 }
 
+/// What a previous run worked out about a plugin: the compiled body, and the
+/// two things derived from its source that the editor needs at load time.
+pub(crate) struct CompiledPlugin {
+    pub bytecode: Vec<u8>,
+    pub declarations: Option<String>,
+    pub dependencies: Vec<String>,
+}
+
+#[derive(serde::Serialize, serde::Deserialize)]
+struct CompiledMeta {
+    declarations: Option<String>,
+    dependencies: Vec<String>,
+}
+
 /// Where this plugin's compiled form is cached, and under what key.
 ///
-/// The key covers the wrapped source *and* the binary that compiled it.
-/// QuickJS stamps its bytecode with `BC_VERSION` and refuses to read a
-/// mismatch, but that only catches changes to the bytecode format itself: a
-/// Fresh release that moves to a different QuickJS build carrying the same
-/// format version would otherwise reuse bytecode it never wrote. Folding in
-/// the running executable's identity means a cache entry is only ever read
-/// back by the exact binary that produced it -- an upgrade, or a developer
-/// rebuild, simply misses and reparses.
-fn bytecode_cache_path(source_name: &str, wrapped: &str) -> Option<PathBuf> {
-    let plugin = Path::new(source_name);
-    let dir = plugin.parent()?.join(".bytecode");
-    let key = fresh_parser_js::source_fingerprint(wrapped) ^ binary_fingerprint();
+/// Keyed on the plugin's own source, so the entry can be found *before*
+/// anything is transpiled -- a hit skips oxc and QuickJS both.
+///
+/// The key also covers the binary. QuickJS stamps bytecode with `BC_VERSION`
+/// and refuses to read a mismatch, but that only catches changes to the
+/// bytecode format itself: a Fresh release moving to a different QuickJS build
+/// at the same format version would otherwise read back bytecode it never
+/// wrote. Folding in the running executable's identity means an entry is only
+/// ever read by the exact binary that produced it; an upgrade, or a rebuild,
+/// simply misses and redoes the work.
+fn compiled_cache_paths(plugin: &Path, source: &str) -> Option<(PathBuf, PathBuf)> {
+    let dir = plugin.parent()?.join(".compiled");
+    let key = fresh_parser_js::source_fingerprint(source) ^ binary_fingerprint();
     let stem = plugin.file_name()?.to_str()?;
-    Some(dir.join(format!("{stem}.{key:016x}.bin")))
+    Some((
+        dir.join(format!("{stem}.{key:016x}.bin")),
+        dir.join(format!("{stem}.{key:016x}.json")),
+    ))
 }
 
 /// A fingerprint of the running executable: its version, plus the size and
@@ -9284,26 +9302,74 @@ fn binary_fingerprint() -> u64 {
     })
 }
 
-fn read_cached_bytecode(path: &Path) -> Option<Vec<u8>> {
-    std::fs::read(path).ok()
+/// The compiled form of `plugin`, if a previous run left one that this binary
+/// wrote for exactly this source.
+pub(crate) fn read_compiled_plugin(plugin: &Path, source: &str) -> Option<CompiledPlugin> {
+    let (bin, json) = compiled_cache_paths(plugin, source)?;
+    let bytecode = std::fs::read(&bin).ok()?;
+    let meta: CompiledMeta = serde_json::from_slice(&std::fs::read(&json).ok()?).ok()?;
+    Some(CompiledPlugin {
+        bytecode,
+        declarations: meta.declarations,
+        dependencies: meta.dependencies,
+    })
 }
 
-/// Publish a cache entry atomically, so a reader sees a whole file or none.
-/// Several test processes compile the same plugin at once; losing that race is
-/// normal, and a failure to cache at all only costs the next process a parse.
-fn write_cached_bytecode(path: &Path, bytes: &[u8]) {
-    let Some(dir) = path.parent() else { return };
+/// Throw away an entry that would not load, so the next run recompiles rather
+/// than retrying it.
+fn discard_compiled_plugin(plugin: &Path, source: &str) {
+    if let Some((bin, json)) = compiled_cache_paths(plugin, source) {
+        let _ = std::fs::remove_file(bin);
+        let _ = std::fs::remove_file(json);
+    }
+}
+
+/// Publish an entry atomically, so a reader sees whole files or none. Several
+/// test processes compile the same plugin at once; losing that race is normal,
+/// and failing to cache at all only costs the next process the work again.
+fn write_compiled_plugin(
+    plugin: &Path,
+    source: &str,
+    bytecode: &[u8],
+    declarations: Option<&str>,
+    dependencies: &[String],
+) {
+    let Some((bin, json)) = compiled_cache_paths(plugin, source) else {
+        return;
+    };
+    let Some(dir) = bin.parent() else { return };
     if std::fs::create_dir_all(dir).is_err() {
         return;
     }
+    let meta = CompiledMeta {
+        declarations: declarations.map(|d| d.to_string()),
+        dependencies: dependencies.to_vec(),
+    };
+    let Ok(meta_bytes) = serde_json::to_vec(&meta) else {
+        return;
+    };
+    // Metadata first: a reader requires both files, so the bytecode landing
+    // last is what makes the pair visible.
+    if !publish_atomically(dir, &json, &meta_bytes) {
+        return;
+    }
+    publish_atomically(dir, &bin, bytecode);
+}
+
+fn publish_atomically(dir: &Path, dest: &Path, bytes: &[u8]) -> bool {
     let tmp = dir.join(format!(
         ".tmp.{}.{:x}",
         std::process::id(),
-        bytes.len() as u64
+        fresh_parser_js::source_fingerprint(&dest.to_string_lossy())
     ));
-    if std::fs::write(&tmp, bytes).is_ok() && std::fs::rename(&tmp, path).is_err() {
-        let _ = std::fs::remove_file(&tmp);
+    if std::fs::write(&tmp, bytes).is_err() {
+        return false;
     }
+    if std::fs::rename(&tmp, dest).is_err() {
+        let _ = std::fs::remove_file(&tmp);
+        return false;
+    }
+    true
 }
 
 impl QuickJsBackend {
@@ -9579,7 +9645,7 @@ impl QuickJsBackend {
         &mut self,
         wrapped: &str,
         source_name: &str,
-        cache: Option<&Path>,
+        compiled: Option<&std::cell::RefCell<Option<Vec<u8>>>>,
     ) -> Result<()> {
         // Extract plugin name from path (filename without extension)
         let plugin_name = Path::new(source_name)
@@ -9617,7 +9683,7 @@ impl QuickJsBackend {
         context.with(|ctx| {
             tracing::debug!("execute_js: executing plugin code for '{}'", plugin_name);
 
-            let result = Self::eval_plugin_module(&ctx, &module_name, wrapped, cache)
+            let result = Self::eval_plugin_module(&ctx, &module_name, wrapped, compiled)
                 .map_err(|e| format_js_error(&ctx, e, source_name));
 
             tracing::debug!(
@@ -9633,30 +9699,79 @@ impl QuickJsBackend {
     /// Run a prepared plugin, from bytecode when the build produced some and
     /// from source otherwise. The two paths are the same module and the same
     /// body; only the parse differs.
-    pub(crate) fn execute_prepared(&mut self, js_code: &str, source_name: &str) -> Result<()> {
-        let wrapped = fresh_parser_js::wrap_plugin_body(js_code);
-        let cache = bytecode_cache_path(source_name, &wrapped);
-
-        // Compiled earlier by this same binary? Then skip the parse.
-        if let Some(bytes) = cache.as_deref().and_then(read_cached_bytecode) {
-            match self.execute_bytecode(&bytes, source_name) {
+    pub(crate) fn execute_prepared(
+        &mut self,
+        bytecode: Option<&[u8]>,
+        js_code: Option<&str>,
+        plugin_path: &Path,
+        source_name: &str,
+        declarations: Option<&str>,
+        dependencies: &[String],
+    ) -> Result<()> {
+        if let Some(bytes) = bytecode {
+            match self.execute_bytecode(bytes, source_name) {
                 Ok(()) => return Ok(()),
                 Err(e) => {
-                    // QuickJS validates the bytecode version on read and
-                    // raises rather than misbehaving, so a cache written by a
-                    // different engine surfaces here as an ordinary error. Drop
-                    // the entry and parse the source instead.
-                    tracing::debug!(
-                        "cached bytecode for '{source_name}' unusable ({e}); reparsing"
-                    );
-                    if let Some(path) = cache.as_deref() {
-                        let _ = std::fs::remove_file(path);
+                    // QuickJS validates the bytecode version on read and raises
+                    // rather than misbehaving, so an entry this binary cannot
+                    // use surfaces here as an ordinary error. Drop it and do
+                    // the work from source.
+                    tracing::debug!("compiled '{source_name}' unusable ({e}); rebuilding");
+                    if let Ok(source) = std::fs::read_to_string(plugin_path) {
+                        discard_compiled_plugin(plugin_path, &source);
+                        let prepared = fresh_parser_js::prepare_source(plugin_path, &source)?;
+                        return self.compile_and_run(
+                            &prepared.js_code,
+                            plugin_path,
+                            &source,
+                            source_name,
+                            prepared.declarations.as_deref(),
+                            &prepared.dependencies,
+                        );
                     }
                 }
             }
         }
 
-        self.execute_wrapped(&wrapped, source_name, cache.as_deref())
+        let Some(code) = js_code else {
+            return Err(anyhow!(
+                "plugin '{source_name}' has neither compiled form nor source"
+            ));
+        };
+        match std::fs::read_to_string(plugin_path) {
+            Ok(source) => self.compile_and_run(
+                code,
+                plugin_path,
+                &source,
+                source_name,
+                declarations,
+                dependencies,
+            ),
+            // Without the source there is nothing to key a cache entry on, so
+            // just run it.
+            Err(_) => self.execute_js(code, source_name),
+        }
+    }
+
+    /// Run a plugin from source, keeping what QuickJS compiled so the next
+    /// process -- the next test, or the user's next editor start -- can skip
+    /// both the transpile and the parse.
+    fn compile_and_run(
+        &mut self,
+        js_code: &str,
+        plugin_path: &Path,
+        source: &str,
+        source_name: &str,
+        declarations: Option<&str>,
+        dependencies: &[String],
+    ) -> Result<()> {
+        let wrapped = fresh_parser_js::wrap_plugin_body(js_code);
+        let compiled = std::cell::RefCell::new(None);
+        let result = self.execute_wrapped(&wrapped, source_name, Some(&compiled));
+        if let Some(bytes) = compiled.into_inner() {
+            write_compiled_plugin(plugin_path, source, &bytes, declarations, dependencies);
+        }
+        result
     }
 
     /// Execute a plugin from bytecode the build script compiled earlier.
@@ -9741,18 +9856,16 @@ impl QuickJsBackend {
         ctx: &rquickjs::Ctx<'js>,
         module_name: &str,
         code: &str,
-        cache: Option<&Path>,
+        compiled: Option<&std::cell::RefCell<Option<Vec<u8>>>>,
     ) -> rquickjs::Result<()> {
         let declared = rquickjs::Module::declare(ctx.clone(), module_name, code)?;
 
-        // Save what QuickJS just parsed, so the next process -- the next test,
-        // or the user's next editor start -- can load it instead of parsing
-        // again. Written before evaluation: the compiled form is a function of
-        // the source alone, and a plugin that throws on load is still the same
-        // program next time.
-        if let Some(path) = cache {
+        // Take what QuickJS just parsed. Captured before evaluation: the
+        // compiled form is a function of the source alone, and a plugin that
+        // throws on load is still the same program next time.
+        if let Some(sink) = compiled {
             if let Ok(bytes) = declared.write(rquickjs::module::WriteOptions::default()) {
-                write_cached_bytecode(path, &bytes);
+                *sink.borrow_mut() = Some(bytes);
             }
         }
 
