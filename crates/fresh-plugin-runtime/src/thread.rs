@@ -1433,6 +1433,72 @@ struct PreparedPlugin {
 ///
 /// This function does I/O and CPU-bound work only — no QuickJS interaction.
 /// It is safe to call from any thread (all inputs/outputs are Send).
+/// The part of a prepared plugin that is a pure function of its source text:
+/// the transpiled/bundled JS, the isolated-declarations `.d.ts`, and the
+/// declared dependencies. Cached on disk so a process does not redo oxc's
+/// work for source it has already seen.
+#[derive(serde::Serialize, serde::Deserialize)]
+struct PreparedCache {
+    /// Length of the source this entry was built from. The file name already
+    /// carries a hash of that source, but a hash can collide and serving the
+    /// wrong plugin's JS would be a silent, baffling failure; checking the
+    /// length as well makes that need two coincidences instead of one.
+    source_len: usize,
+    js_code: String,
+    declarations: Option<String>,
+    dependencies: Vec<String>,
+}
+
+/// Where the prepared-source cache for `path` lives, and under what key.
+///
+/// Keyed by a hash of the source itself, so the entry can never be stale:
+/// edit a plugin and the key changes. The directory sits next to the plugin
+/// because that is writable in both places plugins come from -- the
+/// content-addressed extraction dir for embedded plugins, and the user's own
+/// plugins dir. `PREPARED_CACHE_VERSION` invalidates every entry when the
+/// shape of what we cache (or the transpiler behind it) changes.
+const PREPARED_CACHE_VERSION: u32 = 1;
+
+fn prepared_cache_path(path: &Path, source: &str) -> Option<PathBuf> {
+    use std::hash::{Hash, Hasher};
+    let mut h = std::collections::hash_map::DefaultHasher::new();
+    PREPARED_CACHE_VERSION.hash(&mut h);
+    source.hash(&mut h);
+    path.file_name()?.hash(&mut h);
+    let key = h.finish();
+    Some(path.parent()?.join(".prepared").join(format!("{key:016x}.json")))
+}
+
+fn read_prepared_cache(cache: &Path, source: &str) -> Option<PreparedCache> {
+    let bytes = std::fs::read(cache).ok()?;
+    let value: PreparedCache = serde_json::from_slice(&bytes).ok()?;
+    (value.source_len == source.len()).then_some(value)
+}
+
+/// Publish an entry atomically: a concurrent reader either sees no file or a
+/// complete one, never a half-written one. Several test processes prepare the
+/// same plugin at once, so losing the race is normal and is not an error.
+fn write_prepared_cache(cache: &Path, value: &PreparedCache) {
+    let Some(dir) = cache.parent() else { return };
+    if std::fs::create_dir_all(dir).is_err() {
+        return;
+    }
+    let Ok(json) = serde_json::to_vec(value) else {
+        return;
+    };
+    let tmp = dir.join(format!(
+        ".tmp.{}.{}",
+        std::process::id(),
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .map(|d| d.subsec_nanos())
+            .unwrap_or(0)
+    ));
+    if std::fs::write(&tmp, json).is_ok() && std::fs::rename(&tmp, cache).is_err() {
+        let _ = std::fs::remove_file(&tmp);
+    }
+}
+
 fn prepare_plugin(path: &Path) -> Result<PreparedPlugin> {
     let plugin_name = path
         .file_stem()
@@ -1442,6 +1508,25 @@ fn prepare_plugin(path: &Path) -> Result<PreparedPlugin> {
 
     let source = std::fs::read_to_string(path)
         .map_err(|e| anyhow!("Failed to read plugin {}: {}", path.display(), e))?;
+
+    // oxc's transpile + isolated-declarations emit is the bulk of preparing a
+    // plugin, and it is the same answer every time for the same bytes. Skip
+    // straight to the i18n read when a previous run has already done it.
+    let cache_path = prepared_cache_path(path, &source);
+    let source_len_for_cache = source.len();
+    if let Some(hit) = cache_path
+        .as_deref()
+        .and_then(|c| read_prepared_cache(c, &source))
+    {
+        return Ok(PreparedPlugin {
+            name: plugin_name,
+            path: path.to_path_buf(),
+            js_code: hit.js_code,
+            i18n: read_plugin_i18n(path),
+            dependencies: hit.dependencies,
+            declarations: hit.declarations,
+        });
+    }
 
     let filename = path
         .file_name()
@@ -1499,24 +1584,39 @@ fn prepare_plugin(path: &Path) -> Result<PreparedPlugin> {
         source
     };
 
-    // Load accompanying .i18n.json file
-    let i18n_path = path.with_extension("i18n.json");
-    let i18n = if i18n_path.exists() {
-        std::fs::read_to_string(&i18n_path)
-            .ok()
-            .and_then(|content| serde_json::from_str(&content).ok())
-    } else {
-        None
-    };
+    if let Some(cache) = cache_path.as_deref() {
+        write_prepared_cache(
+            cache,
+            &PreparedCache {
+                source_len: source_len_for_cache,
+                js_code: js_code.clone(),
+                declarations: declarations.clone(),
+                dependencies: dependencies.clone(),
+            },
+        );
+    }
 
     Ok(PreparedPlugin {
         name: plugin_name,
         path: path.to_path_buf(),
         js_code,
-        i18n,
+        i18n: read_plugin_i18n(path),
         dependencies,
         declarations,
     })
+}
+
+/// Load a plugin's accompanying `.i18n.json`, if it has one. Read on both the
+/// cached and uncached paths: it is a small file, and caching it would only
+/// add a way for translations to go stale.
+fn read_plugin_i18n(path: &Path) -> Option<HashMap<String, HashMap<String, String>>> {
+    let i18n_path = path.with_extension("i18n.json");
+    if !i18n_path.exists() {
+        return None;
+    }
+    std::fs::read_to_string(&i18n_path)
+        .ok()
+        .and_then(|content| serde_json::from_str(&content).ok())
 }
 
 /// Execute a pre-prepared plugin in QuickJS. This is the serial phase —
