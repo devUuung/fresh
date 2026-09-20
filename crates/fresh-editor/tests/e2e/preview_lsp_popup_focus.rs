@@ -141,7 +141,6 @@ fn down_arrow_drives_preview_when_lsp_popup_is_visible() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
     assert!(
         tab_bar(&harness).contains("alpha.txt"),
         "first Down should preview alpha.txt; tab bar:\n{}",
@@ -162,7 +161,6 @@ fn down_arrow_drives_preview_when_lsp_popup_is_visible() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     let bar = tab_bar(&harness);
     assert!(
@@ -201,7 +199,6 @@ fn up_arrow_drives_preview_when_lsp_popup_is_visible() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
     assert!(
         tab_bar(&harness).contains("beta.txt"),
         "precondition: beta.txt should be the active preview; tab bar:\n{}",
@@ -214,7 +211,6 @@ fn up_arrow_drives_preview_when_lsp_popup_is_visible() {
     harness
         .send_key(KeyCode::Up, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     let bar = tab_bar(&harness);
     assert!(

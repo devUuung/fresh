@@ -45,7 +45,6 @@ fn test_settings_paste() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify the Edit Value dialog opened on the first language entry.
     // Don't assert which language that is — the list is alphabetical and
@@ -67,13 +66,11 @@ fn test_settings_paste() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Paste "rust"
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify content is pasted into Comment Prefix field
     harness.assert_screen_contains("rust");

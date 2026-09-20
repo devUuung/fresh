@@ -281,7 +281,6 @@ fn test_settings_ui_shows_languages_config() {
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Type "languages" to filter settings
     for c in "languages".chars() {
@@ -387,7 +386,6 @@ fn test_settings_ui_with_language_config_via_command_palette() {
     // Step 4: Navigate to General category (first category, should be selected by default)
     // Switch to settings panel to see items
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Step 5: Scroll down in settings to find the "Languages" map setting
     // Languages is a map-type setting in the General category

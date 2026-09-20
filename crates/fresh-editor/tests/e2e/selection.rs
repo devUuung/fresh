@@ -1316,7 +1316,6 @@ fn test_select_up() {
     // Move to line 3 (start of "Line 3")
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Verify cursor is at start of line 3
     let cursor_pos = harness.cursor_position();
@@ -1332,7 +1331,6 @@ fn test_select_up() {
 
     // Press Shift+Up to select upward
     harness.send_key(KeyCode::Up, KeyModifiers::SHIFT).unwrap();
-    harness.render().unwrap();
 
     // Should now have a selection
     assert!(
@@ -1347,7 +1345,6 @@ fn test_select_up() {
 
     // Press Shift+Up again to extend selection further
     harness.send_key(KeyCode::Up, KeyModifiers::SHIFT).unwrap();
-    harness.render().unwrap();
 
     // Selection should now include both lines
     let selected = harness.get_selected_text();
@@ -1378,7 +1375,6 @@ fn test_select_down() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     // Should now have a selection
     assert!(
@@ -1394,7 +1390,6 @@ fn test_select_down() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     // Selection should now include two lines
     let selected = harness.get_selected_text();
@@ -1407,7 +1402,6 @@ fn test_select_down() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     // Selection should now include three lines
     let selected = harness.get_selected_text();
@@ -1447,7 +1441,6 @@ fn test_select_up_down_reversal() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
     tracing::trace!(
         "After first Shift+Down - selected text: {:?}",
         harness.get_selected_text()
@@ -1456,7 +1449,6 @@ fn test_select_up_down_reversal() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     let selected = harness.get_selected_text();
     tracing::trace!("After second Shift+Down - selected text: {:?}", selected);
@@ -1464,7 +1456,6 @@ fn test_select_up_down_reversal() {
 
     // Now go back up one line (shrink selection)
     harness.send_key(KeyCode::Up, KeyModifiers::SHIFT).unwrap();
-    harness.render().unwrap();
 
     let selected = harness.get_selected_text();
     tracing::trace!(
@@ -1475,7 +1466,6 @@ fn test_select_up_down_reversal() {
 
     // Go up again - this should collapse the selection (back to anchor)
     harness.send_key(KeyCode::Up, KeyModifiers::SHIFT).unwrap();
-    harness.render().unwrap();
 
     // After going past the anchor, selection collapses
     // This is expected behavior - we've moved back to where we started
@@ -1511,7 +1501,6 @@ fn test_select_page_down() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have a selection
     assert!(
@@ -1558,7 +1547,6 @@ fn test_select_page_up() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Now we're somewhere in the middle of the file
     let cursor_before = harness.cursor_position();
@@ -1570,7 +1558,6 @@ fn test_select_page_up() {
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have a selection
     assert!(
@@ -1616,7 +1603,6 @@ fn test_select_page_up_down_combination() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(harness.has_selection());
     let selection_after_page_down = harness.get_selected_text();
@@ -1626,7 +1612,6 @@ fn test_select_page_up_down_combination() {
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     // Selection might still exist but should be different
     let selection_after_page_up = harness.get_selected_text();
@@ -2179,20 +2164,17 @@ fn test_select_at_file_boundaries() {
 
     // At start of file, Shift+Up should not panic or cause issues
     harness.send_key(KeyCode::Up, KeyModifiers::SHIFT).unwrap();
-    harness.render().unwrap();
     // Either no selection or empty selection is fine
 
     // Go to end of file
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // At end of file, Shift+Down should not panic
     harness
         .send_key(KeyCode::Down, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     // Select all the way up from end
     for _ in 0..5 {

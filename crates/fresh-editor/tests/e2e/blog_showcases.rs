@@ -226,20 +226,17 @@ fn blog_showcase_editing_search_replace() {
     // Open command palette
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 120);
 
     // Type "Replace" to find the command
     for ch in "Replace".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 50);
     }
     hold(&mut h, &mut s, 2, 100);
 
     // Execute the Replace command
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 3, 100);
 
@@ -345,13 +342,11 @@ fn blog_showcase_editing_block_selection() {
     for _ in 0..6 {
         h.send_key(KeyCode::Down, KeyModifiers::ALT | KeyModifiers::SHIFT)
             .unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("Alt+Shift+↓"), 100);
     }
     for _ in 0..2 {
         h.send_key(KeyCode::Right, KeyModifiers::ALT | KeyModifiers::SHIFT)
             .unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("Alt+Shift+→"), 100);
     }
     hold(&mut h, &mut s, 5, 100);
@@ -580,13 +575,11 @@ fn blog_showcase_productivity_flash_jump() {
     // ---- Activate flash via the command palette ----
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 600);
     hold(&mut h, &mut s, 3, 200);
 
     for ch in "Flash: Jump".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
     }
     h.wait_for_screen_contains("Flash: Jump").unwrap();
     snap(&mut h, &mut s, None, 800);
@@ -661,7 +654,6 @@ fn blog_showcase_productivity_split_view() {
     // Create horizontal split
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     h.type_text("split horiz").unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 120);
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
@@ -687,7 +679,6 @@ fn blog_showcase_productivity_split_view() {
     // Close split
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     h.type_text("close split").unwrap();
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
     hold(&mut h, &mut s, 4, 100);
@@ -721,7 +712,6 @@ fn blog_showcase_productivity_file_explorer() {
     // Navigate down
     for _ in 0..3 {
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("↓"), 100);
     }
 
@@ -768,18 +758,15 @@ fn blog_showcase_productivity_settings() {
     // Open settings via command palette
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     h.type_text("settings").unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 120);
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 3, 100);
 
     // Navigate settings categories
     for _ in 0..3 {
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("↓"), 100);
     }
     hold(&mut h, &mut s, 3, 100);
@@ -787,26 +774,22 @@ fn blog_showcase_productivity_settings() {
     // Navigate more
     for _ in 0..2 {
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("↓"), 100);
     }
     hold(&mut h, &mut s, 4, 100);
 
     // Filter settings with /
     h.send_key(KeyCode::Char('/'), KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("/"), 150);
 
     for ch in "terminal bg".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 70);
     }
     hold(&mut h, &mut s, 5, 100);
 
     // Confirm filter
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 4, 100);
 
@@ -841,27 +824,23 @@ fn blog_showcase_productivity_keybinding_editor() {
     // Navigate down through bindings
     for _ in 0..6 {
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("↓"), 80);
     }
     hold(&mut h, &mut s, 3, 100);
 
     // Activate search with /
     h.send_key(KeyCode::Char('/'), KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("/"), 150);
 
     // Type search query
     for ch in "save".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 70);
     }
     hold(&mut h, &mut s, 4, 100);
 
     // Press Enter to confirm search
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     hold(&mut h, &mut s, 3, 100);
 
     // Close
@@ -907,18 +886,15 @@ fn blog_showcase_productivity_terminal() {
     // Open terminal via command palette
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 120);
 
     for ch in "open terminal".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 50);
     }
     hold(&mut h, &mut s, 2, 100);
 
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
 
     // Wait for terminal to initialize
@@ -947,7 +923,6 @@ fn blog_showcase_productivity_terminal() {
     // Switch back to editor
     h.send_key(KeyCode::Char('k'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+K"), 200);
     hold(&mut h, &mut s, 4, 100);
 
@@ -979,27 +954,23 @@ fn blog_showcase_editing_sort_lines() {
     // Select all with Ctrl+A
     h.send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+A"), 200);
     hold(&mut h, &mut s, 2, 100);
 
     // Open command palette
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 120);
 
     // Type "sort lines"
     for ch in "sort lines".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 50);
     }
     hold(&mut h, &mut s, 2, 100);
 
     // Execute
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 5, 100);
 
@@ -1034,7 +1005,6 @@ fn blog_showcase_editing_case_conversion() {
 
     // Convert to uppercase
     h.send_key(KeyCode::Char('u'), KeyModifiers::ALT).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Alt+U"), 250);
     hold(&mut h, &mut s, 4, 100);
 
@@ -1055,18 +1025,15 @@ fn blog_showcase_editing_case_conversion() {
 
     // Convert to uppercase too
     h.send_key(KeyCode::Char('u'), KeyModifiers::ALT).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Alt+U"), 250);
     hold(&mut h, &mut s, 3, 100);
 
     // Now select all and lowercase
     h.send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+A"), 150);
 
     h.send_key(KeyCode::Char('l'), KeyModifiers::ALT).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Alt+L"), 250);
     hold(&mut h, &mut s, 5, 100);
 
@@ -1094,29 +1061,24 @@ fn blog_showcase_editing_duplicate_line() {
     // Go to line 2 (the println line)
     h.send_key(KeyCode::Home, KeyModifiers::CONTROL).unwrap();
     h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, None, 200);
     hold(&mut h, &mut s, 2, 100);
 
     // Duplicate via command palette
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     h.type_text("duplicate line").unwrap();
     h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 100);
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 3, 100);
 
     // Duplicate again
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     h.type_text("duplicate line").unwrap();
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Duplicate"), 200);
     hold(&mut h, &mut s, 5, 100);
 
@@ -1153,19 +1115,16 @@ fn blog_showcase_editing_tab_indent() {
 
     // Indent with Tab
     h.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Tab"), 200);
     hold(&mut h, &mut s, 2, 100);
 
     // Indent again
     h.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Tab"), 200);
     hold(&mut h, &mut s, 2, 100);
 
     // Dedent with Shift+Tab
     h.send_key(KeyCode::BackTab, KeyModifiers::SHIFT).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Shift+Tab"), 200);
     hold(&mut h, &mut s, 4, 100);
 
@@ -1196,34 +1155,29 @@ fn blog_showcase_themes_select_theme() {
     // Open command palette
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 120);
 
     // Type "Select Theme"
     for ch in "Select Theme".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 50);
     }
     hold(&mut h, &mut s, 2, 100);
 
     // Execute
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 3, 100);
 
     // Browse themes with arrow keys
     for _ in 0..3 {
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("↓"), 150);
         hold(&mut h, &mut s, 2, 100);
     }
 
     // Select a theme
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 5, 100);
 
@@ -1403,11 +1357,9 @@ Released under the **Apache 2.0** license. See [LICENSE](https://github.com/sine
     // Create a vertical split
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     h.type_text("split vert").unwrap();
     h.render().unwrap();
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     h.render().unwrap();
     snap(&mut h, &mut s, Some("Split Vertical"), 200);
     hold(&mut h, &mut s, 3, 100);
@@ -1415,7 +1367,6 @@ Released under the **Apache 2.0** license. See [LICENSE](https://github.com/sine
     // Enable compose mode in the right panel
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     h.type_text("Toggle Compose").unwrap();
     h.render().unwrap();
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
@@ -1431,25 +1382,21 @@ Released under the **Apache 2.0** license. See [LICENSE](https://github.com/sine
     // Enable scroll sync
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     h.type_text("Toggle Scroll Sync").unwrap();
     h.render().unwrap();
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Scroll Sync"), 200);
     hold(&mut h, &mut s, 3, 100);
 
     // Switch to source panel (left) so scrolling there drives the compose panel
     h.send_key(KeyCode::Char('k'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+K"), 150);
     hold(&mut h, &mut s, 2, 100);
 
     // Scroll down well past the viewport — both panels move together
     for i in 0..45 {
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         if i % 4 == 3 {
             snap(&mut h, &mut s, Some("↓"), 80);
         }
@@ -1490,16 +1437,13 @@ fn blog_showcase_fresh_0_2_9_large_file_scanning() {
     // Press Ctrl+G to trigger Go to Line — shows scan confirm prompt
     h.send_key(KeyCode::Char('g'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+G"), 500);
     hold(&mut h, &mut s, 3, 200);
 
     // Press the Scan button's letter to accept the scan
     h.send_key(KeyCode::Char('s'), KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("s"), 300);
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 400);
 
     // Drive the scan to completion
@@ -1512,14 +1456,12 @@ fn blog_showcase_fresh_0_2_9_large_file_scanning() {
     // Type a line number to jump to
     for ch in "500000".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 120);
     }
     hold(&mut h, &mut s, 2, 200);
 
     // Press Enter to jump
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
 
     // Hold on the result — gutter shows exact line numbers at the target
@@ -1548,12 +1490,10 @@ fn blog_showcase_fresh_0_2_9_vertical_rulers() {
     // Add ruler at column 40 (visible in 100-col terminal)
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     h.type_text("Add Ruler").unwrap();
     h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 120);
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 150);
     hold(&mut h, &mut s, 2, 100);
 
@@ -1562,18 +1502,15 @@ fn blog_showcase_fresh_0_2_9_vertical_rulers() {
     h.render().unwrap();
     snap(&mut h, &mut s, Some("40"), 150);
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 4, 100);
 
     // Add a second ruler at column 80
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     h.type_text("Add Ruler").unwrap();
     h.render().unwrap();
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Add Ruler"), 150);
     hold(&mut h, &mut s, 2, 100);
 
@@ -1581,7 +1518,6 @@ fn blog_showcase_fresh_0_2_9_vertical_rulers() {
     h.render().unwrap();
     snap(&mut h, &mut s, Some("80"), 150);
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 5, 100);
 
@@ -1616,54 +1552,46 @@ fn blog_showcase_fresh_0_2_9_smart_editing() {
 
     for ch in "fn example() {".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 60);
     }
     hold(&mut h, &mut s, 2, 200);
 
     // Press Enter — auto-indent adds leading whitespace
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 300);
     hold_key(&mut h, &mut s, "auto-indent", 3, 200);
 
     // Type a line of code
     for ch in "let x = 1;".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 60);
     }
     hold(&mut h, &mut s, 2, 200);
 
     // Press Enter again — indent is preserved
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 300);
     hold_key(&mut h, &mut s, "auto-indent", 3, 200);
 
     // Type another line
     for ch in "let y = 2;".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 60);
     }
     hold(&mut h, &mut s, 2, 200);
 
     // Press Enter
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 2, 200);
 
     // Backspace — smart dedent removes one indent level
     h.send_key(KeyCode::Backspace, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Backspace"), 400);
     hold_key(&mut h, &mut s, "smart dedent", 3, 200);
 
     // Tab — indent back
     h.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Tab"), 400);
     hold_key(&mut h, &mut s, "indent", 3, 200);
 
@@ -1693,50 +1621,41 @@ fn blog_showcase_fresh_0_2_9_auto_save() {
     // Open settings via command palette
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 120);
 
     for ch in "settings".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 50);
     }
     hold(&mut h, &mut s, 2, 100);
 
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 3, 100);
 
     // Filter settings to find auto_save
     h.send_key(KeyCode::Char('/'), KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("/"), 150);
 
     for ch in "auto_save".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 60);
     }
     hold(&mut h, &mut s, 3, 100);
 
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 3, 100);
 
     // Navigate to the setting and toggle it
     h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("↓"), 100);
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 5, 100);
 
     // Close settings
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     hold(&mut h, &mut s, 3, 100);
 
     s.finalize().unwrap();
@@ -1839,44 +1758,37 @@ mod tests {
     // Open project search via command palette
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 150);
 
     for ch in "Search and Replace".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
     }
     snap(&mut h, &mut s, None, 100);
     hold(&mut h, &mut s, 2, 100);
 
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 3, 100);
 
     // Type search term
     for ch in "process_item".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 50);
     }
 
     // Press Enter to confirm search and move to replace field
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 150);
 
     // Type replacement
     for ch in "handle_item".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 50);
     }
     hold(&mut h, &mut s, 2, 100);
 
     // Press Enter to confirm replacement and trigger the search
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 150);
 
     // Wait for streaming search results to arrive
@@ -1889,7 +1801,6 @@ mod tests {
 
     // Alt+Enter to replace all
     h.send_key(KeyCode::Enter, KeyModifiers::ALT).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Alt+Enter"), 400);
     hold_key(&mut h, &mut s, "Replace All", 5, 150);
 
@@ -2127,7 +2038,6 @@ fn blog_showcase_fresh_0_2_18_surround_selection() {
 
     // Type { to surround with braces
     h.send_key(KeyCode::Char('{'), KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("{"), 400);
     hold_key(&mut h, &mut s, "{body}", 4, 150);
 
@@ -2190,32 +2100,26 @@ fn blog_showcase_fresh_0_2_18_whitespace_indicators() {
     // Open settings to show configuration
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 120);
 
     for ch in "settings".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
     }
     snap(&mut h, &mut s, None, 80);
 
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 2, 100);
 
     // Filter for whitespace
     h.send_key(KeyCode::Char('/'), KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     for ch in "whitespace".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
     }
     snap(&mut h, &mut s, Some("whitespace"), 150);
     hold(&mut h, &mut s, 5, 100);
 
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     hold(&mut h, &mut s, 3, 100);
 
     s.finalize().unwrap();
@@ -2241,25 +2145,21 @@ fn blog_showcase_fresh_0_2_18_theme_editor() {
     // Open theme editor via command palette
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 150);
 
     for ch in "theme editor".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
     }
     snap(&mut h, &mut s, None, 100);
     hold(&mut h, &mut s, 2, 100);
 
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 200);
     hold(&mut h, &mut s, 4, 100);
 
     // Scroll down through theme entries
     for _ in 0..6 {
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("↓"), 80);
     }
     hold(&mut h, &mut s, 3, 100);
@@ -2267,7 +2167,6 @@ fn blog_showcase_fresh_0_2_18_theme_editor() {
     // Scroll more to show virtual scrolling
     for _ in 0..8 {
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("↓"), 60);
     }
     hold(&mut h, &mut s, 4, 100);
@@ -2275,14 +2174,12 @@ fn blog_showcase_fresh_0_2_18_theme_editor() {
     // Go back up
     for _ in 0..5 {
         h.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("↑"), 60);
     }
     hold(&mut h, &mut s, 4, 100);
 
     // Close
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     hold(&mut h, &mut s, 3, 100);
 
     s.finalize().unwrap();
@@ -2393,7 +2290,6 @@ pkgs.mkShell {
     // Scroll through Svelte to show mixed HTML/JS/CSS highlighting
     for _ in 0..10 {
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("↓"), 60);
     }
     hold(&mut h, &mut s, 5, 100);
@@ -2598,12 +2494,10 @@ fn blog_showcase_productivity_git_log() {
     // Open the command palette and type "Git Log".
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 150);
 
     for ch in "Git Log".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 60);
     }
     hold(&mut h, &mut s, 2, 120);
@@ -2646,14 +2540,12 @@ fn blog_showcase_productivity_git_log() {
     // Tab jumps focus into the detail panel so the user can scroll the
     // diff without losing the log's cursor.
     h.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Tab"), 200);
     hold(&mut h, &mut s, 4, 150);
 
     // q in the detail panel hops back to the log panel (it doesn't close
     // the group until q is pressed from the log panel).
     h.send_key(KeyCode::Char('q'), KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("q"), 180);
     hold(&mut h, &mut s, 3, 120);
 
@@ -2769,12 +2661,10 @@ fn blog_showcase_fresh_0_2_26_init_ts() {
     // init: Reload are filtered out by typing "Edit").
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 200);
 
     for ch in "init: Edit".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 70);
     }
     hold(&mut h, &mut s, 3, 150);
@@ -2792,7 +2682,6 @@ fn blog_showcase_fresh_0_2_26_init_ts() {
     // Scroll down through the template to show the examples.
     for _ in 0..8 {
         h.send_key(KeyCode::PageDown, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("PgDn"), 220);
     }
     hold(&mut h, &mut s, 4, 150);
@@ -2820,17 +2709,14 @@ fn blog_showcase_fresh_0_2_26_preview_tabs() {
     // Open the file explorer so we can click on files.
     h.send_key(KeyCode::Char('e'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+E"), 250);
     hold(&mut h, &mut s, 3, 150);
 
     // Navigate to the src/ directory and expand it so main.rs and
     // utils.rs are both visible in the tree.
     h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("↓"), 120);
     h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Enter"), 180);
     hold(&mut h, &mut s, 2, 150);
 
@@ -2968,12 +2854,10 @@ fn blog_showcase_fresh_0_2_26_review_diff() {
     // Open Review Diff via the command palette.
     h.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 180);
 
     for ch in "Review Diff".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 60);
     }
     hold(&mut h, &mut s, 2, 150);
@@ -2991,7 +2875,6 @@ fn blog_showcase_fresh_0_2_26_review_diff() {
     // Hop through hunks with `n`.
     for _ in 0..3 {
         h.send_key(KeyCode::Char('n'), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("n"), 220);
         hold(&mut h, &mut s, 2, 150);
     }
@@ -2999,7 +2882,6 @@ fn blog_showcase_fresh_0_2_26_review_diff() {
     // Back up with `p`.
     for _ in 0..2 {
         h.send_key(KeyCode::Char('p'), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("p"), 220);
     }
     hold(&mut h, &mut s, 5, 150);
@@ -3347,7 +3229,6 @@ fn blog_showcase_fresh_0_4_0_ssh_session() {
 
     for ch in "New Workspace".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 28);
     }
     h.wait_until(|h| h.screen_to_string().contains("Orchestrator: New Workspace"))
@@ -3367,7 +3248,6 @@ fn blog_showcase_fresh_0_4_0_ssh_session() {
     //     Project Path onto it, then → to the next option (no ~/.ssh/config
     //     and no saved machines on the demo box). -----------------------------
     h.send_key(KeyCode::BackTab, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("⇧Tab"), 60);
     h.send_key(KeyCode::Right, KeyModifiers::NONE).unwrap();
     h.wait_until(|h| h.screen_to_string().contains("Target:"))
@@ -3377,14 +3257,12 @@ fn blog_showcase_fresh_0_4_0_ssh_session() {
 
     // Tab from the Machine control into the first SSH field (Target).
     h.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Tab"), 65);
 
     // --- Target: the fake hostname + the throwaway sshd's port. -------------
     let host_value = format!("{}:{}", sup::DEMO_HOST, server.port);
     for ch in host_value.chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 20);
     }
     hold(&mut h, &mut s, 2, 55);
@@ -3393,7 +3271,6 @@ fn blog_showcase_fresh_0_4_0_ssh_session() {
     //     host is the star). Each lands its whole value in one go. -----------
     // Identity file: the keypair authorized on the demo sshd.
     h.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Tab"), 45);
     h.type_text(&server.identity.to_string_lossy()).unwrap();
     h.render().unwrap();
@@ -3402,7 +3279,6 @@ fn blog_showcase_fresh_0_4_0_ssh_session() {
     // SSH options: a throwaway known_hosts so the demo leaves no trace in the
     // user's ~/.ssh (and to show the free-form options field).
     h.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Tab"), 45);
     h.type_text(&format!(
         "-o UserKnownHostsFile={}",
@@ -3414,7 +3290,6 @@ fn blog_showcase_fresh_0_4_0_ssh_session() {
 
     // Project Path: where the session is rooted on the remote.
     h.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Tab"), 45);
     h.type_text(&server.work.to_string_lossy()).unwrap();
     h.render().unwrap();
@@ -3422,7 +3297,6 @@ fn blog_showcase_fresh_0_4_0_ssh_session() {
 
     // Session name.
     h.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Tab"), 45);
     h.type_text("deploy-box").unwrap();
     h.render().unwrap();
@@ -3508,11 +3382,9 @@ fn blog_showcase_fresh_0_4_0_ssh_session() {
     h.wait_for_prompt().unwrap();
     snap(&mut h, &mut s, Some("Ctrl+P"), 100);
     h.send_key(KeyCode::Backspace, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("Bksp"), 75);
     for ch in "app".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 45);
     }
     // The remote file finder lists `app.py` (served over SSH).
@@ -3712,7 +3584,6 @@ fn blog_showcase_fresh_0_4_0_universal_search() {
     // --- Type a query that recurs across every source file. -----------------
     for ch in "config".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some(&ch.to_string()), 35);
     }
     // Results stream in; the preview pane shows the first match's file.
@@ -3737,7 +3608,6 @@ fn blog_showcase_fresh_0_4_0_universal_search() {
     //     selection moves down onto a source match. --------------------------
     for _ in 0..3 {
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("↓"), 130);
         hold(&mut h, &mut s, 2, 75);
     }
@@ -4236,7 +4106,6 @@ fn blog_showcase_fresh_0_4_0_live_diff() {
     for line in ["", "pub fn health() -> bool {", "    true", "}"] {
         h.type_text(line).unwrap();
         h.send_key(KeyCode::Enter, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, None, 120);
     }
     hold(&mut h, &mut s, 4, 120);
@@ -4408,7 +4277,6 @@ fn blog_showcase_fresh_0_4_0_review_diff() {
     // Move onto a changed line and leave a comment with [c].
     for _ in 0..3 {
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, Some("↓"), 120);
     }
     h.send_key(KeyCode::Char('c'), KeyModifiers::NONE).unwrap();
@@ -4417,7 +4285,6 @@ fn blog_showcase_fresh_0_4_0_review_diff() {
     snap(&mut h, &mut s, Some("c"), 200);
     for ch in "validate the token prefix here".chars() {
         h.send_key(KeyCode::Char(ch), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         snap(&mut h, &mut s, None, 38);
     }
     snap(&mut h, &mut s, None, 200);
@@ -4631,7 +4498,6 @@ fn blog_showcase_fresh_0_4_0_workspace_trust() {
     // Move the selection from the safe default ("Keep Restricted") up to
     // "Trust folder & Allow Tooling".
     h.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     snap(&mut h, &mut s, Some("↑"), 240);
     hold(&mut h, &mut s, 4, 150);
 

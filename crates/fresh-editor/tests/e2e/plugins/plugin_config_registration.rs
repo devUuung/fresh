@@ -94,7 +94,6 @@ fn focus_category(h: &mut EditorTestHarness, name: &str) {
             return;
         }
         h.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
     }
     panic!(
         "category {:?} never became selected. Screen:\n{}",
@@ -150,7 +149,6 @@ fn plugin_config_round_trip_toggles_visible_behavior() {
             break;
         }
         harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         harness.open_settings().unwrap();
     }
     let after_open = harness.screen_to_string();
@@ -207,13 +205,10 @@ fn plugin_config_round_trip_toggles_visible_behavior() {
     // Move focus into the settings panel and toggle `uppercase` (the
     // second item) from false → true.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let after_toggle = harness.screen_to_string();
     assert!(

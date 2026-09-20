@@ -22,7 +22,6 @@ fn test_default_language_in_general_settings() {
             return;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 
     let screen = harness.screen_to_string();
@@ -41,7 +40,6 @@ fn test_default_language_is_dropdown() {
     // Navigate within settings panel to Default Language
     // Tab to switch focus to the settings panel
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     for _ in 0..15 {
         let screen = harness.screen_to_string();
@@ -57,7 +55,6 @@ fn test_default_language_is_dropdown() {
             return;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 
     let screen = harness.screen_to_string();
@@ -74,7 +71,6 @@ fn test_default_language_dropdown_shows_languages() {
 
     // Tab to settings panel
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Navigate to Default Language field
     for _ in 0..15 {
@@ -84,7 +80,6 @@ fn test_default_language_dropdown_shows_languages() {
             harness
                 .send_key(KeyCode::Enter, KeyModifiers::NONE)
                 .unwrap();
-            harness.render().unwrap();
 
             let screen = harness.screen_to_string();
             // Should show some of the built-in language keys
@@ -99,7 +94,6 @@ fn test_default_language_dropdown_shows_languages() {
             return;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 
     let screen = harness.screen_to_string();

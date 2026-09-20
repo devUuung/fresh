@@ -64,13 +64,11 @@ fn run_command(harness: &mut EditorTestHarness, command_name: &str) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text(command_name).unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Test that rulers render background color at the correct column positions.
@@ -188,7 +186,6 @@ fn test_rulers_horizontal_scroll() {
 
     // Move cursor far right so viewport scrolls past column 5
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // After viewport scroll, column 5 is off-screen so gutter+5 should NOT
     // have ruler bg. (There's no ruler at whatever column gutter+5 now maps to.)
@@ -320,7 +317,6 @@ fn test_per_buffer_ruler_independence() {
     harness
         .send_key(KeyCode::Char('b'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         has_ruler_bg(&harness, ruler_screen_x, row),
@@ -353,7 +349,6 @@ fn test_add_ruler_command() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify ruler now exists at column 25
     assert!(
@@ -395,7 +390,6 @@ fn test_remove_ruler_command() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify ruler at column 10 is gone
     assert!(
@@ -437,7 +431,6 @@ fn test_remove_ruler_selects_specific() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Ruler at column 20 should be removed
     assert!(
@@ -481,7 +474,6 @@ fn test_add_ruler_invalid_input() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // No ruler should have been added
     let (content_first_row, _) = harness.content_area_rows();
@@ -516,7 +508,6 @@ fn test_add_then_remove_ruler_bad_then_good_input() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify the ruler renders at column 80
     assert!(
@@ -531,12 +522,10 @@ fn test_add_then_remove_ruler_bad_then_good_input() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Ruler at 80 should still be there — "32" was rejected
     // Escape the still-open prompt
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     assert!(
         has_ruler_bg(&harness, ruler_screen_x, row),
@@ -550,7 +539,6 @@ fn test_add_then_remove_ruler_bad_then_good_input() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Ruler at 80 should now be gone
     assert!(
@@ -572,7 +560,6 @@ fn test_add_ruler_zero_column() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let (content_first_row, _) = harness.content_area_rows();
     let row = content_first_row as u16;

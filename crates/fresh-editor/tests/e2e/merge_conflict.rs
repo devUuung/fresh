@@ -313,7 +313,6 @@ fn test_merge_start_resolution_command() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     eprintln!("Typing command...");
     harness.type_text("Merge: Start Resolution").unwrap();
@@ -385,24 +384,20 @@ fn test_merge_conflict_navigation() {
     harness
         .send_key(KeyCode::Char('n'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Navigate to previous conflict with 'p'
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Navigate with j/k as well
     harness
         .send_key(KeyCode::Char('j'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .send_key(KeyCode::Char('k'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // If we got here without error, navigation works
 }
@@ -445,7 +440,6 @@ fn test_merge_use_ours_resolution() {
     harness
         .send_key(KeyCode::Char('u'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Screen should show resolution info
     let screen = harness.screen_to_string();
@@ -490,7 +484,6 @@ fn test_merge_take_theirs_resolution() {
     harness
         .send_key(KeyCode::Char('t'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Screen should show resolution info
     let screen = harness.screen_to_string();
@@ -535,7 +528,6 @@ fn test_merge_use_both_resolution() {
     harness
         .send_key(KeyCode::Char('b'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Screen should show resolution info
     let screen = harness.screen_to_string();
@@ -580,7 +572,6 @@ fn test_merge_abort() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should be back to normal view with original conflict markers
     let screen = harness.screen_to_string();
@@ -625,7 +616,6 @@ fn test_merge_resolve_and_save() {
     harness
         .send_key(KeyCode::Char('u'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Press 's' to save and exit
     harness
@@ -746,20 +736,17 @@ fn test_merge_multiple_conflicts_workflow() {
     harness
         .send_key(KeyCode::Char('u'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should auto-advance to next conflict
     // Resolve second conflict with 't' (theirs)
     harness
         .send_key(KeyCode::Char('t'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Resolve third conflict with 'b' (both)
     harness
         .send_key(KeyCode::Char('b'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // All conflicts resolved - try to save
     harness
@@ -1014,7 +1001,6 @@ fn test_diff3_conflict_resolution() {
     harness
         .send_key(KeyCode::Char('t'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Save and exit
     harness
@@ -1167,7 +1153,6 @@ fn test_merge_conflict_crlf_line_endings() {
     harness
         .send_key(KeyCode::Char('u'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::NONE)
@@ -1232,5 +1217,4 @@ fn test_merge_mouse_click_on_buttons() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }

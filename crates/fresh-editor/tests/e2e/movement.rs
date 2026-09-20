@@ -166,7 +166,6 @@ fn test_basic_editing_operations() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("Hello World");
     harness.assert_screen_contains("Hello World");
     harness.assert_screen_not_contains("Hello, World");
@@ -177,7 +176,6 @@ fn test_basic_editing_operations() {
     harness
         .send_key(KeyCode::Delete, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("HelloWorld");
     harness.assert_screen_contains("HelloWorld");
     harness.assert_screen_not_contains("Hello World");
@@ -187,7 +185,6 @@ fn test_basic_editing_operations() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("Hello\nWorld");
     // Verify both lines appear on screen
     harness.assert_screen_contains("Hello");
@@ -203,7 +200,6 @@ fn test_basic_editing_operations() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("Hello\nNew Line\nWorld");
     // Verify all three lines are visible
     harness.assert_screen_contains("Hello");
@@ -222,14 +218,12 @@ fn test_basic_editing_operations() {
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert_eq!(harness.cursor_position(), 5); // End of "Hello"
 
     // Delete the newline after "Hello" - should join lines
     harness
         .send_key(KeyCode::Delete, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("HelloNew Line\nWorld!");
     // Verify the lines are joined on screen
     harness.assert_screen_contains("HelloNew Line");
@@ -239,13 +233,11 @@ fn test_basic_editing_operations() {
     // Move to start of "World!"
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let pos_before = harness.cursor_position();
 
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("HelloNew LineWorld!");
     // Verify everything is on one line on screen
     harness.assert_screen_contains("HelloNew LineWorld!");
@@ -300,7 +292,6 @@ fn test_rapid_typing_middle_of_line_cursor_sync() {
         harness
             .send_key(KeyCode::Char(ch), KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
 
         // After each character insertion:
         // 1. Verify buffer content is correct

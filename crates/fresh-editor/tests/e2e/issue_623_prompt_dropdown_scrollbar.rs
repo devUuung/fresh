@@ -105,7 +105,6 @@ fn test_command_palette_overflow_draws_scrollbar() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Add Cursor Above");
 
     let rows = suggestion_rows(&harness, 24);
@@ -141,7 +140,6 @@ fn test_select_locale_dropdown_shows_scrollbar_for_hidden_entries() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The locale list is open: 14 locales, 10 rows of room, so 4 are hidden.
     let rows = suggestion_rows(&harness, 24);
@@ -203,7 +201,6 @@ fn test_clicking_palette_scrollbar_scrolls_the_list() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Add Cursor Above");
 
     let rows = suggestion_rows(&harness, 24);
@@ -482,7 +479,6 @@ fn test_arrow_key_after_wheel_brings_the_selection_back_into_view() {
     assert_eq!(selected_row_text(&harness, &rows), None);
 
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert!(
         selected_row_text(&harness, &rows).is_some(),
         "an arrow key must scroll the selection back into view:\n{}",

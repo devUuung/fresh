@@ -75,7 +75,6 @@ fn test_inlay_hint_skipped_when_server_does_not_advertise_capability() -> anyhow
     // before it (including any inlay-hint request from the init handler
     // or from `file_operations::notify_lsp_open`) has already flushed.
     harness.send_key(KeyCode::Char('k'), KeyModifiers::ALT)?;
-    harness.render()?;
     harness.wait_until(|_| {
         let content = std::fs::read_to_string(&log_file).unwrap_or_default();
         content.lines().any(|line| line == "textDocument/hover")

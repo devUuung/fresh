@@ -360,7 +360,6 @@ fn test_markdown_compose_toggle() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Command palette should be visible
     // Note: This test is basic - a full test would search for and execute
@@ -554,12 +553,10 @@ fn test_compose_mode_disable_preserves_content() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Markdown: Toggle Compose").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show compose mode enabled status
     // Content should still be visible
@@ -569,12 +566,10 @@ fn test_compose_mode_disable_preserves_content() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Markdown: Toggle Compose").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // CRITICAL: Content should still be visible after disabling compose mode
     harness.assert_screen_contains("Test Header");
@@ -1942,7 +1937,6 @@ fn test_compose_mode_cursor_visibility_through_emphasis_link() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key_repeat(KeyCode::Down, KeyModifiers::NONE, 2)
         .unwrap();
@@ -2530,7 +2524,6 @@ End of document.
     // We press Down enough times to get well past the table.
     for i in 0..18 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let pos = harness.cursor_position();
         let screen_pos = harness.screen_cursor_position();
@@ -2668,7 +2661,6 @@ Line after table.
     // presses from the heading on line 1.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Helper: read the buffer line number (0-indexed) the primary cursor
     // is currently on.
@@ -2705,7 +2697,6 @@ Line after table.
     let mut observed: Vec<usize> = vec![cursor_line(&mut harness)];
     for _ in 0..8 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         observed.push(cursor_line(&mut harness));
     }
 
@@ -2908,7 +2899,6 @@ End.
 
     for i in 0..total_downs {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let pos = harness.cursor_position();
         assert!(
@@ -2930,7 +2920,6 @@ End.
 
     for i in 0..total_ups {
         harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let pos = harness.cursor_position();
         assert!(
@@ -3017,12 +3006,10 @@ fn test_compose_mode_cursor_column_sticky_on_list() {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 
     // Press Home to go to column 0 of the "2." line
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let pos_on_item2 = harness.cursor_position();
     let screen_before = harness.screen_cursor_position();
@@ -3031,7 +3018,6 @@ fn test_compose_mode_cursor_column_sticky_on_list() {
     // Now press Up — cursor should land near the same visual column on the
     // line above, NOT at the end of the line above
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let pos_after_up = harness.cursor_position();
     let screen_after = harness.screen_cursor_position();
@@ -3121,7 +3107,6 @@ fn test_compose_mode_cursor_column_zero_sticky_through_wrapped_list() {
 
     // Press Home to ensure we start at column 0
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let start_col = harness.screen_cursor_position().0;
     let gutter_col = start_col; // this is column 0 adjusted for gutter
@@ -3298,19 +3283,16 @@ Done.
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Move down: heading(1) → blank(2) → header(3) → separator(4) → data row(5)
     for _ in 0..4 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     // Move right into the bold span (past the leading pipe + space + **)
     for _ in 0..4 {
         harness
             .send_key(KeyCode::Right, KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
     }
 
     // Wait for emphasis markers to be auto-exposed on the cursor row.
@@ -3503,10 +3485,8 @@ End.
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     for _ in 0..4 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     wait_for_only_row_exposed(&mut harness, &labels, labels[0]);
 
@@ -3548,7 +3528,6 @@ End.
     // From Alpha row, move up past separator and header to above the table
     for _ in 0..3 {
         harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     wait_for_all_concealed(&mut harness, &labels);
 
@@ -3639,10 +3618,8 @@ Done.
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     for _ in 0..4 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
     for _ in 0..3 {
@@ -3745,7 +3722,6 @@ Done.
         harness
             .send_key(KeyCode::Right, KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
     }
 
     assert!(

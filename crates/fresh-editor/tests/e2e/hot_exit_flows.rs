@@ -1084,7 +1084,6 @@ fn test_undo_after_hot_exit_recovery_keeps_modified_flag() {
         harness
             .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
 
         // The tab bar should STILL show the modified indicator
         let tab_bar = harness.screen_row_text(layout::TAB_BAR_ROW as u16);

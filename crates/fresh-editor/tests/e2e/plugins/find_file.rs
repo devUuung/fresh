@@ -32,7 +32,6 @@ fn test_quick_open_starts_in_command_mode() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show commands immediately (already has > prefix)
     harness
@@ -62,7 +61,6 @@ fn test_quick_open_command_execute() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type command to filter - look for "Go to Line" command
     harness.type_text("go to line").unwrap();
@@ -104,7 +102,6 @@ fn test_quick_open_command_filter() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type to filter for "save"
     harness.type_text("save").unwrap();
@@ -145,7 +142,6 @@ fn test_quick_open_goto_line_execute() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Clear > and type :15 for go-to-line mode
     harness
@@ -516,7 +512,6 @@ fn test_quick_open_mode_switching() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify command mode (shows commands)
     harness
@@ -570,7 +565,6 @@ fn test_quick_open_cancel() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify prompt is visible
     harness
@@ -582,7 +576,6 @@ fn test_quick_open_cancel() {
 
     // Press Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Should be back to normal editing
     harness.assert_screen_contains("Test content");
@@ -604,7 +597,6 @@ fn test_quick_open_toggle() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify it's open (shows the hints line with >command)
     harness.assert_screen_contains(">command");
@@ -613,7 +605,6 @@ fn test_quick_open_toggle() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should be closed, back to file content (hints should be gone)
     harness.assert_screen_contains("Test content");
@@ -660,7 +651,6 @@ fn test_quick_open_buffer_autocomplete() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should now show alpha file content
     harness.assert_screen_contains("ALPHA_CONTENT");

@@ -15,7 +15,6 @@ fn test_alt_f_opens_file_menu() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // File menu dropdown should now be visible with its items
     harness.assert_screen_contains("New File");
@@ -33,7 +32,6 @@ fn test_alt_e_opens_edit_menu() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // Edit menu dropdown should be visible
     harness.assert_screen_contains("Undo");
@@ -51,7 +49,6 @@ fn test_alt_v_opens_view_menu() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // View menu dropdown should be visible (menu item has checkbox prefix now)
     harness.assert_screen_contains("File Explorer");
@@ -68,7 +65,6 @@ fn test_alt_h_opens_help_menu() {
     harness
         .send_key(KeyCode::Char('h'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // Help menu dropdown should be visible (renamed from "Show Help")
     harness.assert_screen_contains("Show Fresh Manual");
@@ -86,11 +82,9 @@ fn test_f10_activates_menu_bar() {
     harness
         .send_key(KeyCode::F(10), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Press Down to open the menu under the highlighted item
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // First menu (File) should be open
     harness.assert_screen_contains("New File");
@@ -106,12 +100,10 @@ fn test_escape_closes_menu() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("New File");
 
     // Press Escape to close
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Menu should be closed
     harness.assert_screen_not_contains("New File");
@@ -127,14 +119,12 @@ fn test_menu_left_right_navigation() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("New File");
 
     // Press Right to go to Edit menu
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should now show Edit menu items
     harness.assert_screen_contains("Undo");
@@ -142,7 +132,6 @@ fn test_menu_left_right_navigation() {
 
     // Press Left to go back to File menu
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Should now show File menu items again
     harness.assert_screen_contains("New File");
@@ -286,7 +275,6 @@ fn test_mouse_click_menu_item_executes_action() {
     harness
         .send_key(KeyCode::Char('h'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Show Fresh Manual");
 
     // The Help menu dropdown appears at row 1 (below menu bar)
@@ -353,7 +341,6 @@ fn test_view_menu_file_explorer_checkbox_syncs_on_close() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -364,7 +351,6 @@ fn test_view_menu_file_explorer_checkbox_syncs_on_close() {
 
     // Close menu
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Open file explorer
     harness.editor_mut().toggle_file_explorer();
@@ -376,7 +362,6 @@ fn test_view_menu_file_explorer_checkbox_syncs_on_close() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -387,7 +372,6 @@ fn test_view_menu_file_explorer_checkbox_syncs_on_close() {
 
     // Close menu
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Close file explorer (toggle it off)
     harness.editor_mut().toggle_file_explorer();
@@ -403,7 +387,6 @@ fn test_view_menu_file_explorer_checkbox_syncs_on_close() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -424,7 +407,6 @@ fn test_view_menu_other_checkboxes_sync() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     // Line numbers is on by default
@@ -436,7 +418,6 @@ fn test_view_menu_other_checkboxes_sync() {
 
     // Close menu
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Toggle line numbers off
     harness.editor_mut().toggle_line_numbers();
@@ -446,7 +427,6 @@ fn test_view_menu_other_checkboxes_sync() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -466,7 +446,6 @@ fn test_copy_with_formatting_submenu_shows_themes() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // Edit menu should be open with Copy with Formatting visible
     harness.assert_screen_contains("Undo");
@@ -480,7 +459,6 @@ fn test_copy_with_formatting_submenu_shows_themes() {
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     // Down 2: Redo -> Copy with Formatting (skips separator, Cut, Copy - all disabled)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Verify we can see the submenu indicator (">") for Copy with Formatting
     let screen_before = harness.screen_to_string();
@@ -494,7 +472,6 @@ fn test_copy_with_formatting_submenu_shows_themes() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The submenu should show dynamically generated theme options
     // These come from Theme::available_themes()
@@ -534,7 +511,6 @@ fn test_copy_with_formatting_submenu_activates_on_enter() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify text is selected: Ctrl+A selects the line, and selected
     // whitespace draws its indicator (`editor.whitespace_in_selection`), so
@@ -549,7 +525,6 @@ fn test_copy_with_formatting_submenu_activates_on_enter() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // Navigate down to "Copy with Formatting" submenu
     // Edit menu items: Undo(0), Redo(1), [separator], Cut, Copy, Copy with Formatting, ...
@@ -561,13 +536,11 @@ fn test_copy_with_formatting_submenu_activates_on_enter() {
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     // Down 4: Copy -> Copy with Formatting
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Open the submenu with Enter key
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify submenu is open with theme options
     let screen_with_submenu = harness.screen_to_string();
@@ -581,13 +554,11 @@ fn test_copy_with_formatting_submenu_activates_on_enter() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Press Enter on the first theme option ("dark") to activate copy with formatting
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // After activating the action, the menu should close
     let screen_after = harness.screen_to_string();
@@ -618,7 +589,6 @@ fn test_submenu_first_item_aligns_with_parent_item() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // Locate the "Terminal" submenu parent item before opening it. At this
     // point "Open Terminal" is not yet on screen, so this matches the parent.
@@ -654,14 +624,12 @@ fn test_cut_copy_disabled_without_selection() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // Navigate to Cut (after Undo, Redo, separator)
     // Down 1: Undo -> Redo
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     // Down 2: Redo -> Cut (skips separator)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Verify we're at Cut (menu is open)
     let screen = harness.screen_to_string();
@@ -671,7 +639,6 @@ fn test_cut_copy_disabled_without_selection() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Menu should still be open because the action didn't execute
     let screen_after = harness.screen_to_string();
@@ -719,7 +686,6 @@ fn test_toggle_menu_bar_visibility_and_auto_show() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // Menu bar should be visible now with dropdown open
     harness.assert_screen_contains("File");
@@ -727,7 +693,6 @@ fn test_toggle_menu_bar_visibility_and_auto_show() {
 
     // Step 4: Press Escape - menu closes and menu bar auto-hides
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Menu dropdown should be closed
     harness.assert_screen_not_contains("New File");
@@ -753,14 +718,12 @@ fn test_toggle_menu_bar_visibility_and_auto_show() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // Dropdown should be open
     harness.assert_screen_contains("New File");
 
     // Step 7: Press Escape - menu closes but bar stays visible
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Menu dropdown should be closed
     harness.assert_screen_not_contains("New File");
@@ -942,7 +905,6 @@ fn test_menu_arrow_navigation_skips_hidden_menus() {
     harness
         .send_key(KeyCode::Char('h'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify Help menu is open
     harness.assert_screen_contains("Show Fresh Manual");
@@ -951,7 +913,6 @@ fn test_menu_arrow_navigation_skips_hidden_menus() {
     // Expected: Should go to LSP menu (skipping hidden Explorer menu)
     // Bug: Goes to hidden Explorer menu instead
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Should show LSP menu items, not Explorer menu items
     // LSP menu has "Restart Server" and "Stop Server"
@@ -975,7 +936,6 @@ fn test_edit_menu_replace_invokes_basic_replace() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Replace...");
     harness.assert_screen_contains("Query Replace...");
 
@@ -1005,7 +965,6 @@ fn test_edit_menu_query_replace_invokes_query_replace() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Query Replace...");
 
     // Click on "Query Replace..." item.
@@ -1022,7 +981,6 @@ fn test_edit_menu_query_replace_invokes_query_replace() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Query replace 'hello' with:");
 }
 

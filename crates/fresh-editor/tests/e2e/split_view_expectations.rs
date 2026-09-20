@@ -12,12 +12,10 @@ fn split_horizontal(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split horiz").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Helper: Create a vertical split via command palette
@@ -25,12 +23,10 @@ fn split_vertical(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Helper: Navigate to previous split via command palette
@@ -38,12 +34,10 @@ fn prev_split(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("prev split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Helper: Navigate to next split via command palette
@@ -51,12 +45,10 @@ fn next_split(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("next split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Helper: Close the active split via command palette
@@ -64,12 +56,10 @@ fn close_split(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("close split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Test that horizontal split creates two views of the SAME buffer
@@ -163,12 +153,10 @@ fn test_typing_modifies_shared_buffer() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("prev split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // First split should ALSO show "Hello World" (same buffer)
     assert_eq!(harness.get_buffer_content().unwrap(), "Hello World");
@@ -188,12 +176,10 @@ fn test_independent_cursor_positions_same_buffer() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // New split should show same buffer
     assert_eq!(harness.get_buffer_content().unwrap(), "ABCDEFGHIJ");
@@ -207,12 +193,10 @@ fn test_independent_cursor_positions_same_buffer() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("prev split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // First split cursor should still be at position 0 (independent)
     let cursor_in_first_split = harness.cursor_position();
@@ -240,7 +224,6 @@ fn test_independent_scroll_positions_same_buffer() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     let top_byte_first_split = harness.top_byte();
 
     // Create vertical split (both show same buffer)
@@ -250,7 +233,6 @@ fn test_independent_scroll_positions_same_buffer() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     let top_byte_second_split = harness.top_byte();
 
     // Second split should have scrolled
@@ -263,12 +245,10 @@ fn test_independent_scroll_positions_same_buffer() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("prev split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // First split should still be at original scroll position
     assert_eq!(
@@ -300,12 +280,10 @@ fn test_split_navigation_circular() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("next split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // All splits show same buffer, but cursor positions differ
     assert_eq!(harness.get_buffer_content().unwrap(), "Shared buffer");
@@ -314,22 +292,18 @@ fn test_split_navigation_circular() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("next split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("next split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // After 3 next operations, should be back to third split with cursor at end
     assert_eq!(harness.cursor_position(), cursor_third);
@@ -397,12 +371,10 @@ fn test_split_with_different_files() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("prev split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // First split should still show file1 content
     assert_eq!(harness.get_buffer_content().unwrap(), "Content of file 1");
@@ -433,12 +405,10 @@ fn test_nested_splits_maintain_hierarchy() {
         harness
             .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
         harness.type_text("next split").unwrap();
         harness
             .send_key(KeyCode::Enter, KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
 
         // All splits show same buffer
         assert_eq!(harness.get_buffer_content().unwrap(), "Base content");
@@ -466,7 +436,6 @@ fn test_undo_redo_affects_shared_buffer() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let after_undo = harness.get_buffer_content().unwrap();
 
@@ -474,12 +443,10 @@ fn test_undo_redo_affects_shared_buffer() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("prev split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // First split should also show the undone state (same buffer)
     assert_eq!(
@@ -539,7 +506,6 @@ fn test_delete_visible_in_all_splits() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert_eq!(harness.get_buffer_content().unwrap(), "ABC");
 
@@ -547,12 +513,10 @@ fn test_delete_visible_in_all_splits() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("prev split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // First split should also show "ABC" (same buffer)
     assert_eq!(harness.get_buffer_content().unwrap(), "ABC");
@@ -594,12 +558,10 @@ fn test_cursor_movement_isolated_to_active_split() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("prev split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // First split cursor should be exactly where we left it
     assert_eq!(harness.cursor_position(), first_cursor_before);
@@ -646,7 +608,6 @@ fn test_clipboard_shared_across_splits() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Create split (shows same buffer)
     split_vertical(&mut harness);
@@ -656,7 +617,6 @@ fn test_clipboard_shared_across_splits() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have "CopyThis" + "CopyThis" = "CopyThisCopyThis"
     assert_eq!(harness.get_buffer_content().unwrap(), "CopyThisCopyThis");
@@ -688,12 +648,10 @@ fn test_cursor_adjustment_on_shared_buffer_edit() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("prev split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // In first split, insert text at beginning
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
@@ -707,12 +665,10 @@ fn test_cursor_adjustment_on_shared_buffer_edit() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("next split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Second split cursor should have adjusted from 5 to 8 (5 + 3 inserted chars)
     // This is a critical feature for shared buffer editing
@@ -807,7 +763,6 @@ fn test_cursor_movement_after_split_switch() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let after_right = harness.cursor_position();
     assert_eq!(after_right, 1);
 
@@ -820,7 +775,6 @@ fn test_cursor_movement_after_split_switch() {
 
     // Move cursor left in first split
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let after_left = harness.cursor_position();
     assert_eq!(after_left, 9, "Cursor should move left from 10 to 9");
 
@@ -831,7 +785,6 @@ fn test_cursor_movement_after_split_switch() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let after_right2 = harness.cursor_position();
     assert_eq!(after_right2, 10);
 
@@ -857,7 +810,6 @@ fn test_scroll_wheel_targets_viewport_under_pointer() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Create horizontal split - focus moves to the new (bottom) split
     split_horizontal(&mut harness);
@@ -866,7 +818,6 @@ fn test_scroll_wheel_targets_viewport_under_pointer() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Navigate back to first (top) split so it's the focused one
     prev_split(&mut harness);

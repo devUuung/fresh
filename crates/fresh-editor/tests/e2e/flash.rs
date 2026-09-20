@@ -64,7 +64,6 @@ fn arm_flash(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Flash: Jump").unwrap();
     harness.wait_for_screen_contains("Flash: Jump").unwrap();
 
@@ -545,12 +544,10 @@ fn flash_jumps_across_splits() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness.open_file(&f2).unwrap();
     harness.render().unwrap();

@@ -23,14 +23,12 @@ fn open_lsp_edit_item(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Lsp");
 
     // Find and open a language entry that has a server configured
     let mut opened = false;
     for _ in 0..50 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
         if screen.contains("[Enter to edit]") {
@@ -38,14 +36,12 @@ fn open_lsp_edit_item(harness: &mut EditorTestHarness) {
             harness
                 .send_key(KeyCode::Enter, KeyModifiers::NONE)
                 .unwrap();
-            harness.render().unwrap();
 
             if harness.screen_to_string().contains("Edit Value") {
                 // Now open the Edit Item for the first server
                 harness
                     .send_key(KeyCode::Enter, KeyModifiers::NONE)
                     .unwrap();
-                harness.render().unwrap();
 
                 if harness.screen_to_string().contains("Edit Item") {
                     opened = true;
@@ -53,11 +49,9 @@ fn open_lsp_edit_item(harness: &mut EditorTestHarness) {
                 }
                 // Try navigating down and entering
                 harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-                harness.render().unwrap();
                 harness
                     .send_key(KeyCode::Enter, KeyModifiers::NONE)
                     .unwrap();
-                harness.render().unwrap();
                 if harness.screen_to_string().contains("Edit Item") {
                     opened = true;
                     break;
@@ -170,7 +164,6 @@ fn test_tab_cycles_through_all_buttons() {
 
     for _ in 0..20 {
         harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         if let Some(btn) = focused_button(&harness) {
             if visited_buttons.last().map(|s| s.as_str()) != Some(btn.as_str()) {
@@ -224,7 +217,6 @@ fn test_textlist_items_keyboard_accessible() {
     let mut found_root_markers = false;
     for _ in 0..20 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         if let Some(f) = focused_field(&harness.screen_to_string()) {
             if f == "Root Markers" {
                 found_root_markers = true;
@@ -246,7 +238,6 @@ fn test_textlist_items_keyboard_accessible() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     // Check if individual marker items are present (e.g., pyproject.toml, .git)
@@ -267,7 +258,6 @@ fn test_textlist_items_keyboard_accessible() {
     let mut focused_an_item = false;
     for _ in 0..10 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
         // Check if any individual marker item has a focus indicator
@@ -316,14 +306,11 @@ fn test_page_down_works_in_long_map_lists() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Lsp");
 
     // Move down a couple times to be inside the list
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Record current screen
     let screen_before = harness.screen_to_string();
@@ -332,7 +319,6 @@ fn test_page_down_works_in_long_map_lists() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen_after = harness.screen_to_string();
 
@@ -361,7 +347,6 @@ fn test_composite_focus_indicator_on_subrow_not_header() {
     // Navigate to Args section (a TextList with sub-items)
     for _ in 0..20 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         let screen = harness.screen_to_string();
 
         // Look for a state where "Args:" is visible and ">" is on a sub-item line
@@ -414,7 +399,6 @@ fn test_tab_cycles_through_all_fields_and_buttons() {
 
     for _ in 0..40 {
         harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         total_tabs += 1;
 
         let screen = harness.screen_to_string();
@@ -478,13 +462,11 @@ fn test_add_new_lsp_server_persists() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Find python entry
     let mut found_python = false;
     for _ in 0..50 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         let screen = harness.screen_to_string();
         if screen.contains("python") && screen.contains("[Enter to edit]") {
             for line in screen.lines() {
@@ -508,7 +490,6 @@ fn test_add_new_lsp_server_persists() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Edit Value");
     harness.assert_screen_contains("pylsp");
 
@@ -516,7 +497,6 @@ fn test_add_new_lsp_server_persists() {
     let mut found_add = false;
     for _ in 0..10 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         let screen = harness.screen_to_string();
         for line in screen.lines() {
             if line.contains("[+] Add new")
@@ -540,7 +520,6 @@ fn test_add_new_lsp_server_persists() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Add Item");
     harness.assert_screen_contains("Command");
 
@@ -552,7 +531,6 @@ fn test_add_new_lsp_server_persists() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should be back in Edit Value dialog, now showing both pylsp and ty
     let screen = harness.screen_to_string();
@@ -585,7 +563,6 @@ fn test_textlist_down_accepts_new_entry() {
     let mut found_args_add = false;
     for _ in 0..30 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         let screen = harness.screen_to_string();
         let lines: Vec<&str> = screen.lines().collect();
         for (i, line) in lines.iter().enumerate() {
@@ -616,7 +593,6 @@ fn test_textlist_down_accepts_new_entry() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Type a new argument
     harness.type_text("--verbose").unwrap();
@@ -624,7 +600,6 @@ fn test_textlist_down_accepts_new_entry() {
 
     // Press Down to auto-accept and navigate
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // The new arg should be accepted and visible as a committed entry
     // (not just in the add-new text field)
@@ -691,7 +666,6 @@ fn test_enter_commits_text_field_and_advances_focus() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // We are no longer in edit mode (footer back to navigation help)...
     harness.assert_screen_not_contains("Enter/Tab:Commit field");
@@ -730,13 +704,11 @@ fn test_new_lsp_server_auto_start_defaults_on() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Find the python entry and open its server list.
     let mut found_python = false;
     for _ in 0..50 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         let screen = harness.screen_to_string();
         if screen
             .lines()
@@ -754,14 +726,12 @@ fn test_new_lsp_server_auto_start_defaults_on() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Edit Value");
 
     // Navigate to [+] Add new and open the Add Item dialog.
     let mut found_add = false;
     for _ in 0..10 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         let screen = harness.screen_to_string();
         if screen.lines().any(|line| {
             line.contains("[+] Add new") && (line.contains(">") || line.contains("[Enter to add]"))
@@ -778,7 +748,6 @@ fn test_new_lsp_server_auto_start_defaults_on() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Add Item");
 
     // Scroll until the Auto Start row renders, and confirm it defaults to ON
@@ -803,7 +772,6 @@ fn test_new_lsp_server_auto_start_defaults_on() {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     assert!(
         auto_on && !auto_off,

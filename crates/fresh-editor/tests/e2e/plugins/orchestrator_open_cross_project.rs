@@ -23,13 +23,11 @@ fn run_palette(harness: &mut EditorTestHarness, command_name: &str) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text(command_name).unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 fn set_orch_project_path(harness: &mut EditorTestHarness, project_path: &Path) {
@@ -103,7 +101,6 @@ fn open_dialog_defaults_to_all_projects_then_scopes_to_current() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
     // The "Project:" control drops "All ▾" once scoped to the current
     // project (it switches to the project's basename). The footer hint keeps
     // the bare "all projects" affordance, so we key off the control's "All ▾"
@@ -127,12 +124,10 @@ fn open_dialog_defaults_to_all_projects_then_scopes_to_current() {
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     for ch in "qzqz".chars() {
         harness
             .send_key(KeyCode::Char(ch), KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
     }
     let screen = harness.screen_to_string();
     assert!(

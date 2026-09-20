@@ -230,7 +230,6 @@ fn test_lsp_toggle_off_edit_toggle_on_causes_desync() -> anyhow::Result<()> {
 
     // Step 3: Toggle LSP OFF (Alt+T)
     harness.send_key(KeyCode::Char('t'), KeyModifiers::ALT)?;
-    harness.render()?;
 
     // Wait for didClose to be sent to the LSP server
     harness.wait_until(|_| {
@@ -244,7 +243,6 @@ fn test_lsp_toggle_off_edit_toggle_on_causes_desync() -> anyhow::Result<()> {
 
     // Step 5: Toggle LSP back ON (Alt+T)
     harness.send_key(KeyCode::Char('t'), KeyModifiers::ALT)?;
-    harness.render()?;
 
     // Wait for second didOpen (re-sync after toggle)
     harness.wait_until(|_| {
@@ -348,7 +346,6 @@ fn test_lsp_toggle_off_sends_did_close() -> anyhow::Result<()> {
 
     // Toggle LSP OFF
     harness.send_key(KeyCode::Char('t'), KeyModifiers::ALT)?;
-    harness.render()?;
 
     // Wait for didClose to be sent to the LSP server
     harness.wait_until(|_| {

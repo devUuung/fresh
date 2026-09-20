@@ -58,7 +58,6 @@ fn run_command(harness: &mut EditorTestHarness, command: &str) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Return the full text of the first rendered row that contains `needle`.
@@ -77,7 +76,6 @@ fn row_with(harness: &EditorTestHarness, needle: &str) -> String {
 fn open_html_language_dialog(harness: &mut EditorTestHarness) {
     harness.open_settings().unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     // Walk down until the (single) language map entry is the focused row — its
     // "[Enter to edit]" affordance is the reliable signal across terminal
     // heights (the "Languages:" label can be visible before the entry is
@@ -87,7 +85,6 @@ fn open_html_language_dialog(harness: &mut EditorTestHarness) {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     assert!(
         harness.screen_to_string().contains("[Enter to edit]"),
@@ -96,7 +93,6 @@ fn open_html_language_dialog(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         harness.screen_to_string().contains("Auto Surround"),
         "language entry dialog should show the Auto Surround field"
@@ -123,7 +119,6 @@ fn issue_2345_html_line_wrap_survives_language_settings_edit() {
     // From the first field, two Downs land on Auto Surround.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap(); // toggle Auto Surround on
@@ -137,7 +132,6 @@ fn issue_2345_html_line_wrap_survives_language_settings_edit() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
@@ -206,7 +200,6 @@ fn issue_2345_per_field_inherit_button_reverts_single_field() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let row = row_with(&harness, "Auto Surround");
     assert!(
         row.contains("[v]") && row.contains("[Inherit]"),
@@ -253,7 +246,6 @@ fn issue_2345_inherit_button_reachable_by_tab() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         row_with(&harness, "Auto Surround").contains("[v]"),
         "precondition: Auto Surround overriding; row: {:?}",
@@ -264,11 +256,9 @@ fn issue_2345_inherit_button_reachable_by_tab() {
     // (If Tab had skipped to the next field, Enter would not inherit Auto
     // Surround and this assertion would fail.)
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let row = row_with(&harness, "Auto Surround");
     assert!(
@@ -295,7 +285,6 @@ fn issue_2345_inherit_button_reachable_by_back_tab() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         row_with(&harness, "Auto Surround").contains("[v]"),
         "precondition: Auto Surround overriding; row: {:?}",
@@ -305,7 +294,6 @@ fn issue_2345_inherit_button_reachable_by_back_tab() {
     // Forward: control -> [Inherit] button -> next field.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Shift+Tab once lands back on Auto Surround's [Inherit] button; Enter
     // inherits it. If Shift+Tab had skipped the button, Enter would not inherit
@@ -316,7 +304,6 @@ fn issue_2345_inherit_button_reachable_by_back_tab() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let row = row_with(&harness, "Auto Surround");
     assert!(
@@ -364,7 +351,6 @@ fn issue_2345_reset_button_restores_builtin_default() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let row = row_with(&harness, "Auto Indent");
     assert!(
         row.contains("[v]") && !row.contains("[Reset]"),
@@ -398,7 +384,6 @@ fn issue_2345_reset_button_reachable_by_back_tab() {
     // Forward: control -> [Reset] -> next field (Auto Surround).
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Shift+Tab lands back on Auto Indent's [Reset]; Enter resets it.
     harness
@@ -407,7 +392,6 @@ fn issue_2345_reset_button_reachable_by_back_tab() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let row = row_with(&harness, "Auto Indent");
     assert!(

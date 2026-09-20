@@ -47,7 +47,6 @@ line 9 filler text";
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("NEEDLE").unwrap();
     harness.render().unwrap();
     harness
@@ -114,7 +113,6 @@ line 9 filler text";
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("NEEDLE").unwrap();
     harness.render().unwrap();
     harness
@@ -127,7 +125,6 @@ line 9 filler text";
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Find Previous — should go to match 3 (line 8), the nearest match before EOF
     // The bug would send us to match 3 only by coincidence (wrapping from match 1 - 1 = last).
@@ -136,13 +133,11 @@ line 9 filler text";
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Re-search to reset match state — lands on match 1
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
@@ -203,7 +198,6 @@ fn test_find_next_and_previous_after_ctrl_end() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("NEEDLE").unwrap();
     harness.render().unwrap();
     harness
@@ -221,7 +215,6 @@ fn test_find_next_and_previous_after_ctrl_end() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Find Previous from EOF — should go to match 3 (line 25), the last match.
     // BUG: because current_match_index is 1 (match 2), the buggy code does
@@ -314,7 +307,6 @@ fn test_find_next_respects_cursor_position_large_file() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("NEEDLE").unwrap();
     harness.render().unwrap();
     harness
@@ -433,7 +425,6 @@ fn test_find_previous_from_end_of_large_file_issue_1305() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("NEEDLE").unwrap();
     harness.render().unwrap();
     harness

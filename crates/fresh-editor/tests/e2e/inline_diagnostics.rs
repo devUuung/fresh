@@ -201,7 +201,6 @@ fn test_multiline_diagnostic_highlight_visible_when_partially_scrolled() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Calculate byte offsets for lines 1-4 (each "line N\n" is 7 bytes for 1-digit, 8 for 2-digit)
     // "line 1\nline 2\nline 3\nline 4\n" = bytes 0..28

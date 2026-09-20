@@ -128,7 +128,6 @@ fn plus_button_menu_grabs_keyboard_from_active_terminal() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -280,12 +279,10 @@ fn test_open_terminal_to_the_right_via_palette() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("open terminal to the right").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // A terminal pane appeared alongside the still-visible editor content.
     let (term_col, _term_row) = harness
@@ -317,12 +314,10 @@ fn test_open_terminal_below_via_palette() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("open terminal below").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let (_term_col, term_row) = harness
         .find_text_on_screen("*Terminal 0*")
@@ -430,7 +425,6 @@ fn test_file_menu_disables_save_for_a_terminal_buffer() {
     harness
         .send_key(KeyCode::F(10), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let (_, _, enabled_fg) = menu_item_fg(&harness, "New File");
     let (_, _, save_fg) = menu_item_fg(&harness, "Save");
     assert_eq!(
@@ -440,7 +434,6 @@ fn test_file_menu_disables_save_for_a_terminal_buffer() {
         harness.screen_to_string()
     );
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness.editor_mut().open_terminal();
     harness.render().unwrap();
@@ -449,7 +442,6 @@ fn test_file_menu_disables_save_for_a_terminal_buffer() {
     harness
         .send_key(KeyCode::F(10), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let (_, _, enabled_fg) = menu_item_fg(&harness, "New File");
     let (_, _, save_fg) = menu_item_fg(&harness, "Save");
     assert_ne!(
@@ -1618,16 +1610,13 @@ fn test_keyboard_capture_toggle() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">command");
     // Close the command palette
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Toggle keyboard capture ON with F9
     tracing::info!("=== Toggling keyboard capture ON ===");
     harness.send_key(KeyCode::F(9), KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.editor().is_keyboard_capture(),
@@ -1640,7 +1629,6 @@ fn test_keyboard_capture_toggle() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         !harness.screen_to_string().contains(">command"),
         "Command palette should NOT open when keyboard capture is ON"
@@ -1649,7 +1637,6 @@ fn test_keyboard_capture_toggle() {
     // Toggle keyboard capture OFF with F9
     tracing::info!("=== Toggling keyboard capture OFF ===");
     harness.send_key(KeyCode::F(9), KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     assert!(
         !harness.editor().is_keyboard_capture(),
@@ -1661,7 +1648,6 @@ fn test_keyboard_capture_toggle() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">command");
 }
 
@@ -1675,12 +1661,10 @@ fn test_ui_bindings_work_in_terminal_mode() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Open a terminal in the current (right) split
     harness.editor_mut().open_terminal();
@@ -1703,7 +1687,6 @@ fn test_ui_bindings_work_in_terminal_mode() {
     harness
         .send_key(KeyCode::Char('['), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have switched to the left split (non-terminal buffer)
     let new_buffer = harness.editor().active_buffer_id();
@@ -1731,12 +1714,10 @@ fn test_ui_bindings_blocked_with_keyboard_capture() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Open a terminal in the current split
     harness.editor_mut().open_terminal();
@@ -1748,14 +1729,12 @@ fn test_ui_bindings_blocked_with_keyboard_capture() {
 
     // Turn keyboard capture ON with F9
     harness.send_key(KeyCode::F(9), KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert!(harness.editor().is_keyboard_capture());
 
     // Now Alt+[ should NOT switch splits - it should go to terminal
     harness
         .send_key(KeyCode::Char('['), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // Should still be in terminal mode with same buffer
     assert!(
@@ -1785,7 +1764,6 @@ fn test_command_palette_works_in_terminal_mode() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // The command palette should be open now
     // The prompt shows ">command"
@@ -1808,7 +1786,6 @@ fn test_prompt_typing_works_in_terminal_mode() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify command palette is open
     harness.assert_screen_contains(">command");
@@ -1875,7 +1852,6 @@ fn test_split_terminal_scrollback_does_not_freeze_other_split() {
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         !harness.editor().is_terminal_mode(),
         "Ctrl+Space should drop the focused split into read-only scrollback"
@@ -1883,7 +1859,6 @@ fn test_split_terminal_scrollback_does_not_freeze_other_split() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // The focused split is now parked at the top of history, showing the early
     // marker.
@@ -1965,7 +1940,6 @@ fn test_unfocused_split_retains_scrollback_independently() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         harness.screen_to_string().contains("EARLY_HISTORY_MARKER"),
         "the split just dropped into scrollback should show the top of history"
@@ -2014,12 +1988,10 @@ fn test_terminal_split_switch_exits_terminal_mode() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Disable jump_to_end_on_output so terminal output doesn't re-enter terminal mode
     harness
@@ -2050,7 +2022,6 @@ fn test_terminal_split_switch_exits_terminal_mode() {
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         !harness.editor().is_terminal_mode(),
         "Should have exited terminal mode with Ctrl+Space"
@@ -2060,7 +2031,6 @@ fn test_terminal_split_switch_exits_terminal_mode() {
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         harness.editor().is_terminal_mode(),
         "Should be back in terminal mode"
@@ -2141,12 +2111,10 @@ fn test_click_between_splits_terminal_focus() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Disable jump_to_end_on_output so terminal output doesn't interfere
     harness
@@ -2335,7 +2303,6 @@ fn test_close_terminal_tab_transfers_focus_to_remaining_tab() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // Terminal should be closed
     let screen = harness.screen_to_string();
@@ -2366,7 +2333,6 @@ fn test_close_terminal_tab_transfers_focus_to_remaining_tab() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let file1_content = std::fs::read_to_string(&file1).unwrap();
     assert!(
@@ -2419,7 +2385,6 @@ fn test_terminal_mode_preserved_when_switching_tabs() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should see terminal tab is active
     harness.assert_screen_contains("*Terminal 0*");
@@ -2480,7 +2445,6 @@ fn test_terminal_mode_preserved_when_switching_tabs() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.editor().is_terminal_mode(),
@@ -2649,7 +2613,6 @@ fn test_close_terminal_tab_in_terminal_mode_via_mouse() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let file1_content = std::fs::read_to_string(&file1).unwrap();
     assert!(
@@ -3254,7 +3217,6 @@ fn test_scrollback_stable_after_multiple_mode_toggles() {
         harness
             .send_key(KeyCode::Home, KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
 
         // DEBUG: Check terminal mode after Ctrl+Home
         eprintln!(
@@ -3351,7 +3313,6 @@ fn test_open_file_from_terminal_uses_correct_directory() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // The file open dialog should show the project root directory, not the terminal
     // backing file directory (which would be something like ~/.local/share/fresh/terminals/)
@@ -4397,13 +4358,11 @@ fn test_send_selection_to_terminal_runs_selection() {
 
     // Select the first line (cursor starts at offset 0).
     harness.send_key(KeyCode::End, KeyModifiers::SHIFT).unwrap();
-    harness.render().unwrap();
 
     // Run the command through the palette, the way a user would.
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">command");
     harness.type_text("Send Selection to Terminal").unwrap();
     harness
@@ -5036,7 +4995,6 @@ fn test_bug_2649_tall_line_scrollback_reachable_and_stable() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Symptom 1: the leading XXXXXXXX is now reachable in scroll-back.
     assert!(
@@ -5053,7 +5011,6 @@ fn test_bug_2649_tall_line_scrollback_reachable_and_stable() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     for _ in 0..6 {
         harness
             .send_key(KeyCode::PageUp, KeyModifiers::NONE)
@@ -5062,7 +5019,6 @@ fn test_bug_2649_tall_line_scrollback_reachable_and_stable() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         harness.screen_to_string().contains("XXXXXXXX"),
         "after scrolling to the bottom and back up, the tall line's head must \
@@ -5174,7 +5130,6 @@ fn test_bug_2775_scrollback_entry_is_seamless_grid_wrap() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     let bottom1 = harness.screen_to_string();
     for _ in 0..3 {
         harness
@@ -5184,7 +5139,6 @@ fn test_bug_2775_scrollback_entry_is_seamless_grid_wrap() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     let bottom2 = harness.screen_to_string();
     let b1_rows: Vec<&str> = bottom1.lines().collect();
     let b2_rows: Vec<&str> = bottom2.lines().collect();
@@ -5231,7 +5185,6 @@ fn test_terminal_scrollback_rewraps_when_split_shrinks_pane() {
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Split vertically: the pre-existing split's pane halves in width. The new
     // split streams the live grid, so only the LEFT pane exercises scroll-back.
@@ -5418,7 +5371,6 @@ fn test_scrollback_survives_output_during_a_scrollback_visit() {
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         !harness.editor().is_terminal_mode(),
         "Ctrl+Space should drop the focused split into read-only scrollback"
@@ -5441,7 +5393,6 @@ fn test_scrollback_survives_output_during_a_scrollback_visit() {
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         harness.editor().is_terminal_mode(),
         "Ctrl+Space should return the focused split to the live grid"
@@ -5451,11 +5402,9 @@ fn test_scrollback_survives_output_during_a_scrollback_visit() {
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let missing = missing_markers_in_scrollback(
         &mut harness,
@@ -5502,7 +5451,6 @@ fn missing_markers_in_scrollback(
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
         let after = harness.screen_to_string();
         seen.push_str(&after);
         if after == before {
@@ -5566,12 +5514,10 @@ fn test_focusing_an_already_live_terminal_keeps_its_scrollback() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Focus Terminal").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         harness.editor().is_terminal_mode(),
         "Focus Terminal should leave the terminal live. Screen:\n{}",
@@ -5582,11 +5528,9 @@ fn test_focusing_an_already_live_terminal_keeps_its_scrollback() {
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let missing =
         missing_markers_in_scrollback(&mut harness, (1..=LINES).map(|i| format!("L_{i}")));

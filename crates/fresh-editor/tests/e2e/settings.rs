@@ -32,7 +32,6 @@ fn test_close_settings_with_escape() {
 
     // Close with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Settings should be closed
     harness.assert_screen_not_contains("Settings");
@@ -48,15 +47,12 @@ fn test_settings_navigation() {
 
     // Navigate down in categories
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Switch to settings panel with Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Navigate down in settings
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Close settings
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
@@ -74,7 +70,6 @@ fn test_settings_search() {
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Type a search query
     harness
@@ -92,14 +87,12 @@ fn test_settings_search() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show search results
     // The search query "theme" should match theme-related settings
 
     // Cancel search with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Close settings
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
@@ -117,14 +110,12 @@ fn test_settings_help_overlay() {
     harness
         .send_key(KeyCode::Char('?'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Help overlay should be visible
     harness.assert_screen_contains("Keyboard Shortcuts");
 
     // Close help with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Settings should still be visible
     harness.assert_screen_contains("Settings");
@@ -145,7 +136,6 @@ fn test_settings_search_text_displays() {
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show search mode indicator
     harness.assert_screen_contains("Type to search");
@@ -160,7 +150,6 @@ fn test_settings_search_text_displays() {
     harness
         .send_key(KeyCode::Char('b'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Search text should be visible in the search box
     harness.assert_screen_contains("tab");
@@ -200,20 +189,17 @@ fn test_settings_toggle_shows_modified() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Toggle the setting
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show modified indicator in title
     harness.assert_screen_contains("modified");
 
     // Close and discard
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     // Select "Discard" (one right from "Save and Exit")
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
@@ -340,7 +326,6 @@ fn test_plugin_toggle_mouse_click_chip_matches_visual_position() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         screen_contains_text_at_or_after_col(&harness, "Plugin: dashboard", 32),
@@ -403,11 +388,9 @@ fn test_confirmation_dialog_shows_changes() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Press Escape to trigger confirmation dialog
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Dialog should show
     harness.assert_screen_contains("Unsaved Changes");
@@ -444,11 +427,9 @@ fn test_confirmation_dialog_button_navigation() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Open confirmation dialog
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // First button should be selected (Save and Exit has > indicator)
     harness.assert_screen_contains(">[ Save and Exit ]");
@@ -457,7 +438,6 @@ fn test_confirmation_dialog_button_navigation() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Discard should now be selected
     harness.assert_screen_contains(">[ Discard ]");
@@ -466,7 +446,6 @@ fn test_confirmation_dialog_button_navigation() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Cancel should now be selected
     harness.assert_screen_contains(">[ Cancel ]");
@@ -475,7 +454,6 @@ fn test_confirmation_dialog_button_navigation() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Dialog should be closed but settings still open
     harness.assert_screen_not_contains("Unsaved Changes");
@@ -502,7 +480,6 @@ fn test_settings_selection_indicator() {
 
     // Switch to settings panel with Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Settings panel should show focus indicator ">" on selected item
     // General category has: Active Keybinding Map (first item)
@@ -516,7 +493,6 @@ fn test_settings_selection_indicator() {
 
     // Navigate down
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Now Check For Updates should have the focus indicator
     // Format: ">  " (3-char indicator area: focus, modified, space)
@@ -553,7 +529,6 @@ fn test_settings_number_type_to_edit() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_screen_contains("500");
 
@@ -563,13 +538,11 @@ fn test_settings_number_type_to_edit() {
         .unwrap();
     // Tab commits the pending edit.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness.assert_screen_contains("modified");
 
     // Discard
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
@@ -599,7 +572,6 @@ fn test_settings_number_value_click_enters_edit_mode() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Render: `Label: [500 ]` — `[` then the 4-char inner cell then `]`.
     let (bracket_col, value_row) = harness.find_text_on_screen("[500 ]").unwrap_or_else(|| {
@@ -617,7 +589,6 @@ fn test_settings_number_value_click_enters_edit_mode() {
         .send_key(KeyCode::Char('9'), KeyModifiers::NONE)
         .unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let after_edit = harness.screen_row_text(value_row);
     assert!(
         after_edit.contains("[  9 ]"),
@@ -626,7 +597,6 @@ fn test_settings_number_value_click_enters_edit_mode() {
 
     // Discard changes and close
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
@@ -656,7 +626,6 @@ fn test_settings_toggle_checkbox_click_flips_value() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let (label_col, row) = harness
         .find_text_on_screen("Ensure Final Newline On Save")
@@ -686,7 +655,6 @@ fn test_settings_toggle_checkbox_click_flips_value() {
 
     // Discard changes and close.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
@@ -715,7 +683,6 @@ fn test_settings_dropdown_button_click_opens_options() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let (label_col, row) = harness
         .find_text_on_screen("Default Line Ending")
@@ -757,9 +724,7 @@ fn test_settings_dropdown_button_click_opens_options() {
 
     // Close the dropdown, discard, and close settings.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 }
 
 /// Left arrow on a focused Number control no longer decrements — it now
@@ -783,14 +748,12 @@ fn test_settings_number_left_returns_to_categories() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Default is 500.
     harness.assert_screen_contains("500");
 
     // Left should navigate back to Categories, NOT change the value.
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Value unchanged.
     harness.assert_screen_contains("500");
@@ -823,7 +786,6 @@ fn test_settings_dropdown_cycle() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Check initial theme value (should be "dark")
     let initial_screen = harness.screen_to_string();
@@ -833,7 +795,6 @@ fn test_settings_dropdown_cycle() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // If it was "dark", it should now be "light" or another theme option
     // The exact value depends on available themes, but it should change
@@ -844,7 +805,6 @@ fn test_settings_dropdown_cycle() {
 
     // Discard and close
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
@@ -876,7 +836,6 @@ fn test_settings_dropdown_increment() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Get initial screen
     let initial_screen = harness.screen_to_string();
@@ -885,13 +844,10 @@ fn test_settings_dropdown_increment() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Get new screen
     let new_screen = harness.screen_to_string();
@@ -904,7 +860,6 @@ fn test_settings_dropdown_increment() {
 
     // Discard and close
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
@@ -924,11 +879,9 @@ fn test_settings_scrolling() {
 
     // Navigate to Editor category which has many settings
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Switch to settings panel
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Get initial screen to check first item
     let initial_screen = harness.screen_to_string();
@@ -966,11 +919,9 @@ fn test_settings_scrollbar_visible() {
 
     // Navigate to Editor category which has many settings
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Switch to settings panel
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Scrollbar should be visible (rendered with background colors)
     // Settings panel uses a popup layout, so the scrollbar may be at the right edge
@@ -1010,7 +961,6 @@ fn test_settings_search_jump_scrolls() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The searched term should be visible after jumping
     // (selection is shown via background highlight, not a text indicator)
@@ -1326,7 +1276,6 @@ fn test_settings_theme_dropdown_cycle() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should be on Theme setting with current value (high-contrast is default)
     harness.assert_screen_contains("Theme");
@@ -1337,7 +1286,6 @@ fn test_settings_theme_dropdown_cycle() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The theme should have changed - this is currently broken
     // Expected: theme changes to next option (e.g., monokai, solarized-dark)
@@ -1357,7 +1305,6 @@ fn test_settings_theme_dropdown_cycle() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let after_right = harness.screen_to_string();
 
@@ -1370,7 +1317,6 @@ fn test_settings_theme_dropdown_cycle() {
 
     // Discard and close
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
@@ -1442,7 +1388,6 @@ fn test_settings_from_terminal_mode_captures_input() {
     // Navigate down should move from General to Editor
     // We can verify by switching to settings panel and checking we see Editor settings
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Editor category has settings organized by sections - Completion section comes first
     // If Down key worked in Settings, we should now be viewing Editor settings
@@ -1451,7 +1396,6 @@ fn test_settings_from_terminal_mode_captures_input() {
 
     // Clean up - close settings
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // If there's an unsaved changes dialog, dismiss it
     if harness.screen_to_string().contains("Unsaved Changes") {
@@ -1495,7 +1439,6 @@ fn test_settings_footer_buttons_keyboard_accessible() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show modified indicator
     harness.assert_screen_contains("modified");
@@ -1509,7 +1452,6 @@ fn test_settings_footer_buttons_keyboard_accessible() {
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Layer button should be selected (has > indicator)
     harness.assert_screen_contains(">[ User ]");
@@ -1518,19 +1460,16 @@ fn test_settings_footer_buttons_keyboard_accessible() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">[ Reset ]");
 
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">[ Save ]");
 
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Cancel button should now be selected
     harness.assert_screen_contains(">[ Cancel ]");
@@ -1539,7 +1478,6 @@ fn test_settings_footer_buttons_keyboard_accessible() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Confirmation dialog should appear
     harness.assert_screen_contains("Unsaved Changes");
@@ -1548,13 +1486,11 @@ fn test_settings_footer_buttons_keyboard_accessible() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Press Enter to discard and close
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Settings should be closed
     harness.assert_screen_not_contains("Settings");
@@ -1593,29 +1529,24 @@ fn test_settings_change_theme_and_save() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Open dropdown with Enter, navigate to a different theme, confirm
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Navigate down one option to select a different theme
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Confirm selection with Enter
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Save with Ctrl+S (works from any panel)
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify settings is closed via state check
     assert!(
@@ -1653,7 +1584,6 @@ fn test_settings_descriptions_render_properly() {
 
     // Switch to settings panel
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
 
@@ -1715,7 +1645,6 @@ fn test_settings_consumes_global_shortcuts() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Settings should still be open (Ctrl+P was consumed)
     assert!(
@@ -1730,7 +1659,6 @@ fn test_settings_consumes_global_shortcuts() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Settings should still be open (Ctrl+Q was consumed)
     assert!(
@@ -1766,7 +1694,6 @@ fn test_map_control_add_new_shows_text_input() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show "[+] Add new" for the empty map
     harness.assert_screen_contains("[+] Add new");
@@ -1775,7 +1702,6 @@ fn test_map_control_add_new_shows_text_input() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The "[+] Add new" for Keybinding Maps should be replaced with a text input field
     // We can't check for absence of "[+] Add new" because other Map controls still show it
@@ -1797,7 +1723,6 @@ fn test_map_control_add_new_shows_text_input() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Entry should be added and "[+] Add new" should appear below it
     harness.assert_screen_contains("vim");
@@ -1808,11 +1733,9 @@ fn test_map_control_add_new_shows_text_input() {
 
     // Exit editing mode
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Close settings and verify confirm dialog shows the change
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Confirm dialog should show the map change
     harness.assert_screen_contains("Unsaved Changes");
@@ -1852,7 +1775,6 @@ fn test_settings_file_explorer_width_shows_percent_suffix() {
     harness.render().unwrap();
     // Switch to the settings panel.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     // File Explorer items (alphabetical): Auto Open On Last Buffer Close,
     // Compact Directories, Custom Ignore Patterns, Follow Active Buffer,
     // Preview Tabs, Respect Gitignore, Show Gitignored, Show Hidden,
@@ -1930,7 +1852,6 @@ fn test_settings_file_explorer_width_applies_live() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         !harness.editor().is_settings_open(),
@@ -2063,7 +1984,6 @@ fn test_settings_file_explorer_toggles_propagate_to_runtime() {
     // toggle by name — see `select_settings_row` for why by name.
     select_settings_row(&mut harness, "File Explorer");
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     select_settings_row(&mut harness, "Show Gitignored");
     harness
@@ -2075,7 +1995,6 @@ fn test_settings_file_explorer_toggles_propagate_to_runtime() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // To Save: Left leaves the body for the tree, Shift+Tab wraps the ring
     // to Cancel, Left steps to Save.
@@ -2087,7 +2006,6 @@ fn test_settings_file_explorer_toggles_propagate_to_runtime() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         !harness.editor().is_settings_open(),
@@ -2134,7 +2052,6 @@ fn test_number_input_enter_editing_mode() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The default value is 500
     harness.assert_screen_contains("500");
@@ -2143,7 +2060,6 @@ fn test_number_input_enter_editing_mode() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Type Ctrl+A to select all, then type new value
     harness
@@ -2163,14 +2079,12 @@ fn test_number_input_enter_editing_mode() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show modified indicator
     harness.assert_screen_contains("modified");
 
     // Discard and close
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
@@ -2199,7 +2113,6 @@ fn test_number_input_escape_cancels_editing() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Start editing mode
     harness
@@ -2222,7 +2135,6 @@ fn test_number_input_escape_cancels_editing() {
 
     // Press Escape to cancel
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Should revert back to 500
     harness.assert_screen_contains("500");
@@ -2251,13 +2163,11 @@ fn test_number_input_cursor_navigation() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Value is 500, start editing
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Move cursor to beginning with Home
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
@@ -2266,7 +2176,6 @@ fn test_number_input_cursor_navigation() {
     harness
         .send_key(KeyCode::Char('1'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show 1500 (1 inserted at beginning)
     harness.assert_screen_contains("1500");
@@ -2275,14 +2184,12 @@ fn test_number_input_cursor_navigation() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show modified indicator
     harness.assert_screen_contains("modified");
 
     // Discard and close
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
@@ -2311,7 +2218,6 @@ fn test_number_input_backspace() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Value is 500, start editing (Enter selects all text)
     harness
@@ -2325,7 +2231,6 @@ fn test_number_input_backspace() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show 50
     harness.assert_screen_contains("50");
@@ -2334,14 +2239,12 @@ fn test_number_input_backspace() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show 5
     harness.assert_screen_contains("5");
 
     // Cancel editing
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Should revert to 500
     harness.assert_screen_contains("500");
@@ -2385,7 +2288,6 @@ fn test_settings_loads_saved_values_on_reopen() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show the default value of 4
     harness.assert_screen_contains("4");
@@ -2396,7 +2298,6 @@ fn test_settings_loads_saved_values_on_reopen() {
         .send_key(KeyCode::Char('5'), KeyModifiers::NONE)
         .unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Should now show 5
     harness.assert_screen_contains("5");
@@ -2408,13 +2309,11 @@ fn test_settings_loads_saved_values_on_reopen() {
         .send_key(KeyCode::BackTab, KeyModifiers::SHIFT)
         .unwrap();
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Enter to save
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Settings should be closed after saving
     assert!(
@@ -2444,7 +2343,6 @@ fn test_settings_loads_saved_values_on_reopen() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify the saved value is displayed (not the default)
     harness.assert_screen_contains("5");
@@ -2483,7 +2381,6 @@ fn test_number_input_enter_selects_all_text() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify initial value is 500
     harness.assert_screen_contains("500");
@@ -2492,7 +2389,6 @@ fn test_number_input_enter_selects_all_text() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Type "100" - this should REPLACE the value, not append
     for c in "100".chars() {
@@ -2510,14 +2406,12 @@ fn test_number_input_enter_selects_all_text() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show modified indicator
     harness.assert_screen_contains("modified");
 
     // Discard and close
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
@@ -2554,7 +2448,6 @@ fn test_category_selection_indicator_visible() {
 
     // Navigate down to Clipboard category
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Now Clipboard should have the ">" indicator
     let screen = harness.screen_to_string();
@@ -2568,7 +2461,6 @@ fn test_category_selection_indicator_visible() {
 
     // Tab to settings panel (categories panel loses focus)
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Now the ">" indicator before Clipboard should be gone (categories panel not focused)
     // The ">" may still appear as the item selection indicator in the settings panel,
@@ -2627,7 +2519,6 @@ fn test_ctrl_s_saves_settings() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show modified indicator
     harness.assert_screen_contains("modified");
@@ -2636,7 +2527,6 @@ fn test_ctrl_s_saves_settings() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Settings should be closed after Ctrl+S
     assert!(
@@ -2661,7 +2551,6 @@ fn test_entry_dialog_focus_indicator() {
 
     // We're in General category. Tab to content panel
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Navigate down to find a language entry in the Languages list
     // Languages section is after Keybinding Maps and Keybindings sections
@@ -2686,7 +2575,6 @@ fn test_entry_dialog_focus_indicator() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Entry dialog should be open
     harness.assert_screen_contains("Edit Value");
@@ -2708,7 +2596,6 @@ fn test_entry_dialog_focus_indicator() {
 
     // Navigate down to next editable field
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Now "Auto Indent" should be focused with ">" indicator
     let screen = harness.screen_to_string();
@@ -2742,7 +2629,6 @@ fn test_entry_dialog_add_new_textlist_item() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Edit Value");
 
     // Navigate to Extensions section which has "[+] Add new"
@@ -2763,7 +2649,6 @@ fn test_entry_dialog_add_new_textlist_item() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Type a new extension value
     for c in "test_ext".chars() {
@@ -2780,7 +2665,6 @@ fn test_entry_dialog_add_new_textlist_item() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // After adding, the item should appear in the list
     let after_add = harness.screen_to_string();
@@ -2816,7 +2700,6 @@ fn test_entry_dialog_delete_textlist_item() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Edit Value");
 
     // Navigate to Extensions section which has existing items
@@ -2866,7 +2749,6 @@ fn test_entry_dialog_delete_textlist_item() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Type a new extension value
     for c in "to_delete".chars() {
@@ -2880,7 +2762,6 @@ fn test_entry_dialog_delete_textlist_item() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify the item was added
     harness.assert_screen_contains("to_delete");
@@ -2888,7 +2769,6 @@ fn test_entry_dialog_delete_textlist_item() {
     // Now navigate UP to focus on the newly added item
     // (we should be on the add-new row, so Up goes to the last item)
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Get screen before delete
     let before_delete = harness.screen_to_string();
@@ -2901,7 +2781,6 @@ fn test_entry_dialog_delete_textlist_item() {
     harness
         .send_key(KeyCode::Delete, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The item should be removed
     let after_delete = harness.screen_to_string();
@@ -2938,11 +2817,9 @@ fn test_settings_toggle_persists_after_save_and_reopen() {
 
     // Switch to settings panel
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Navigate down to "Check For Updates" (second item in General)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Verify we're on Check For Updates and it shows as unchecked [ ]
     // Format is ">  Check For Updates" (3-char indicator area: focus, modified, space)
@@ -2957,7 +2834,6 @@ fn test_settings_toggle_persists_after_save_and_reopen() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify it now shows as checked [v]
     // After toggling, the item is modified so it shows ">● " (3-char indicator area)
@@ -2975,11 +2851,9 @@ fn test_settings_toggle_persists_after_save_and_reopen() {
         .send_key(KeyCode::BackTab, KeyModifiers::SHIFT)
         .unwrap();
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify settings closed and config updated
     assert!(
@@ -2996,11 +2870,9 @@ fn test_settings_toggle_persists_after_save_and_reopen() {
 
     // Switch to settings panel
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Navigate to Check For Updates
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // This is the key assertion: the toggle should show the SAVED value
     // (chip reads "[v]") not the ORIGINAL unchecked state.
@@ -3040,7 +2912,6 @@ fn test_line_numbers_config_applied_to_new_buffers() {
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     for c in "line numbers".chars() {
         harness
             .send_key(KeyCode::Char(c), KeyModifiers::NONE)
@@ -3049,19 +2920,16 @@ fn test_line_numbers_config_applied_to_new_buffers() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Toggle it off (it's on by default)
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Save settings with Ctrl+S
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify config was updated
     assert!(
@@ -3073,7 +2941,6 @@ fn test_line_numbers_config_applied_to_new_buffers() {
     harness
         .send_key(KeyCode::Char('n'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // The new buffer should NOT show line numbers
     let screen = harness.screen_to_string();
@@ -3100,7 +2967,6 @@ fn test_line_wrap_config_applied_to_new_buffers() {
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     for c in "line wrap".chars() {
         harness
             .send_key(KeyCode::Char(c), KeyModifiers::NONE)
@@ -3109,19 +2975,16 @@ fn test_line_wrap_config_applied_to_new_buffers() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Toggle it off (it's on by default)
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Save settings with Ctrl+S
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify config was updated
     assert!(
@@ -3133,7 +2996,6 @@ fn test_line_wrap_config_applied_to_new_buffers() {
     harness
         .send_key(KeyCode::Char('n'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type a line longer than the screen width (80 chars)
     let long_text = "X".repeat(100);
@@ -3182,7 +3044,6 @@ fn navigate_to_lsp_json_editor(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify we're in the LSP section
     harness.assert_screen_contains("Lsp");
@@ -3191,7 +3052,6 @@ fn navigate_to_lsp_json_editor(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify we're in an Edit dialog
     harness.assert_screen_contains("Edit Value");
@@ -3201,7 +3061,6 @@ fn navigate_to_lsp_json_editor(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Navigate down to "Initialization Options" field
     // Navigate until we see the focus indicator on Initialization Options
@@ -3238,7 +3097,6 @@ fn test_json_editor_delete_key_works() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The help line should change to indicate JSON editing mode
     harness.assert_screen_contains("Enter:Newline");
@@ -3258,7 +3116,6 @@ fn test_json_editor_delete_key_works() {
     harness
         .send_key(KeyCode::Delete, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // After deleting 'A', should show "BC" (no surrounding "null" — the
     // placeholder was cleared on edit start).
@@ -3289,7 +3146,6 @@ fn test_json_editor_home_end_keys_work() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // When entering edit mode, the `null` placeholder is wiped so the
     // buffer starts empty. Type "XYZ" — the editor now contains "XYZ".
@@ -3299,26 +3155,22 @@ fn test_json_editor_home_end_keys_work() {
 
     // Cursor is now after 'Z'. Press End - should go to the end of text
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Type 'B' - should appear at the end
     harness
         .send_key(KeyCode::Char('B'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should now show "XYZB" (B appended at end)
     harness.assert_screen_contains("XYZB");
 
     // Press Home - cursor should go to beginning
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Type 'A' - should appear at the beginning
     harness
         .send_key(KeyCode::Char('A'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should now show "AXYZB" (A inserted at beginning)
     harness.assert_screen_contains("AXYZB");
@@ -3343,7 +3195,6 @@ fn test_json_editor_ctrl_a_selects_all() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // When entering edit mode, the `null` placeholder is wiped so the
     // buffer starts empty. Type "OLD" — the editor now contains "OLD".
@@ -3355,7 +3206,6 @@ fn test_json_editor_ctrl_a_selects_all() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type new text - should replace all selected text
     harness.type_text("NEW").unwrap();
@@ -3393,7 +3243,6 @@ fn test_json_editor_ctrl_c_copies_selected_text() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify we're in JSON editing mode
     harness.assert_screen_contains("Enter:Newline");
@@ -3408,13 +3257,11 @@ fn test_json_editor_ctrl_c_copies_selected_text() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Copy with Ctrl+C
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify clipboard contains the selected text
     let clipboard_content = harness.editor_mut().clipboard_content_for_test();
@@ -3467,7 +3314,6 @@ fn test_settings_edit_button_keyboard_navigation() {
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Should show Layer button focused
     harness.assert_screen_contains(">[ User ]");
@@ -3477,25 +3323,21 @@ fn test_settings_edit_button_keyboard_navigation() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">[ Reset ]");
 
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">[ Save ]");
 
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">[ Cancel ]");
 
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Edit button should now be focused
     harness.assert_screen_contains(">[ Edit ]");
@@ -3535,7 +3377,6 @@ fn test_settings_edit_button_opens_config_file() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify Edit button is focused
     harness.assert_screen_contains(">[ Edit ]");
@@ -3544,7 +3385,6 @@ fn test_settings_edit_button_opens_config_file() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Settings should be closed
     assert!(
@@ -3590,7 +3430,6 @@ fn test_settings_edit_button_blocked_with_pending_changes() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show modified indicator
     harness.assert_screen_contains("modified");
@@ -3604,13 +3443,11 @@ fn test_settings_edit_button_blocked_with_pending_changes() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Press Enter to try to activate Edit button
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Settings should STILL be open (Edit was blocked)
     assert!(
@@ -3623,7 +3460,6 @@ fn test_settings_edit_button_blocked_with_pending_changes() {
 
     // Discard changes and close
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
@@ -3656,7 +3492,6 @@ fn test_map_add_new_button_clickable_with_mouse() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for the "[+] Add new" button to be visible after search navigation
     harness
@@ -3686,7 +3521,6 @@ fn test_map_add_new_button_clickable_with_mouse() {
 
     // Close everything and clean up
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
 }
 
@@ -3713,7 +3547,6 @@ fn test_lsp_map_has_add_new_button() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify we're in the LSP section
     harness.assert_screen_contains("Lsp");
@@ -3756,7 +3589,6 @@ fn test_languages_map_has_add_new_button() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify we're in the Languages section
     harness.assert_screen_contains("Languages");
@@ -3773,7 +3605,6 @@ fn test_languages_map_has_add_new_button() {
     // The Languages map has many built-in entries, so we need to scroll to see the add button
     for _ in 0..30 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
         // Check if we can see "[+] Add new" in the visible Languages section
@@ -3820,7 +3651,6 @@ fn test_lsp_map_add_new_button_click_opens_dialog() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify we're in the LSP section
     harness.assert_screen_contains("Lsp");
@@ -3833,7 +3663,6 @@ fn test_lsp_map_add_new_button_click_opens_dialog() {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 
     harness.assert_screen_contains("[+] Add new");
@@ -3877,7 +3706,6 @@ fn test_lsp_map_add_new_button_click_opens_dialog() {
 
     // Close the dialog and settings
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
 }
 
@@ -3906,7 +3734,6 @@ fn test_map_entry_navigation_scrolls_to_focused_entry() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify we're in the Languages section and the first entry is focused
     let screen = harness.screen_to_string();
@@ -3929,7 +3756,6 @@ fn test_map_entry_navigation_scrolls_to_focused_entry() {
     // which indicates it's the focused entry and is visible on screen
     for i in 0..15 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
 
@@ -3956,7 +3782,6 @@ fn test_map_entry_navigation_scrolls_to_focused_entry() {
 
     // Close settings
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
 }
 
@@ -3979,7 +3804,6 @@ fn test_settings_search_results_scroll() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Get the first visible result
     let screen_before = harness.screen_to_string();
@@ -4037,14 +3861,12 @@ fn test_usability_backtab_backward_navigation() {
 
     // Start in the tree. Tab enters the body at its selected card.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">  Active Keybinding Map");
 
     // Shift+Tab from the first card goes back to the tree.
     harness
         .send_key(KeyCode::BackTab, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains(">  Active Keybinding Map");
 
     // Shift+Tab from the tree wraps the ring to its last stop, Cancel, and
@@ -4059,7 +3881,6 @@ fn test_usability_backtab_backward_navigation() {
         harness
             .send_key(KeyCode::BackTab, KeyModifiers::SHIFT)
             .unwrap();
-        harness.render().unwrap();
         harness.assert_screen_contains(want);
     }
 
@@ -4067,7 +3888,6 @@ fn test_usability_backtab_backward_navigation() {
     harness
         .send_key(KeyCode::BackTab, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains(">[ Edit ]");
     harness.assert_screen_contains(">  Active Keybinding Map");
 
@@ -4083,31 +3903,26 @@ fn test_usability_footer_tab_visits_all_buttons() {
     harness
         .send_key(KeyCode::BackTab, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">[ Cancel ]");
 
     // Left to the footer's first stop in reading order, Edit.
     for want in [">[ Save ]", ">[ Reset ]", ">[ User ]"] {
         harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         harness.assert_screen_contains(want);
     }
     harness
         .send_key(KeyCode::BackTab, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">[ Edit ]");
 
     // Tab visits all five in reading order: Edit, Layer, Reset, Save, Cancel.
     for want in [">[ User ]", ">[ Reset ]", ">[ Save ]", ">[ Cancel ]"] {
         harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         harness.assert_screen_contains(want);
     }
 
     // Tab again wraps to the tree: no button is focused.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains(">[ Cancel ]");
 
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
@@ -4120,18 +3935,15 @@ fn test_usability_left_arrow_to_categories() {
 
     // Tab to Settings panel
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // We're now on a setting item. Press Left to go back to Categories.
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Verify we're back in the tree: Shift+Tab from it wraps the ring to the
     // footer's last stop.
     harness
         .send_key(KeyCode::BackTab, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">[ Cancel ]");
 
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
@@ -4158,7 +3970,6 @@ fn test_usability_dropdown_no_left_right_change() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Capture the current screen with the dropdown value
     let before = harness.screen_to_string();
@@ -4168,7 +3979,6 @@ fn test_usability_dropdown_no_left_right_change() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let after = harness.screen_to_string();
 
@@ -4204,7 +4014,6 @@ fn test_usability_rulers_integer_array_no_data_loss() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The rulers setting should be visible
     harness.assert_screen_contains("Rulers");
@@ -4224,7 +4033,6 @@ fn test_usability_rulers_integer_array_no_data_loss() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Type a ruler value
     for c in "80".chars() {
@@ -4238,14 +4046,12 @@ fn test_usability_rulers_integer_array_no_data_loss() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // "80" should be visible as an item
     harness.assert_screen_contains("80");
 
     // Press Escape to exit editing mode
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // "80" should STILL be visible (no data loss on Escape)
     harness.assert_screen_contains("80");
@@ -4322,19 +4128,16 @@ fn test_usability_entry_dialog_button_focus_indicator() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Enter the languages map - press Enter to edit first entry
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Tab cycles through all fields and buttons — press Tab until we reach a button
     let mut has_focused_button = false;
     for _ in 0..60 {
         harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
         // The ">" indicator is rendered with a gap before the button bracket
@@ -4369,7 +4172,6 @@ fn test_usability_entry_dialog_button_focus_indicator() {
 
     // Close the dialog
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
 }
 
@@ -4403,25 +4205,21 @@ fn test_discard_dialog_does_not_persist_on_reopen() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Press Escape to trigger confirmation dialog
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Unsaved Changes");
 
     // Navigate to Discard button (one Right from Save)
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">[ Discard ]");
 
     // Press Enter to discard and close settings
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Settings should be closed
     harness.assert_screen_not_contains("Settings");
@@ -4464,7 +4262,6 @@ fn test_reset_button_shows_confirmation_dialog() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show modified indicator
     harness.assert_screen_contains("modified");
@@ -4477,14 +4274,12 @@ fn test_reset_button_shows_confirmation_dialog() {
         .unwrap();
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">[ Reset ]");
 
     // Press Enter on Reset button
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Reset confirmation dialog should appear
     harness.assert_screen_contains("Reset All Changes");
@@ -4496,7 +4291,6 @@ fn test_reset_button_shows_confirmation_dialog() {
 
     // Cancel the dialog with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Dialog should be dismissed, settings still open with changes
     harness.assert_screen_not_contains("Reset All Changes");
@@ -4505,7 +4299,6 @@ fn test_reset_button_shows_confirmation_dialog() {
 
     // Discard and close
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
@@ -4540,7 +4333,6 @@ fn test_reset_dialog_confirm_discards_changes() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show modified indicator
     harness.assert_screen_contains("modified");
@@ -4553,14 +4345,12 @@ fn test_reset_dialog_confirm_discards_changes() {
         .unwrap();
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">[ Reset ]");
 
     // Press Enter on Reset button
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Reset confirmation dialog should appear
     harness.assert_screen_contains("Reset All Changes");
@@ -4569,7 +4359,6 @@ fn test_reset_dialog_confirm_discards_changes() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Dialog should be dismissed
     harness.assert_screen_not_contains("Reset All Changes");
@@ -4580,6 +4369,5 @@ fn test_reset_dialog_confirm_discards_changes() {
 
     // Closing settings should NOT show Unsaved Changes dialog since all changes were reset
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains("Unsaved Changes");
 }

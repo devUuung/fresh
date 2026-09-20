@@ -23,7 +23,6 @@ fn test_save_unnamed_buffer_shows_save_as_prompt() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show SaveAs prompt (not crash)
     harness.assert_screen_contains("Save as:");
@@ -52,14 +51,12 @@ fn test_alt_w_does_not_toggle_whole_word_in_close_prompt() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Discard");
 
     // A second Alt+W must be inert here — not flip whole-word match mode.
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains("Whole word");
     // The close confirmation is still the active prompt.
     harness.assert_screen_contains("Discard");
@@ -76,14 +73,12 @@ fn test_alt_w_toggles_whole_word_in_search_prompt() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Whole Word");
 
     // Alt+W flips whole-word match mode here.
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Whole word search enabled");
 }
 
@@ -102,7 +97,6 @@ fn test_quit_with_modified_buffers_shows_confirmation() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should NOT quit immediately - there's a confirmation prompt
     assert!(
@@ -122,7 +116,6 @@ fn test_quit_without_modified_buffers() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Editor should signal quit
     assert!(
@@ -146,13 +139,11 @@ fn test_quit_with_confirmation_discard() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Confirm with 'd' (discard) and Enter
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Editor should quit
     assert!(harness.should_quit(), "Editor should quit after confirming");
@@ -178,7 +169,6 @@ fn test_quit_prompt_offers_discard_when_hot_exit_enabled() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // The prompt must list both the discard ("d") and recoverable-quit ("q")
     // options; previously only the latter appeared in hot_exit mode.
@@ -205,12 +195,10 @@ fn test_quit_with_discard_key_works_with_hot_exit() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.should_quit(),
@@ -235,11 +223,9 @@ fn test_quit_save_chains_save_as_for_unnamed_buffer() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // We should now be sitting on the Save As prompt, not quitting.
     harness.assert_screen_contains("Save as:");
@@ -253,7 +239,6 @@ fn test_quit_save_chains_save_as_for_unnamed_buffer() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.should_quit(),
@@ -284,11 +269,9 @@ fn test_quit_save_chains_save_as_for_multiple_unnamed_buffers() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // First Save-As prompt — name the active buffer.
     harness.assert_screen_contains("Save as:");
@@ -298,7 +281,6 @@ fn test_quit_save_chains_save_as_for_multiple_unnamed_buffers() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The chain should now advance to the second unnamed buffer rather than
     // quitting.
@@ -312,7 +294,6 @@ fn test_quit_save_chains_save_as_for_multiple_unnamed_buffers() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.should_quit(),
@@ -344,16 +325,13 @@ fn test_quit_save_chain_cancel_aborts_quit() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Save as:");
 
     // Dismiss the Save As prompt.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     assert!(
         !harness.should_quit(),
@@ -376,13 +354,11 @@ fn test_quit_with_confirmation_cancel() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Cancel with 'c' and Enter (or any non-'d' key, default is cancel)
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Editor should NOT quit
     assert!(
@@ -423,7 +399,6 @@ fn test_undo_restores_non_dirty_status() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Buffer should be back to non-modified state (no * in tab)
     let screen_after = harness.screen_to_string();
@@ -465,7 +440,6 @@ fn test_undo_after_save_modified_status() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Buffer should NOT be modified after save (check for "Saved" message too)
     harness.assert_screen_contains("Saved");
@@ -487,7 +461,6 @@ fn test_undo_after_save_modified_status() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Buffer should be back to saved state (not modified)
     let screen_after_undo = harness.screen_to_string();
@@ -663,7 +636,6 @@ fn test_click_tab_close_modified_discard() {
             harness
                 .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
                 .unwrap();
-            harness.render().unwrap();
 
             // Should show discarded message (use shorter match due to status bar truncation)
             harness.assert_screen_contains("Buffer closed");
@@ -712,7 +684,6 @@ fn test_click_tab_close_modified_cancel() {
             harness
                 .send_key(KeyCode::Char('c'), KeyModifiers::NONE)
                 .unwrap();
-            harness.render().unwrap();
 
             // Should show cancelled message
             harness.assert_screen_contains("Close cancelled");
@@ -797,7 +768,6 @@ fn test_next_buffer_skips_hidden_buffers() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
         println!("After next_buffer #{}: screen:\n{}", i + 1, screen);
@@ -825,7 +795,6 @@ fn test_next_buffer_skips_hidden_buffers() {
         harness
             .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
         println!("After prev_buffer #{}: screen:\n{}", i + 1, screen);
@@ -900,7 +869,6 @@ fn test_close_returns_to_previous_focused() {
     harness
         .send_key(KeyCode::Char('w'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // Should now be on A
     let screen = harness.screen_to_string();

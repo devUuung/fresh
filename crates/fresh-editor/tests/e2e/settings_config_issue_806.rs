@@ -92,14 +92,11 @@ fn test_issue_806_external_config_edits_lost_on_settings_save() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Step 5: Save with Ctrl+S
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-
-    harness.render().unwrap();
 
     // Verify settings is closed
     assert!(
@@ -194,7 +191,6 @@ fn test_issue_806_custom_language_config_lost_on_settings_save() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for settings to close (may need a few renders)
     for _ in 0..5 {
@@ -320,13 +316,11 @@ fn test_issue_806_external_edit_then_settings_change_and_save() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Toggle the auto_indent checkbox (space to toggle)
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Step 6: Save from Settings UI (Ctrl+S)
     harness
@@ -408,7 +402,6 @@ fn test_settings_should_reflect_external_config_changes() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The Settings UI should ideally show "dracula" as the current value
     // (This tests whether config is reloaded when Settings opens)
@@ -416,7 +409,6 @@ fn test_settings_should_reflect_external_config_changes() {
 
     // For now, just close without saving
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     assert!(
         !harness.editor().is_settings_open(),

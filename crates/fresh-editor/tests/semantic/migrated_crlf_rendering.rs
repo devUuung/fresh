@@ -220,7 +220,6 @@ fn migrated_crlf_cursor_moves_forward_across_lines() {
     assert_eq!(initial, 0, "Should start at byte 0");
 
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let after_down = harness.cursor_position();
     assert!(
         after_down > initial,
@@ -228,7 +227,6 @@ fn migrated_crlf_cursor_moves_forward_across_lines() {
     );
 
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let after_second = harness.cursor_position();
     assert!(
         after_second > after_down,
@@ -380,7 +378,6 @@ fn migrated_crlf_backspace_at_line_start_joins_lines() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert_any_row_contains(&mut harness, "Line 1Line 2");
 
@@ -411,7 +408,6 @@ fn migrated_crlf_delete_at_line_end_joins_lines() {
     harness
         .send_key(KeyCode::Delete, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert_any_row_contains(&mut harness, "Line 1Line 2");
 
@@ -455,7 +451,6 @@ fn migrated_crlf_cut_paste_preserves_crlf() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     assert_no_row_contains(&mut harness, "Line 2");
 
@@ -466,7 +461,6 @@ fn migrated_crlf_cut_paste_preserves_crlf() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     assert_any_row_contains(&mut harness, "Line 2");
 
@@ -538,7 +532,6 @@ fn migrated_cr_cursor_moves_forward_across_rows() {
     assert_eq!(initial, 0, "Should start at byte 0");
 
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let after_down = harness.cursor_position();
     assert!(
         after_down > initial,
@@ -606,18 +599,15 @@ fn migrated_crlf_cursor_visibility_across_grown_buffer() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("set line ending").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The Set-Line-Ending prompt should be closed.
     assert_no_row_contains(&mut harness, "Line ending:");
@@ -644,7 +634,6 @@ fn migrated_crlf_cursor_visibility_across_grown_buffer() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let content_after_paste = harness.get_buffer_content().unwrap();
     let line_count = content_after_paste.lines().count();

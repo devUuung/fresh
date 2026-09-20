@@ -89,7 +89,6 @@ fn selected_line_break_shows_a_highlighted_column_past_line_end() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     let selection_bg = Some(harness.editor().theme().selection_bg);
     let (col0, first_row) = content_origin(&harness);

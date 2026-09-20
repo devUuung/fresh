@@ -102,7 +102,6 @@ editor.setStatus("Test plugin loaded!");
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Check the rendered screen content - should still contain the test content
     harness.assert_screen_contains("TEST_MARKER");
@@ -278,7 +277,6 @@ editor.setStatus("Render hook test loaded");
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The status should show lines were rendered and marker was found
     let screen = harness.screen_to_string();
@@ -371,7 +369,6 @@ fn test_diagnostics_panel_plugin_loads() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type to search for the command
     harness.type_text("Show Diagnostics Panel").unwrap();
@@ -394,7 +391,6 @@ fn test_diagnostics_panel_plugin_loads() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for the async panel creation to complete
     // The panel shows "Diagnostics" header when open
@@ -593,7 +589,6 @@ editor.setStatus("Multi-action plugin loaded");
         harness
             .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
 
         // Type and execute command
         harness.type_text(action_name).unwrap();
@@ -688,7 +683,6 @@ editor.setStatus("Nonblocking test plugin loaded");
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Slow Action").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
@@ -932,7 +926,6 @@ editor.setStatus("Test source plugin loaded!");
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Search for our plugin command
     harness.type_text("Test Source Plugin").unwrap();
@@ -967,13 +960,11 @@ editor.setStatus("Test source plugin loaded!");
 
     // Also verify that builtin commands still show "builtin"
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Open palette again and search for a builtin command
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Save File").unwrap();
 
     for _ in 0..3 {
@@ -1118,7 +1109,6 @@ editor.setStatus("Test diagnostics plugin loaded");
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render()?;
 
     // Wait for the published diagnostic to reach the screen: the status bar's
     // diagnostics element shows `E:1` once one error is known for the buffer.

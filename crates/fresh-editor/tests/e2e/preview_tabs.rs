@@ -371,7 +371,6 @@ fn keyboard_navigation_previews_selected_file() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     let row = tab_bar(&harness);
     assert!(
@@ -383,7 +382,6 @@ fn keyboard_navigation_previews_selected_file() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     let row = tab_bar(&harness);
     assert!(
@@ -399,7 +397,6 @@ fn keyboard_navigation_previews_selected_file() {
     harness
         .send_key(KeyCode::Up, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     let row = tab_bar(&harness);
     assert!(
@@ -439,7 +436,6 @@ fn keyboard_navigation_skips_preview_when_disabled() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     let row = tab_bar(&harness);
     assert_eq!(
@@ -493,7 +489,6 @@ fn buffer_navigation_shortcut_works_from_file_explorer() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // From FileExplorer context, Ctrl+PageUp should switch to the
     // previous buffer via the UI-action fallthrough into Normal. Without

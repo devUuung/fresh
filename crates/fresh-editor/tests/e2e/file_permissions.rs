@@ -176,7 +176,6 @@ fn test_multiple_saves_preserve_permissions() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let mode_after_first = std::fs::metadata(&file_path).unwrap().permissions().mode() & 0o777;
     assert_eq!(
@@ -189,7 +188,6 @@ fn test_multiple_saves_preserve_permissions() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let mode_after_second = std::fs::metadata(&file_path).unwrap().permissions().mode() & 0o777;
     assert_eq!(
@@ -202,7 +200,6 @@ fn test_multiple_saves_preserve_permissions() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let mode_after_third = std::fs::metadata(&file_path).unwrap().permissions().mode() & 0o777;
     assert_eq!(
@@ -294,7 +291,6 @@ fn test_multiple_saves_preserve_owner_and_group() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let meta_after_first = std::fs::metadata(&file_path).unwrap();
     assert_eq!(
@@ -313,7 +309,6 @@ fn test_multiple_saves_preserve_owner_and_group() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let meta_after_second = std::fs::metadata(&file_path).unwrap();
     assert_eq!(
@@ -332,7 +327,6 @@ fn test_multiple_saves_preserve_owner_and_group() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let meta_after_third = std::fs::metadata(&file_path).unwrap();
     assert_eq!(
@@ -386,7 +380,6 @@ fn test_save_preserves_various_permission_modes() {
         harness
             .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
 
         // Verify permissions preserved
         let final_mode = std::fs::metadata(&file_path).unwrap().permissions().mode() & 0o777;

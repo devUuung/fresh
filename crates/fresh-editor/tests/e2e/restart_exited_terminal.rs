@@ -120,14 +120,12 @@ fn assert_palette_offers(harness: &mut EditorTestHarness, query: &str, command: 
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text(query).unwrap();
     let command = command.to_string();
     harness
         .wait_until(|h| h.screen_to_string().contains(&command))
         .expect("the palette should offer the command");
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 }
 
 /// Click the status-bar restart indicator, whichever wording it currently has.
@@ -321,7 +319,6 @@ fn test_restart_refuses_while_process_is_running() {
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains("⟳ Restart");
     harness.assert_screen_not_contains("⟳ Resume");
     harness.assert_screen_contains("LONG-JOB-STARTED");

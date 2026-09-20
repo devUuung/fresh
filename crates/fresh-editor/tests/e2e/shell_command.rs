@@ -111,38 +111,32 @@ fn test_shell_command_on_selection() {
 
     // Move to line 2 (skip header)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Select lines 2-4 (cherry, apple, banana)
     // Start visual line selection
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     // Move down 2 lines to include all three fruit lines
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Open command palette and run shell command (replace)
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.type_text("shell command (replace)").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Sort the selection
     harness.type_text("sort").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Only the selected portion should be sorted
     // Header and footer should remain unchanged
@@ -264,7 +258,6 @@ fn test_shell_command_replace_undo() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_buffer_content("original content");
 }
@@ -369,7 +362,6 @@ fn test_shell_command_replace_preserves_cursor_position() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Get cursor position before replacement
     let cursor_pos_before = harness.editor().active_cursors().primary().position;
@@ -432,7 +424,6 @@ fn test_shell_command_replace_clamps_cursor_when_buffer_shrinks() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let cursor_pos_before = harness.editor().active_cursors().primary().position;
     assert!(

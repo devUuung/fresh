@@ -38,7 +38,6 @@ fn test_file_explorer_toggle() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // File Explorer text should no longer be visible
     let screen_final = harness.screen_to_string();
@@ -119,7 +118,6 @@ fn test_file_explorer_navigation() {
     harness
         .send_key(KeyCode::Char('j'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     let screen_after_down = harness.screen_to_string();
 
@@ -131,7 +129,6 @@ fn test_file_explorer_navigation() {
     harness
         .send_key(KeyCode::Char('k'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Test file explorer expand/collapse
@@ -230,7 +227,6 @@ fn test_file_explorer_open_file() {
 
     // Navigate down to the file (first child after root)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Try to open with Enter - should work if we're on a file
     harness
@@ -304,7 +300,6 @@ fn test_file_explorer_focus_switching() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     // Toggle file explorer off
     harness.editor_mut().toggle_file_explorer();
@@ -456,19 +451,16 @@ fn test_file_explorer_context_aware_keybindings() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     // Switch to editor context
     harness
         .send_key(KeyCode::Esc, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     // Now arrow keys should work for editor navigation, not file explorer
     harness
         .send_key(KeyCode::Down, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Test opening file explorer with focus
@@ -791,7 +783,6 @@ fn test_file_explorer_delete_smoke() {
 
     // Navigate to the file using Down key (user-facing action)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Call delete using Delete key (user-facing action)
     harness
@@ -831,7 +822,6 @@ fn test_file_explorer_focus_after_delete() {
 
     // Navigate to file1.txt
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen_before = harness.screen_to_string();
     println!("Screen before deletion:\n{}", screen_before);
@@ -890,7 +880,6 @@ fn test_file_explorer_focus_after_delete() {
 
     // Verify arrow keys work in file explorer (not captured by editor)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     // If we can navigate without error, the focus is correctly on file explorer
 }
 
@@ -913,7 +902,6 @@ fn test_enter_toggles_directory() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     let screen_before_expand = harness.screen_to_string();
     println!("Before expand:\n{}", screen_before_expand);
@@ -1004,7 +992,6 @@ fn test_enter_opens_file_and_switches_focus() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     let screen_before = harness.screen_to_string();
     println!("Before opening file:\n{}", screen_before);
@@ -1042,7 +1029,6 @@ fn test_enter_opens_file_and_switches_focus() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     let screen_after_movement = harness.screen_to_string();
 
@@ -1142,7 +1128,6 @@ fn test_unsaved_change_indicators() {
         harness
             .send_key(KeyCode::Down, KeyModifiers::empty())
             .unwrap();
-        harness.render().unwrap();
     }
 
     let screen_before_open = harness.screen_to_string();
@@ -1173,7 +1158,6 @@ fn test_unsaved_change_indicators() {
     harness
         .send_key(KeyCode::Char('X'), KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     // Go back to file explorer
     harness.editor_mut().focus_file_explorer();
@@ -1247,7 +1231,6 @@ fn test_scroll_allows_cursor_to_top() {
         harness
             .send_key(KeyCode::Down, KeyModifiers::empty())
             .unwrap();
-        harness.render().unwrap();
     }
 
     let screen_at_bottom = harness.screen_to_string();
@@ -1293,7 +1276,6 @@ fn test_scroll_allows_cursor_to_top() {
         harness
             .send_key(KeyCode::Up, KeyModifiers::empty())
             .unwrap();
-        harness.render().unwrap();
 
         let screen_after_up = harness.screen_to_string();
         let visible_after_up = get_visible_files(&screen_after_up);
@@ -1317,7 +1299,6 @@ fn test_scroll_allows_cursor_to_top() {
     harness
         .send_key(KeyCode::Up, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     let screen_after_scroll = harness.screen_to_string();
     let visible_after_scroll = get_visible_files(&screen_after_scroll);
@@ -1615,7 +1596,6 @@ fn test_file_explorer_keybinding_when_focused() {
     harness
         .send_key(KeyCode::Char('\\'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
 
@@ -1656,7 +1636,6 @@ fn test_file_explorer_keybinding_matches_behavior() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let screen_without_explorer = harness.screen_to_string();
 
@@ -1712,7 +1691,6 @@ fn test_ctrl_e_toggles_focus_between_explorer_and_editor() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // File explorer should STILL be visible (not toggled off)
     assert!(
@@ -1916,7 +1894,6 @@ fn test_folder_shows_modified_indicator_for_unsaved_file() {
 
     // Expand the src folder to see main.rs
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
@@ -1924,7 +1901,6 @@ fn test_folder_shows_modified_indicator_for_unsaved_file() {
 
     // Navigate to main.rs and open it
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
@@ -2136,7 +2112,6 @@ fn test_folder_modified_indicator_cleared_after_save() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait a bit for save to complete
     harness.sleep(std::time::Duration::from_millis(100));
@@ -2188,7 +2163,6 @@ fn test_file_explorer_new_file_opens_rename_prompt_and_buffer() {
     harness
         .send_key(KeyCode::Char('n'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let screen_after = harness.screen_to_string();
     println!("Screen after new file:\n{}", screen_after);
@@ -2506,7 +2480,6 @@ fn test_file_explorer_rename_existing_file_keeps_focus() {
 
     // Navigate down to select the file
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Verify we're in FileExplorer context
     let key_context_before = harness.editor_mut().get_key_context();
@@ -2738,19 +2711,15 @@ fn test_file_explorer_search_basic() {
     harness
         .send_key(KeyCode::Char('m'), KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('i'), KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('n'), KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     // Search bar should be visible with the query
     let screen_with_search = harness.screen_to_string();
@@ -2781,7 +2750,6 @@ fn test_file_explorer_search_basic() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     let screen_after_backspace = harness.screen_to_string();
     assert!(
@@ -2793,7 +2761,6 @@ fn test_file_explorer_search_basic() {
     harness
         .send_key(KeyCode::Esc, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     let screen_after_escape = harness.screen_to_string();
     // After clearing search, the search bar should not show a query
@@ -2824,7 +2791,6 @@ fn test_file_explorer_search_highlight_positions() {
         harness
             .send_key(KeyCode::Char(c), KeyModifiers::empty())
             .unwrap();
-        harness.render().unwrap();
     }
 
     // Get the file explorer and check if we can get match positions for the selected node
@@ -2915,7 +2881,6 @@ fn test_file_explorer_search_navigation() {
         harness
             .send_key(KeyCode::Char(c), KeyModifiers::empty())
             .unwrap();
-        harness.render().unwrap();
     }
 
     let screen = harness.screen_to_string();
@@ -2928,18 +2893,15 @@ fn test_file_explorer_search_navigation() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .send_key(KeyCode::Down, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     // Navigate up
     harness
         .send_key(KeyCode::Up, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     // Selection should change (we're cycling through matches)
     let screen_after_nav = harness.screen_to_string();
@@ -2975,7 +2937,6 @@ fn test_file_explorer_escape_clears_search() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     // Verify search is active
     assert!(
@@ -2987,7 +2948,6 @@ fn test_file_explorer_escape_clears_search() {
     harness
         .send_key(KeyCode::Esc, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     // Search should be cleared
     assert!(
@@ -3009,7 +2969,6 @@ fn test_file_explorer_escape_clears_search() {
     harness
         .send_key(KeyCode::Esc, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         matches!(
@@ -3611,7 +3570,6 @@ fn test_file_explorer_click_markdown_enter_does_not_modify_buffer() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -3851,7 +3809,6 @@ fn test_file_explorer_duplicate_file_creates_copy_sibling() {
 
     // Move selection from the (auto-expanded) root onto alpha.txt.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness.editor_mut().file_explorer_duplicate();
     harness
@@ -3887,7 +3844,6 @@ fn test_file_explorer_duplicate_increments_when_copy_exists() {
     // ("alpha copy.txt" sorts first).
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness.editor_mut().file_explorer_duplicate();
     harness
@@ -3921,7 +3877,6 @@ fn test_file_explorer_duplicate_directory_copies_recursively() {
     harness.wait_for_file_explorer_item("src").unwrap();
 
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness.editor_mut().file_explorer_duplicate();
     harness
@@ -3954,7 +3909,6 @@ fn test_file_explorer_copy_full_path() {
     harness.wait_for_file_explorer_item("alpha.txt").unwrap();
 
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Read the actual selected-node path from the explorer rather than
     // reconstructing it from `project_dir()`. On macOS CI the working dir
@@ -4007,7 +3961,6 @@ fn test_file_explorer_copy_relative_path() {
         .unwrap();
     harness.wait_for_file_explorer_item("main.rs").unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Sanity-check selection so the test fails loudly if explorer ordering
     // shifts under us, instead of silently asserting against the wrong path.
@@ -4439,7 +4392,6 @@ fn test_file_explorer_shows_placeholder_during_slow_build() {
     harness
         .send_key(KeyCode::Char('b'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let placeholder_frame = harness.screen_to_string();
     assert!(

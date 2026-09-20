@@ -153,7 +153,6 @@ fn test_paste_undo_is_atomic() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_buffer_content("hello");
 
@@ -161,7 +160,6 @@ fn test_paste_undo_is_atomic() {
     harness
         .send_key(KeyCode::Char('y'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_buffer_content("hello world");
 }
@@ -199,7 +197,6 @@ fn test_multi_cursor_paste_undo_is_atomic() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let content_after_undo = harness.get_buffer_content().unwrap();
     let x_count_after_undo = content_after_undo.matches('X').count();
@@ -246,7 +243,6 @@ fn test_paste_with_selection_undo_is_atomic() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_buffer_content("hello world");
 
@@ -254,7 +250,6 @@ fn test_paste_with_selection_undo_is_atomic() {
     harness
         .send_key(KeyCode::Char('y'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_buffer_content("hello universe");
 }
@@ -280,7 +275,6 @@ fn test_paste_multiline_text() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_buffer_content("");
 }
@@ -400,7 +394,6 @@ fn test_external_paste_goes_to_prompt() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">command");
 
     // Simulate external paste (bracketed paste) - this should go to the prompt, not the buffer
@@ -423,7 +416,6 @@ fn test_external_paste_in_open_file_prompt() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Open file:");
 
     // Simulate external paste of a file path
@@ -471,14 +463,12 @@ fn test_ctrl_v_paste_in_prompt() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">command");
 
     // Press Ctrl+V to paste
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should see pasted text in prompt
     harness.assert_screen_contains(">clipboard content");
@@ -503,7 +493,6 @@ fn test_prompt_copy_paste_workflow() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Clear the prompt by selecting all and deleting
     harness
@@ -512,7 +501,6 @@ fn test_prompt_copy_paste_workflow() {
     harness
         .send_key(KeyCode::Delete, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The prompt should be empty now (just hints line visible)
     harness.assert_screen_contains(">command");
@@ -521,7 +509,6 @@ fn test_prompt_copy_paste_workflow() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should see the copied text (may have double ">" from paste)
     harness.assert_screen_contains("copy me");
@@ -603,13 +590,11 @@ fn test_prompt_copy_selection() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Paste - should only paste "hello", not "hello world"
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should see ">hello" (the ">" prefix plus pasted "hello")
     harness.assert_screen_contains(">hello");
@@ -657,7 +642,6 @@ fn test_prompt_cut_selection() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should only have ">world" remaining (prefix + remaining text)
     harness.assert_screen_contains(">world");
@@ -670,7 +654,6 @@ fn test_prompt_cut_selection() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should paste "hello " (the ">" prefix is already there from Quick Open)
     harness.assert_screen_contains(">hello ");
@@ -711,7 +694,6 @@ fn test_prompt_paste_replaces_selection() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_screen_contains(">hello replaced");
 }
@@ -768,14 +750,12 @@ fn test_paste_in_search_prompt() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Search:");
 
     // Paste the search term
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_screen_contains("Search: this");
 }
@@ -882,7 +862,6 @@ fn test_paste_crlf_into_prompt() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">command");
 
     // Paste text with CRLF (should be normalized to LF for prompt)
@@ -1079,6 +1058,5 @@ fn test_paste_column_mode_undo_is_atomic() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("aaa\nbbb\nccc");
 }

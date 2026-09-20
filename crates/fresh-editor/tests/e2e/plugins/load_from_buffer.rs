@@ -45,7 +45,6 @@ editor.setStatus("buffer-plugin loaded ok");
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Load Plugin from Buffer").unwrap();
 
     // Process to update suggestions
@@ -79,7 +78,6 @@ editor.setStatus("buffer-plugin loaded ok");
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Buffer Plugin Hello").unwrap();
 
     for _ in 0..3 {
@@ -125,7 +123,6 @@ editor.setStatus("v1 loaded");
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Load Plugin from Buffer").unwrap();
     for _ in 0..3 {
         harness.process_async_and_render().unwrap();
@@ -145,7 +142,6 @@ editor.setStatus("v1 loaded");
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Alpha Zebra Xylophone").unwrap();
     for _ in 0..3 {
         harness.process_async_and_render().unwrap();
@@ -160,7 +156,6 @@ editor.setStatus("v1 loaded");
 
     // Close palette
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Now update the file with v2 plugin code that registers a completely different command
     let plugin_v2 = r#"
@@ -179,7 +174,6 @@ editor.setStatus("v2 loaded");
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Revert").unwrap();
     for _ in 0..3 {
         harness.process_async_and_render().unwrap();
@@ -197,7 +191,6 @@ editor.setStatus("v2 loaded");
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Load Plugin from Buffer").unwrap();
     for _ in 0..3 {
         harness.process_async_and_render().unwrap();
@@ -217,7 +210,6 @@ editor.setStatus("v2 loaded");
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Beta Mango Pineapple").unwrap();
     for _ in 0..3 {
         harness.process_async_and_render().unwrap();
@@ -235,11 +227,9 @@ editor.setStatus("v2 loaded");
     // old command name doesn't appear inside the popup box (it WILL appear in the
     // search input line, so we can't just check screen.contains).
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Alpha Zebra Xylophone").unwrap();
     for _ in 0..3 {
         harness.process_async_and_render().unwrap();

@@ -662,14 +662,12 @@ fn test_pkg_manager_ui_split_view_and_tab_navigation() {
     // Test Tab navigation - press Tab and check that focus changes
     // (indicated by help text changing or visual elements changing)
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let screen_after_tab1 = harness.screen_to_string();
     println!("After Tab 1:\n{}", screen_after_tab1);
 
     // Tab through all focusable elements (typically: list -> action -> filters -> sync -> search -> back to list)
     for i in 2..=8 {
         harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         println!("After Tab {}:", i);
     }
 
@@ -1342,7 +1340,6 @@ editor.debug("Bundle test plugin 2 loaded!");
 
     // Close the language selection
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // === Test 3: Verify second plugin command is available ===
     harness
@@ -1428,7 +1425,6 @@ editor.debug("Bundle test plugin 2 loaded!");
 
     // Close the theme selection
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // === Test 5: Verify bundle shows up in package manager with installed status ===
     harness
@@ -1652,7 +1648,6 @@ globalThis.uninstall_test_hello = function() { editor.setStatus("Hello from unin
     // Step 8: Tab to Uninstall button and press Enter
     eprintln!("[TEST] Step 8: Pressing Tab to focus Uninstall button");
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     eprintln!(
         "[TEST] Step 8: After Tab. Screen:\n{}",
         harness.screen_to_string()
@@ -1662,7 +1657,6 @@ globalThis.uninstall_test_hello = function() { editor.setStatus("Hello from unin
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     eprintln!(
         "[TEST] Step 8b: After Enter. Screen:\n{}",
         harness.screen_to_string()

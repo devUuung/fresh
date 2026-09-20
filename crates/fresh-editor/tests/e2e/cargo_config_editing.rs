@@ -30,7 +30,6 @@ fn test_cargo_config_toml_is_editable() {
     harness
         .send_key(KeyCode::Char('Z'), KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_screen_contains("QZ");
     harness.assert_screen_not_contains("Editing disabled");
@@ -58,7 +57,6 @@ fn test_cargo_registry_file_stays_readonly() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_screen_contains("pub fn placeholder() {}");
 

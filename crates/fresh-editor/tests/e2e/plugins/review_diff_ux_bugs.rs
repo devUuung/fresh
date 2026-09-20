@@ -281,7 +281,6 @@ fn test_bug1_side_by_side_vim_keys_produce_editing_disabled() {
     harness
         .send_key(KeyCode::Char('j'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     println!("BUG-1 screen after j:\n{}", screen);
@@ -334,7 +333,6 @@ fn test_bug1_side_by_side_escape_does_not_close() {
 
     // Press Escape — should close the side-by-side view
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     println!("BUG-1 escape screen:\n{}", screen);
@@ -386,7 +384,6 @@ fn test_bug1_side_by_side_tab_does_not_switch_pane() {
 
     // Press Tab — should switch pane, not show "Editing disabled"
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     println!("BUG-1 tab screen:\n{}", screen);
@@ -517,7 +514,6 @@ fn test_bug3_file_explorer_steals_review_diff_keys() {
     harness
         .send_key(KeyCode::Char('j'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen_after_j = harness.screen_to_string();
     println!("BUG-3 screen after j:\n{}", screen_after_j);
@@ -561,14 +557,12 @@ fn test_bug4_hunk_navigation_n_does_not_move_cursor() {
 
     // Switch focus to the diff panel with Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Record the screen before pressing n
     let _screen_before_n = harness.screen_to_string();
 
     // Press Home to go to line 1 of the diff
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Helper to extract the line number from the status bar ("Ln X, Col Y")
     fn extract_ln(screen: &str) -> Option<usize> {
@@ -671,7 +665,6 @@ fn test_set_buffer_cursor_updates_status_bar_for_panel_buffer() {
 
     // Switch focus to the diff panel with Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // The status bar should show "*diff*" (the inner panel buffer name),
     // NOT the outer split's buffer name.
@@ -687,7 +680,6 @@ fn test_set_buffer_cursor_updates_status_bar_for_panel_buffer() {
     // line number — this verifies both the cursor movement and the status
     // bar reading from effective_active_split().
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     fn extract_ln(screen: &str) -> Option<usize> {
         screen.lines().find_map(|l| {
@@ -783,7 +775,6 @@ fn test_bug5_deleted_file_drill_down_hangs() {
         harness
             .send_key(KeyCode::Char('j'), KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
     }
 
     if !found_deleted {
@@ -802,7 +793,6 @@ fn test_bug5_deleted_file_drill_down_hangs() {
         harness
             .send_key(KeyCode::Char('j'), KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
     }
 
     // Press Enter to drill down into side-by-side view for the deleted file
@@ -876,7 +866,6 @@ fn test_bug6_comment_from_files_panel_not_visible_in_diff() {
 
     // Now switch to diff panel to look for the comment inline
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     println!("BUG-6 screen after comment:\n{}", screen);
@@ -930,7 +919,6 @@ fn test_bug7_escape_does_not_exit_file_explorer_focus() {
 
     // Press Escape to try to leave File Explorer focus
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Now press `j` — if Escape worked, this should go to the editor.
     // If Escape did NOT work, the File Explorer still has focus and `j`
@@ -938,7 +926,6 @@ fn test_bug7_escape_does_not_exit_file_explorer_focus() {
     harness
         .send_key(KeyCode::Char('j'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen_after = harness.screen_to_string();
     println!("BUG-7 screen after Escape + j:\n{}", screen_after);
@@ -1012,7 +999,6 @@ fn test_bug9_side_by_side_down_arrow_no_viewport_scroll() {
     // Press Down many times to move past the visible viewport
     for _ in 0..25 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 
     let screen_after_down = harness.screen_to_string();
@@ -1073,7 +1059,6 @@ fn test_bug10_toolbar_export_label_truncated() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Re-open File Explorer
     harness
@@ -1180,7 +1165,6 @@ fn test_review_diff_works_after_terminal_opened() {
 
     // Down arrow should work for navigation (file list selection)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     // Verify the screen didn't produce an error
     let screen_after_move = harness.screen_to_string();
     assert!(
@@ -1229,7 +1213,6 @@ fn test_review_diff_file_list_auto_scrolls() {
     // Move down many times to go past the visible area in the files panel
     for _ in 0..15 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 
     let screen_after = harness.screen_to_string();
@@ -1785,7 +1768,6 @@ fn test_issue3_status_bar_shows_current_hunk_index() {
 
     // Tab to the diff panel so `n` / `p` jump between hunks.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Jump to the first hunk.
     harness
@@ -2114,7 +2096,6 @@ fn test_issue2117_discard_hunk_with_no_trailing_newline() {
     // header) so `d` performs a *hunk*-level discard — the path that builds
     // and reverse-applies a patch.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('n'), KeyModifiers::NONE)
         .unwrap();

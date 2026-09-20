@@ -93,7 +93,6 @@ fn preview_open_does_not_fire_after_file_open_hook() {
         harness
             .send_key(KeyCode::Down, KeyModifiers::empty())
             .unwrap();
-        harness.render().unwrap();
         if tab_bar(&harness).contains("browse_me.txt (preview)") {
             break;
         }
@@ -162,7 +161,6 @@ fn escalating_a_preview_fires_the_deferred_after_file_open_hook() {
         harness
             .send_key(KeyCode::Down, KeyModifiers::empty())
             .unwrap();
-        harness.render().unwrap();
         if tab_bar(&harness).contains("browse_me.txt (preview)") {
             break;
         }
@@ -188,7 +186,6 @@ fn escalating_a_preview_fires_the_deferred_after_file_open_hook() {
     harness
         .send_key(KeyCode::Char('X'), KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     // The deferred hook now fires (probe popup marker appears) and the tab is
     // no longer a preview.

@@ -12,7 +12,6 @@ fn test_command_palette_trigger() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Check that the Quick Open hints line is visible
     harness.assert_screen_contains(">command");
@@ -54,7 +53,6 @@ fn test_command_palette_navigation() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">command");
 
     // Navigate down
@@ -62,7 +60,6 @@ fn test_command_palette_navigation() {
 
     // Navigate up
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Commands should still be visible (alphabetically sorted, so Add Cursor commands first)
     harness.assert_screen_contains("Add Cursor Above");
@@ -84,7 +81,6 @@ fn test_command_palette_tab_completion() {
 
     // Press Tab to accept first suggestion
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // The input should be completed to "Open File"
     harness.assert_screen_contains(">Open File");
@@ -101,12 +97,10 @@ fn test_command_palette_cancel() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">command");
 
     // Cancel with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Prompt should be gone
     harness.assert_screen_not_contains(">command");
@@ -135,7 +129,6 @@ fn test_command_palette_execute() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Line numbers should now be hidden
     harness.assert_screen_not_contains("1 │");
@@ -1032,7 +1025,6 @@ fn test_command_palette_tab_skip_disabled() {
 
     // Press Tab to accept first suggestion
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // The input should be completed (should work with available commands)
     harness.assert_screen_contains(">Save File");
@@ -1055,7 +1047,6 @@ fn test_command_palette_tab_on_disabled() {
 
     // Press Tab to accept the suggestion
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // The input should be completed
     harness.assert_screen_contains(">Undo");
@@ -1077,7 +1068,6 @@ fn test_command_palette_tab_on_disabled() {
     // The first match might be "Focus Editor" which is disabled in Normal context
     // Tab should either skip it or not accept it
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // After Tab, we should have an enabled command in the input
     // Let's just check that SOMETHING happened (either it completed or stayed as is)
@@ -1111,7 +1101,6 @@ fn test_command_palette_tab_all_disabled() {
 
     // Press Tab - it should not accept the disabled suggestion
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // The input should NOT have been auto-completed to disabled command
     // It should still be "FocusEditor" not "Focus Editor"
@@ -1144,7 +1133,6 @@ fn test_command_palette_enter_uses_selection() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should NOT see error about unknown command
     harness.assert_screen_not_contains("Unknown command");
@@ -1178,13 +1166,11 @@ fn test_command_palette_enter_partial_match() {
 
     // Navigate down to select "Save File As"
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Enter - should execute the selected command
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should execute the selected command, not fail on "sav"
     harness.assert_screen_not_contains("Unknown command: sav");
@@ -1200,7 +1186,6 @@ fn test_command_palette_scroll_beyond_visible() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Commands are sorted alphabetically, first is "Add Cursor Above"
     harness.assert_screen_contains("Add Cursor Above");
@@ -1224,7 +1209,6 @@ fn test_command_palette_scroll_beyond_visible() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should NOT see "Unknown command" error
     harness.assert_screen_not_contains("Unknown command");
@@ -1243,7 +1227,6 @@ fn test_command_palette_keyboard_nav_inside_viewport_does_not_scroll() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // The first command (alphabetically) — anchored on row 0 of the list.
     let initial_top = harness
@@ -1269,7 +1252,6 @@ fn test_command_palette_keyboard_nav_inside_viewport_does_not_scroll() {
     // 10th Down moves selection past the viewport; only now should the list
     // scroll so the top item disappears.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains("Add Cursor Above");
 }
 
@@ -1302,7 +1284,6 @@ fn test_command_palette_new_file_switches_buffer() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should see status message confirming new buffer
     harness.assert_screen_contains("New buffer");
@@ -1399,7 +1380,6 @@ fn test_command_palette_from_file_explorer() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show the command palette
     harness.assert_screen_contains(">command");
@@ -1412,7 +1392,6 @@ fn test_command_palette_from_file_explorer() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Command should execute successfully (Toggle Hidden Files)
     // We should see a status message about the toggle
@@ -1433,7 +1412,6 @@ fn test_command_palette_up_no_wraparound() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Commands are sorted alphabetically, first is "Add Cursor Above"
     harness.assert_screen_contains("Add Cursor Above");
@@ -1441,7 +1419,6 @@ fn test_command_palette_up_no_wraparound() {
     // The first suggestion should be selected by default
     // Press Up - should stay at the first item, not wrap to the end
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Enter to execute the selected command
     // If we wrapped around, we would execute the last command in the list
@@ -1449,7 +1426,6 @@ fn test_command_palette_up_no_wraparound() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // "Add Cursor Above" adds a cursor above the current one
     // The editor should now have 2 cursors - check via cursor count or status
@@ -1506,7 +1482,6 @@ fn test_command_palette_pageup_no_wraparound() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Commands are sorted alphabetically, first is "Add Cursor Above"
     harness.assert_screen_contains("Add Cursor Above");
@@ -1529,7 +1504,6 @@ fn test_command_palette_pageup_no_wraparound() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should execute first command - "Add Cursor Above" adds a cursor
     // Just verify we didn't execute a command from the end of the list
@@ -1546,7 +1520,6 @@ fn test_command_palette_pagedown_no_wraparound() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Commands are sorted alphabetically, first is "Add Cursor Above"
     harness.assert_screen_contains("Add Cursor Above");
@@ -1566,14 +1539,12 @@ fn test_command_palette_pagedown_no_wraparound() {
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // We should still be far from the beginning
     // Execute the command and verify we didn't wrap to the first command
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify command executed without error
     harness.assert_screen_not_contains("Unknown command");
@@ -1589,7 +1560,6 @@ fn test_command_palette_shows_shortcuts() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Check that the command palette is visible
     harness.assert_screen_contains(">command");
@@ -1664,7 +1634,6 @@ fn test_command_palette_shortcuts_alignment() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify that shortcuts are displayed alongside commands
     // Look for commands that we know have shortcuts
@@ -1697,7 +1666,6 @@ fn test_show_keyboard_shortcuts_command() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type to filter for "Show Keyboard Shortcuts" (more specific to avoid "Calibrate Keyboard")
     harness.type_text("show keyboard").unwrap();
@@ -1710,7 +1678,6 @@ fn test_show_keyboard_shortcuts_command() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     println!("Screen after Show Keyboard Shortcuts:\n{}", screen);
@@ -1750,7 +1717,6 @@ fn test_show_keyboard_shortcuts_open_close_reopen() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify keyboard shortcuts are shown
     let screen = harness.screen_to_string();
@@ -1765,7 +1731,6 @@ fn test_show_keyboard_shortcuts_open_close_reopen() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen_after_close = harness.screen_to_string();
     println!("After close - Screen:\n{}", screen_after_close);
@@ -1780,7 +1745,6 @@ fn test_show_keyboard_shortcuts_open_close_reopen() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify keyboard shortcuts are shown again
     let screen = harness.screen_to_string();
@@ -1810,7 +1774,6 @@ fn test_keyboard_shortcuts_q_closes_buffer() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.screen_to_string().contains("Keyboard Shortcuts"),
@@ -1821,7 +1784,6 @@ fn test_keyboard_shortcuts_q_closes_buffer() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let after = harness.screen_to_string();
     assert!(
@@ -1852,7 +1814,6 @@ fn test_fresh_manual_q_closes_buffer() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.screen_to_string().contains("*Fresh Manual*"),
@@ -1863,7 +1824,6 @@ fn test_fresh_manual_q_closes_buffer() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let after = harness.screen_to_string();
     assert!(
@@ -1888,7 +1848,6 @@ fn test_command_palette_description_fuzzy_matching() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Search for "UI language" which appears in the description of "Select Locale"
     // ("Choose the UI language for the editor")
@@ -2039,7 +1998,6 @@ fn palette_with_unselected_row(harness: &mut EditorTestHarness) -> (u16, u16) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     // "Add Cursor Above" sorts first and is therefore the selected row;
     // "Add Cursor Below" is the row below it.
     harness.assert_screen_contains("Add Cursor Below");

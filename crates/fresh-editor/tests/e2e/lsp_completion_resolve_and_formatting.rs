@@ -178,20 +178,17 @@ fn test_completion_accept_applies_additional_text_edits() -> anyhow::Result<()> 
     // Move to the 'p' on line 2 (after "    p")
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
-    harness.render()?;
 
     // Type 'r' to extend "p" to "pr", then explicitly trigger completion
     harness.type_text("r")?;
     harness.render()?;
     harness.send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)?;
-    harness.render()?;
 
     // Wait for completion popup to appear with "println"
     harness.wait_for_screen_contains("println")?;
 
     // Accept the first completion item (println) with Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
-    harness.render()?;
 
     // Wait for the additional_text_edit to be applied — "use std::io;" at top
     harness.wait_for_screen_contains("use std::io;")?;
@@ -233,11 +230,9 @@ fn test_format_buffer_via_lsp() -> anyhow::Result<()> {
 
     // Open command palette with Ctrl+P and run "Format Buffer"
     harness.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)?;
-    harness.render()?;
     harness.type_text("format buffer")?;
     harness.render()?;
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
-    harness.render()?;
 
     // Wait for the formatting request to reach the server
     harness.wait_until(|_| {

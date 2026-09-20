@@ -112,7 +112,6 @@ fn open_duplicate_label_popup(
     // completions.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
-    harness.render()?;
     harness.send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)?;
 
     // Both same-labelled candidates must be on screen, told apart only by
@@ -141,7 +140,6 @@ fn test_accepting_second_same_label_candidate_applies_its_own_import() -> anyhow
 
     // Move down to the std::collections candidate and accept it.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
-    harness.render()?;
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
 
     // Either import landing ends the wait; the assertions below decide
@@ -188,7 +186,6 @@ fn test_typing_another_character_keeps_the_selected_candidate_highlighted() -> a
 
     // Pick the std::collections candidate.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
-    harness.render()?;
     assert!(
         row_is_highlighted(&harness, row_showing(&harness, "std::collections::HashMap")),
         "precondition: the second candidate is the selected one; screen was:\n{}",
@@ -251,7 +248,6 @@ fn test_resolve_deferred_import_follows_the_selected_candidate() -> anyhow::Resu
     let mut harness = open_duplicate_label_popup(&temp_dir, "resolve")?;
 
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
-    harness.render()?;
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE)?;
 
     harness.wait_until(|h| {
@@ -340,7 +336,6 @@ fn open_two_server_popup(temp_dir: &tempfile::TempDir) -> anyhow::Result<EditorT
 
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::End, KeyModifiers::NONE)?;
-    harness.render()?;
     harness.send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)?;
 
     // Both servers' candidates on screen means both have answered, so the
@@ -376,7 +371,6 @@ fn test_resolve_goes_to_the_server_that_offered_the_candidate() -> anyhow::Resul
     let beta_row = row_showing(&harness, "beta::HashMap");
     if !row_is_highlighted(&harness, beta_row) {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
-        harness.render()?;
     }
     let beta_row = row_showing(&harness, "beta::HashMap");
     assert!(

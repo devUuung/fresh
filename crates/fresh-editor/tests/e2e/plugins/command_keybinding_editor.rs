@@ -20,7 +20,6 @@ fn load_plugin_from_buffer(harness: &mut EditorTestHarness, filename: &str, sour
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Load Plugin from Buffer").unwrap();
     for _ in 0..3 {
         harness.process_async_and_render().unwrap();
@@ -67,7 +66,6 @@ editor.setStatus("zqw-plugin loaded");
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("zephyr_quasar").unwrap();
     harness.render().unwrap();
 
@@ -111,11 +109,9 @@ editor.setStatus("npb-plugin loaded");
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Tab to the action field
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Type a prefix of the plugin action
     harness.type_text("nexus_prism").unwrap();
@@ -156,7 +152,6 @@ editor.setStatus("crd-plugin loaded");
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("coral_reef").unwrap();
     harness.render().unwrap();
 
@@ -204,7 +199,6 @@ editor.setStatus("let-plugin loaded");
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Lunar Eclipse").unwrap();
     harness.render().unwrap();
 

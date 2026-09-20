@@ -124,7 +124,6 @@ fn test_enter_continues_unordered_list() {
     // Move to line 2 ("  - nested"), then End to go to end of line
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Enter — should insert newline + "  - " (same indent + bullet)
     harness
@@ -152,7 +151,6 @@ fn test_enter_continues_ordered_list() {
     // Move to line 2 ("2. second"), End
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Enter — should insert "\n3. "
     harness
@@ -178,7 +176,6 @@ fn test_enter_continues_checkbox() {
     open_md_and_wait_for_mode(&mut harness, &fixture.path);
 
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Enter — should insert "\n- [ ] " (unchecked)
     harness
@@ -206,7 +203,6 @@ fn test_enter_clears_empty_bullet() {
     // Move to line 2 ("- "), End
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Enter — should remove "- " leaving an empty line
     harness
@@ -237,7 +233,6 @@ fn test_enter_no_indent_on_unindented_line() {
 
     // Cursor starts at line 1 col 1; move to end
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Enter
     harness
@@ -279,7 +274,6 @@ fn test_enter_deep_indent() {
 
     // Go to end of the line
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Enter
     harness
@@ -310,7 +304,6 @@ fn test_tab_inserts_spaces() {
 
     // Cursor is at the beginning of "text"; press Home to be sure
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Tab — should insert 4 spaces before "text"
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
@@ -334,7 +327,6 @@ fn test_multiple_tabs() {
     open_md_and_wait_for_mode(&mut harness, &fixture.path);
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Tab twice -> 8 spaces
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
@@ -364,7 +356,6 @@ fn test_tab_cycles_bullet_on_blank_item() {
     open_md_and_wait_for_mode(&mut harness, &fixture.path);
 
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Tab: * -> - (indented by 4)
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
@@ -400,7 +391,6 @@ fn test_shift_tab_reverse_cycles_bullet_on_blank_item() {
     open_md_and_wait_for_mode(&mut harness, &fixture.path);
 
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Shift+Tab #1:  "    - " → "* "   (de-indent, reverse cycle - → *)
     harness
@@ -428,7 +418,6 @@ fn test_tab_shift_tab_full_round_trip() {
     open_md_and_wait_for_mode(&mut harness, &fixture.path);
 
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Helper: drain any remaining async commands (e.g. setBufferCursor) so the
     // plugin state snapshot is fully up-to-date before sending the next key.
@@ -524,7 +513,6 @@ fn test_normal_typing_works() {
     open_md_and_wait_for_mode(&mut harness, &fixture.path);
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Type some text
     harness.type_text("Hello markdown").unwrap();
@@ -621,7 +609,6 @@ fn test_enter_then_type_workflow() {
 
     // Go to end of "- item"
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Enter -> should auto-insert "- "
     harness

@@ -134,7 +134,6 @@ fn arrows_drive_buffer_when_popup_is_unfocused() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -161,7 +160,6 @@ fn popup_cancel_key_dismisses_unfocused_popup() {
     harness
         .send_key(KeyCode::Esc, KeyModifiers::empty())
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -191,7 +189,6 @@ fn alt_t_focuses_popup_and_clears_focus_hint() {
     harness
         .send_key(KeyCode::Char('t'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     let title_after = title_row(&harness).unwrap_or_else(|| {
         panic!(

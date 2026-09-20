@@ -111,7 +111,6 @@ fn test_save_all_via_command_palette() -> anyhow::Result<()> {
     harness.assert_screen_contains("Save All");
 
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
-    harness.render()?;
 
     // Status bar confirms two files were saved.
     let status = harness.get_status_bar();

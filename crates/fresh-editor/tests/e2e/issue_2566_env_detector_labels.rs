@@ -27,7 +27,6 @@ fn open_env_settings(harness: &mut EditorTestHarness) {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     assert!(
         harness.screen_to_string().contains("Detectors:"),

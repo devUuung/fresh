@@ -29,7 +29,6 @@ fn test_find_selection_next_on_punctuation_does_not_hijack_query() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("sub").unwrap();
     harness.render().unwrap();
     harness
@@ -89,7 +88,6 @@ fn test_find_selection_next_on_whitespace_does_not_hijack_query() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("sub").unwrap();
     harness.render().unwrap();
     harness

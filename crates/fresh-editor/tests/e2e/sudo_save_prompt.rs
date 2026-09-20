@@ -73,7 +73,6 @@ fn test_save_permission_denied_shows_sudo_prompt() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show sudo save prompt, not crash
     // The prompt contains "Permission denied" or "sudo"
@@ -128,7 +127,6 @@ fn test_save_readonly_file_shows_sudo_prompt() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show sudo save prompt or error message, not crash
     let screen = harness.screen_to_string();
@@ -171,7 +169,6 @@ fn test_sudo_prompt_cancel_returns_to_editing() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify sudo prompt appears
     let screen = harness.screen_to_string();
@@ -180,7 +177,6 @@ fn test_sudo_prompt_cancel_returns_to_editing() {
         harness
             .send_key(KeyCode::Char('c'), KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
 
         // Should return to normal editing - buffer should still show modified (*)
         let screen_after = harness.screen_to_string();

@@ -44,13 +44,11 @@ fn row_is_focused(harness: &EditorTestHarness, label: &str) -> bool {
 fn open_language_dialog(harness: &mut EditorTestHarness) {
     harness.open_settings().unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     for _ in 0..60 {
         if harness.screen_to_string().contains("[Enter to edit]") {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     assert!(
         harness.screen_to_string().contains("[Enter to edit]"),
@@ -59,7 +57,6 @@ fn open_language_dialog(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         harness.screen_to_string().contains("Edit Value"),
         "language entry dialog should open; screen was:\n{}",
@@ -74,7 +71,6 @@ fn focus_field(harness: &mut EditorTestHarness, label: &str) {
             return;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     panic!(
         "could not focus the {label:?} field; screen was:\n{}",
@@ -112,7 +108,6 @@ fn esc_reverts_number_field_edit() {
 
     // ...then Esc — it must revert to the inherited 0, badge and all.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let row = row_with(&harness, "Tab Size");
     assert!(
         row.contains("0 ]") && !row.contains("8"),
@@ -155,7 +150,6 @@ fn esc_reverts_text_field_edit() {
 
     // ...then Esc — the junk must be gone and the original restored.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let row = row_with(&harness, "Grammar");
     assert!(
         row.contains("typescript") && !row.contains("ZZZ"),
@@ -181,7 +175,6 @@ fn enter_commits_text_field_edit() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         row_with(&harness, "Grammar").contains("typescriptZZZ"),
         "Enter must keep the typed value; row: {:?}",

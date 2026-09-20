@@ -170,7 +170,6 @@ fn test_switch_project_changes_working_dir() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     tracing::info!("Pressed Enter, checking active window re-root");
 
     // Switch Project re-roots the ACTIVE window in place — it must NOT restart
@@ -252,7 +251,6 @@ fn test_switch_project_select_current_directory() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     tracing::info!("Pressed Enter, checking active window");
 
     // Selecting the directory the active window is already rooted at is a
@@ -305,7 +303,6 @@ fn test_switch_project_cancel_preserves_directory() {
 
     // Cancel with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Folder browser should be closed
     harness.assert_screen_not_contains("Navigation:");
@@ -383,7 +380,6 @@ fn test_switch_project_in_file_menu() {
     harness
         .send_key(KeyCode::F(10), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .wait_until(|h| h.screen_to_string().contains("File"))
@@ -515,7 +511,6 @@ fn test_switch_project_restart_flow_with_sessions() {
         harness
             .send_key(KeyCode::Enter, KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
 
         // Switch Project re-roots the active window in place — no restart.
         assert!(
@@ -639,7 +634,6 @@ fn switch_to_project(harness: &mut EditorTestHarness, project_path: &std::path::
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Test that sessions persist when switching between projects multiple times

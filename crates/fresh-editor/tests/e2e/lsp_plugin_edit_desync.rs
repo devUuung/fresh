@@ -105,11 +105,9 @@ fn enable_vi_mode(harness: &mut EditorTestHarness) -> anyhow::Result<()> {
     })?;
 
     harness.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)?;
-    harness.render()?;
     harness.type_text("Toggle Vi")?;
     harness.wait_for_screen_contains("Toggle Vi mode")?;
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
-    harness.render()?;
     harness.wait_until(|h| h.editor().editor_mode() == Some("vi-normal".to_string()))?;
     Ok(())
 }
@@ -131,16 +129,12 @@ fn vi_dd_keeps_the_server_in_sync_with_the_buffer() -> anyhow::Result<()> {
 
     // Put the caret on `let unused = 2;` (line 3) and delete the line with dd.
     harness.send_key(KeyCode::Char('j'), KeyModifiers::NONE)?;
-    harness.render()?;
     harness.send_key(KeyCode::Char('j'), KeyModifiers::NONE)?;
-    harness.render()?;
     harness.wait_until(|h| h.editor().editor_mode() == Some("vi-normal".to_string()))?;
 
     harness.send_key(KeyCode::Char('d'), KeyModifiers::NONE)?;
-    harness.render()?;
     harness.wait_until(|h| h.editor().editor_mode() == Some("vi-operator-pending".to_string()))?;
     harness.send_key(KeyCode::Char('d'), KeyModifiers::NONE)?;
-    harness.render()?;
     harness.wait_until(|h| h.editor().editor_mode() == Some("vi-normal".to_string()))?;
 
     // Pins the failure below to what the server was told, not to what `dd` did.
@@ -177,18 +171,13 @@ fn saving_after_vi_dd_does_not_leave_the_server_diverged() -> anyhow::Result<()>
     enable_vi_mode(&mut harness)?;
 
     harness.send_key(KeyCode::Char('j'), KeyModifiers::NONE)?;
-    harness.render()?;
     harness.send_key(KeyCode::Char('j'), KeyModifiers::NONE)?;
-    harness.render()?;
     harness.send_key(KeyCode::Char('d'), KeyModifiers::NONE)?;
-    harness.render()?;
     harness.wait_until(|h| h.editor().editor_mode() == Some("vi-operator-pending".to_string()))?;
     harness.send_key(KeyCode::Char('d'), KeyModifiers::NONE)?;
-    harness.render()?;
     harness.wait_until(|h| h.editor().editor_mode() == Some("vi-normal".to_string()))?;
 
     harness.send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)?;
-    harness.render()?;
     harness.wait_until(|_| fs::read_to_string(&test_file).unwrap_or_default() == AFTER_DD_TEXT)?;
     harness.wait_until(|_| {
         fs::read_to_string(&log_file)

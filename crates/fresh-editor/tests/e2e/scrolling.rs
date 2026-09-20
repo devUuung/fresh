@@ -51,7 +51,6 @@ fn test_edits_persist_through_scrolling() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     assert_eq!(harness.cursor_position(), 0);
 
     // Make an edit at the beginning: change "Line 0" to "EDITED Line 0"
@@ -63,7 +62,6 @@ fn test_edits_persist_through_scrolling() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify we're at the end
     let pos_at_end = harness.cursor_position();
@@ -96,7 +94,6 @@ fn test_edits_persist_through_scrolling() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // The edit should still be visible on screen and in buffer
     harness.assert_screen_contains("EDITED Line 0");
@@ -122,7 +119,6 @@ fn test_edits_persist_through_scrolling() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // End marker should still be visible
     harness.assert_screen_contains("END MARKER");
@@ -380,7 +376,6 @@ fn test_cursor_wrap_on_long_line_navigation() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Navigate character-by-character to the end of the first line
     // This simulates a user holding down the right arrow key
@@ -426,7 +421,6 @@ fn test_cursor_wrap_on_long_line_navigation() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let pos_after_wrap = harness.cursor_position();
     println!("Cursor position after wrapping: {}", pos_after_wrap);
@@ -448,7 +442,6 @@ fn test_cursor_wrap_on_long_line_navigation() {
 
     // Now test the reverse: press left to wrap back to the previous line
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let pos_after_left_wrap = harness.cursor_position();
     println!("Cursor position after left wrap: {}", pos_after_left_wrap);
@@ -519,7 +512,6 @@ fn test_cursor_disappears_beyond_long_line_end() {
         harness
             .send_key(KeyCode::Right, KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
 
         let buffer_pos = harness.cursor_position();
         let screen_pos = harness.screen_cursor_position();
@@ -870,7 +862,6 @@ fn test_viewport_31_rows() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Quick Open should be visible (shows ">command" in hints)
     harness.assert_screen_contains(">command");
@@ -885,7 +876,6 @@ fn test_viewport_31_rows() {
 
     // Close the command palette
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // After closing palette, viewport should be restored to full height
     let editor = harness.editor();
@@ -1403,7 +1393,6 @@ fn test_scrollbar_consistency_with_file_size(num_lines: usize) {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Track scrollbar sizes throughout the scrolling
     let mut scrollbar_sizes = Vec::new();
@@ -1435,7 +1424,6 @@ fn test_scrollbar_consistency_with_file_size(num_lines: usize) {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
 
         let after_line = harness.top_line_number();
         let after_cursor = harness.cursor_position();
@@ -1467,7 +1455,6 @@ fn test_scrollbar_consistency_with_file_size(num_lines: usize) {
         let before_cursor = harness.cursor_position();
 
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let after_line = harness.top_line_number();
         let after_cursor = harness.cursor_position();
@@ -1600,7 +1587,6 @@ fn test_scrollbar_invariants_with_file_size(num_lines: usize) {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // INVARIANT 1: At first line, handle top should be at scrollbar top (content_first_row, after menu bar and tab bar)
     let (start_row, initial_size, _) =
@@ -1624,7 +1610,6 @@ fn test_scrollbar_invariants_with_file_size(num_lines: usize) {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
 
         let after_line = harness.top_line_number();
         let after_cursor = harness.cursor_position();
@@ -1653,7 +1638,6 @@ fn test_scrollbar_invariants_with_file_size(num_lines: usize) {
         let before_cursor = harness.cursor_position();
 
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let after_line = harness.top_line_number();
         let after_cursor = harness.cursor_position();
@@ -1706,7 +1690,6 @@ fn test_scrollbar_invariants_with_file_size(num_lines: usize) {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify INVARIANT 1 again
     let (start_row_final, size_final, _) =
@@ -1787,7 +1770,6 @@ fn test_last_line_never_above_bottom() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify cursor is at the end of the file
     let buffer_content = harness.get_buffer_content().unwrap();
@@ -1852,7 +1834,6 @@ fn test_last_line_never_above_bottom() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let top_byte_after = harness.editor().active_viewport().top_byte();
 
     assert_eq!(
@@ -1864,7 +1845,6 @@ fn test_last_line_never_above_bottom() {
     // Try Down arrow - should not move viewport
     let top_byte_before = harness.editor().active_viewport().top_byte();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let top_byte_after = harness.editor().active_viewport().top_byte();
 
     assert_eq!(
@@ -1893,7 +1873,6 @@ fn test_last_line_never_above_bottom() {
     small_harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    small_harness.render().unwrap();
 
     // When buffer is smaller than viewport, top_byte should be 0
     let viewport = small_harness.editor().active_viewport();
@@ -2131,7 +2110,6 @@ fn test_cursor_visibility_at_line_end_no_wrap() {
 
     // Move to the beginning of the line
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     assert_eq!(harness.cursor_position(), 0, "Should be at position 0");
 
@@ -2150,7 +2128,6 @@ fn test_cursor_visibility_at_line_end_no_wrap() {
         harness
             .send_key(KeyCode::Right, KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
 
         let buffer_pos = harness.cursor_position();
         let screen_pos = harness.screen_cursor_position();
@@ -2406,7 +2383,6 @@ fn test_cursor_never_on_status_bar_when_scrolling() {
         harness
             .send_key(KeyCode::PageDown, KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
 
         let (cursor_x, cursor_y) = harness.screen_cursor_position();
 
@@ -2435,11 +2411,9 @@ fn test_cursor_never_on_status_bar_when_scrolling() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let (cursor_x, cursor_y) = harness.screen_cursor_position();
     assert!(
@@ -2457,7 +2431,6 @@ fn test_cursor_never_on_status_bar_when_scrolling() {
     println!("\nTest 3: Navigate down line by line from near end");
     for _ in 0..10 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let (cursor_x, cursor_y) = harness.screen_cursor_position();
         assert!(
@@ -2517,7 +2490,6 @@ fn test_enter_resets_horizontal_scroll() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Check the state after Enter
     let cursor_pos_after = harness.cursor_position();
@@ -2579,7 +2551,6 @@ fn test_vertical_scroll_margin_down() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Read viewport height AFTER render so it reflects actual content area
     let viewport_height = harness.viewport_height();
@@ -2645,7 +2616,6 @@ fn test_vertical_scroll_margin_up() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let viewport_height = harness.viewport_height();
 
@@ -2811,7 +2781,6 @@ fn test_page_down_changes_view_until_bottom() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         content_area_snapshot(&harness).contains(first_marker),
@@ -2891,7 +2860,6 @@ fn test_page_up_changes_view_until_top() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         content_area_snapshot(&harness).contains(&last_marker),

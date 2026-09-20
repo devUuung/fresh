@@ -162,7 +162,6 @@ fn test_quit_unnamed_only_skips_prompt() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // No "unsaved changes" prompt should appear; editor should quit
     harness.assert_screen_not_contains("unsaved changes");
@@ -201,7 +200,6 @@ fn test_persist_disabled_shows_quit_prompt() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should see the discard prompt on screen
     harness.assert_screen_contains("unsaved changes");
@@ -248,7 +246,6 @@ fn test_quit_mixed_modified_still_prompts() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should see the discard prompt
     harness.assert_screen_contains("unsaved changes");
@@ -437,7 +434,6 @@ fn test_hot_exit_quit_shows_recoverable_option() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_screen_contains("unsaved changes");
     harness.assert_screen_contains("recoverable");
@@ -453,7 +449,6 @@ fn test_hot_exit_quit_shows_recoverable_option() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.should_quit(),
@@ -495,14 +490,12 @@ fn test_quit_save_and_quit() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     assert!(!harness.should_quit());
 
     // Press 's' then Enter to save and quit
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.should_quit(),
@@ -592,7 +585,6 @@ fn test_auto_save_skips_quit_prompt() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.should_quit(),

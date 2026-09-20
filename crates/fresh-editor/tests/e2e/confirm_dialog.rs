@@ -49,7 +49,6 @@ fn quit(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// The core of the report: the question is a card in the middle of the screen
@@ -154,7 +153,6 @@ fn arrows_move_the_armed_button() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         armed(&harness).contains("[ Discard and Quit ]"),
         "Right must arm the next button; row was {:?}",
@@ -162,7 +160,6 @@ fn arrows_move_the_armed_button() {
     );
 
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert!(
         armed(&harness).contains("[ Save and Quit ]"),
         "Left must arm the previous one; row was {:?}",
@@ -171,7 +168,6 @@ fn arrows_move_the_armed_button() {
 
     // Wrapping: one Left from the first lands on the last.
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert!(
         armed(&harness).contains("[ Cancel ]"),
         "the selection wraps; row was {:?}",
@@ -188,7 +184,6 @@ fn escape_cancels_and_leaves_the_editor_running() {
     harness.assert_screen_contains("Unsaved Changes");
 
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     assert!(!harness.should_quit(), "Esc must not exit");
     let screen = harness.screen_to_string();
@@ -209,14 +204,12 @@ fn enter_takes_the_armed_outcome() {
     quit(&mut harness);
 
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let buttons = row_of(&harness, "Cancel").expect("the button row is on screen");
     assert!(harness.screen_row_text(buttons).contains("[ Cancel ]"));
 
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(!harness.should_quit(), "Enter on Cancel must not exit");
     assert!(!harness.screen_to_string().contains("Unsaved Changes"));
 }
@@ -233,7 +226,6 @@ fn the_letter_a_button_marks_answers_it() {
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.should_quit(),
@@ -278,7 +270,6 @@ fn the_buffer_behind_the_dialog_does_not_take_keys() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert_eq!(
         harness.get_buffer_content(),
@@ -349,7 +340,6 @@ fn cancel_never_discards_even_where_the_locale_letters_collide() {
 
     // Esc resolves to the dialog's retreat, the same one the button sends.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     assert!(!harness.should_quit(), "cancelling must not exit");
     assert!(
@@ -394,7 +384,6 @@ fn escape_dismisses_a_dialog_whose_every_button_does_something() {
     harness.assert_screen_contains("Go to Byte Offset");
 
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -428,7 +417,6 @@ fn the_quit_confirmation_answers_to_the_letter_it_shows() {
     harness
         .send_key(KeyCode::Char('y'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         !harness.should_quit(),
         "an inherited letter that no button shows must not answer"
@@ -438,7 +426,6 @@ fn the_quit_confirmation_answers_to_the_letter_it_shows() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         harness.should_quit(),
         "the Quit button's own letter answers"
@@ -469,7 +456,6 @@ fn the_quit_confirmation_opens_on_cancel_and_answers_to_it() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(!harness.should_quit(), "Cancel answers to its own `C`");
 }
 
@@ -498,7 +484,6 @@ fn a_destructive_button_is_never_the_one_enter_would_take() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("File Changed on Disk");
 
     let row = (0..HEIGHT)
@@ -514,7 +499,6 @@ fn a_destructive_button_is_never_the_one_enter_would_take() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert_eq!(
         std::fs::read_to_string(&file).unwrap(),
         "changed by someone else\n",
@@ -580,7 +564,6 @@ fn cancel_is_the_same_letter_in_every_dialog() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         dir.join("victim.txt").exists(),
         "`c` must be Cancel here, not the Delete button"
@@ -598,7 +581,6 @@ fn cancel_is_the_same_letter_in_every_dialog() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         !dir.join("newdir").exists(),
         "`c` must be Cancel here too, not Create Folder"
@@ -647,7 +629,6 @@ fn hovering_a_button_lights_it_without_arming_it() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert_eq!(
         std::fs::read_to_string(&file).unwrap(),
         "EDITEDoriginal\n",

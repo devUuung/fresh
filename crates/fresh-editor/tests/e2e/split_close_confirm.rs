@@ -11,12 +11,10 @@ fn split_vertical(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Number of split leaves in the active window.
@@ -90,7 +88,6 @@ fn confirming_close_split_closes_the_pane() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.editor().active_window().close_split_menu.is_none(),
@@ -112,7 +109,6 @@ fn cancelling_close_split_keeps_both_panes() {
 
     // Esc dismisses the confirmation without closing anything.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.editor().active_window().close_split_menu.is_none(),

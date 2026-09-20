@@ -37,14 +37,12 @@ fn test_rust_auto_indent_after_brace() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("fn main() {");
 
     // Press Enter - should auto-indent
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have newline + 4 spaces indent
     let content = harness.get_buffer_content().unwrap();
@@ -70,14 +68,12 @@ fn test_python_auto_indent_after_colon() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("def foo():");
 
     // Press Enter - should auto-indent
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have newline + 4 spaces indent
     let content = harness.get_buffer_content().unwrap();
@@ -103,14 +99,12 @@ fn test_javascript_auto_indent_after_brace() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("function test() {");
 
     // Press Enter - should auto-indent
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have newline + 4 spaces indent
     let content = harness.get_buffer_content().unwrap();
@@ -142,7 +136,6 @@ fn test_rust_nested_indent() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have double indent (8 spaces)
     let content = harness.get_buffer_content().unwrap();
@@ -168,7 +161,6 @@ fn test_fallback_copies_previous_indent() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should copy the 4-space indent from previous line
     let content = harness.get_buffer_content().unwrap();
@@ -257,7 +249,6 @@ fn test_auto_indent_with_multi_cursor() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Both lines should be indented
     let content = harness.get_buffer_content().unwrap();
@@ -292,7 +283,6 @@ fn test_auto_indent_disabled_by_config() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have newline but NO indent
     let content = harness.get_buffer_content().unwrap();
@@ -368,7 +358,6 @@ fn test_cpp_class_indent() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have indent
     let content = harness.get_buffer_content().unwrap();
@@ -394,7 +383,6 @@ fn test_go_function_indent() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have tab indent (Go uses tabs)
     let content = harness.get_buffer_content().unwrap();
@@ -420,7 +408,6 @@ fn test_json_object_indent() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have indent
     let content = harness.get_buffer_content().unwrap();
@@ -448,7 +435,6 @@ fn test_indent_after_typing_on_same_line() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should still indent correctly
     let content = harness.get_buffer_content().unwrap();
@@ -487,7 +473,6 @@ fn test_indent_with_selection_deletes_first() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     assert!(!content.contains("old text"), "Selection should be deleted");
@@ -513,14 +498,12 @@ fn test_no_indent_after_close_brace() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Now cursor is after the closing brace
     // Pressing Enter should NOT indent (should be 0 spaces)
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
 
@@ -566,7 +549,6 @@ fn test_auto_dedent_on_close_brace() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have 4 spaces of indent
     let content = harness.get_buffer_content().unwrap();
@@ -620,7 +602,6 @@ fn test_auto_dedent_nested_blocks() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     println!("Content before typing closing brace:\n{}", content);
@@ -671,7 +652,6 @@ fn test_auto_dedent_with_content_before() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have 4 spaces of indent
     let content = harness.get_buffer_content().unwrap();
@@ -687,7 +667,6 @@ fn test_auto_dedent_with_content_before() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should still have 4 spaces on new line
     let content = harness.get_buffer_content().unwrap();
@@ -857,7 +836,6 @@ fn test_indent_after_empty_line_in_function_body() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
 
@@ -938,13 +916,11 @@ fn test_bracket_expansion_c_function() {
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Enter - should expand brackets
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1001,13 +977,11 @@ fn test_bracket_expansion_rust_function() {
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Enter
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1049,7 +1023,6 @@ fn test_bracket_expansion_javascript_function() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1088,7 +1061,6 @@ fn test_bracket_expansion_typescript_interface() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1121,7 +1093,6 @@ fn test_bracket_expansion_go_function() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1161,7 +1132,6 @@ fn test_bracket_expansion_square_brackets_rust() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1195,7 +1165,6 @@ fn test_bracket_expansion_json_object() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1229,7 +1198,6 @@ fn test_bracket_expansion_json_array() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1265,7 +1233,6 @@ fn test_bracket_expansion_nested_braces() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1330,7 +1297,6 @@ fn test_bracket_expansion_with_trailing_comment() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1369,7 +1335,6 @@ fn test_bracket_expansion_with_whitespace_inside() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1403,7 +1368,6 @@ fn test_bracket_expansion_parentheses() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1440,7 +1404,6 @@ fn test_bracket_expansion_mixed_brackets() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
 
@@ -1475,7 +1438,6 @@ fn test_bracket_expansion_deeply_nested() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1508,7 +1470,6 @@ fn test_bracket_expansion_cpp_class() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1541,7 +1502,6 @@ fn test_bracket_expansion_with_assignment() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1579,7 +1539,6 @@ fn test_no_bracket_expansion_with_content_between() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1619,7 +1578,6 @@ fn test_bracket_expansion_marks_file_modified() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify file is now modified
     assert!(
@@ -1651,7 +1609,6 @@ fn test_bracket_expansion_undo() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify expansion happened
     let expanded_content = harness.get_buffer_content().unwrap();
@@ -1664,7 +1621,6 @@ fn test_bracket_expansion_undo() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should be back to original
     let after_undo = harness.get_buffer_content().unwrap();
@@ -1695,7 +1651,6 @@ fn test_bracket_expansion_rust_struct() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1732,7 +1687,6 @@ fn test_bracket_expansion_jsx_component() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -1769,7 +1723,6 @@ fn test_python_nested_indent_if_inside_def() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // After pressing Enter after "def foo():", should have 4 spaces indent
     let content = harness.get_buffer_content().unwrap();
@@ -1784,7 +1737,6 @@ fn test_python_nested_indent_if_inside_def() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // After pressing Enter after "    if True:", should have 8 spaces indent (2 levels)
     let content = harness.get_buffer_content().unwrap();
@@ -1811,7 +1763,6 @@ fn test_python_nested_indent_three_levels() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify level 1 indent (4 spaces)
     let content = harness.get_buffer_content().unwrap();
@@ -1829,7 +1780,6 @@ fn test_python_nested_indent_three_levels() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify level 2 indent (8 spaces)
     let content = harness.get_buffer_content().unwrap();
@@ -1847,7 +1797,6 @@ fn test_python_nested_indent_three_levels() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify level 3 indent (12 spaces)
     let content = harness.get_buffer_content().unwrap();
@@ -1882,13 +1831,11 @@ fn test_python_nested_indent_from_file() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Press Enter after "        for x in range(10):"
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have 12 spaces indent (3 levels deep)
     let content = harness.get_buffer_content().unwrap();
@@ -1925,14 +1872,12 @@ fn test_python_nested_indent_class_def_while() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Level 2: def method(self):
     harness.type_text("def method(self):").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify level 2 indent (8 spaces)
     let content = harness.get_buffer_content().unwrap();
@@ -1950,7 +1895,6 @@ fn test_python_nested_indent_class_def_while() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify level 3 indent (12 spaces)
     let content = harness.get_buffer_content().unwrap();
@@ -1983,7 +1927,6 @@ fn test_go_auto_indent_uses_tabs_not_spaces() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -2028,7 +1971,6 @@ fn test_python_auto_indent_uses_spaces_not_tabs() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -2076,7 +2018,6 @@ fn test_go_nested_auto_indent_uses_only_tabs() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let content = harness.get_buffer_content().unwrap();
     let lines: Vec<&str> = content.lines().collect();
@@ -2126,7 +2067,6 @@ fn test_dart_auto_dedent_closing_brace() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type closing brace - should dedent to 2 spaces (matching `for` keyword indent)
     harness.type_text("}").unwrap();
@@ -2169,7 +2109,6 @@ fn test_dart_auto_dedent_closing_brace_top_level() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type closing brace - should dedent to 0 (matching `void main()` indent)
     harness.type_text("}").unwrap();
@@ -2239,7 +2178,6 @@ fn test_config_increase_indent_pattern_applies() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("foo OPEN");
 
     // Enter then type — the new line should be one level (4 spaces) deeper.
@@ -2274,7 +2212,6 @@ fn test_config_indent_next_line_pattern_applies() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("HDR thing");
 
     harness

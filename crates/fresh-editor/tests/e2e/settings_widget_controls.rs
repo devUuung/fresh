@@ -24,7 +24,6 @@ fn focus_env_detectors(harness: &mut EditorTestHarness) {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     assert!(
         harness.screen_to_string().contains("Detectors:"),
@@ -33,7 +32,6 @@ fn focus_env_detectors(harness: &mut EditorTestHarness) {
     );
     // Move focus from the category sidebar into the content pane.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 }
 
 /// The `>` focus indicator sits before whichever detector row is
@@ -80,7 +78,6 @@ fn object_array_list_navigates_entries() {
     let mut reached = None;
     for _ in 0..6 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         if focused_detector(&harness).as_deref() == Some("direnv") {
             reached = Some("direnv");
             break;
@@ -96,7 +93,6 @@ fn object_array_list_navigates_entries() {
     // Up returns toward the first entry.
     for _ in 0..6 {
         harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         if focused_detector(&harness).as_deref() == Some(".venv") {
             break;
         }
@@ -138,7 +134,6 @@ fn object_array_add_new_row_highlights_when_focused() {
     let mut focused_add = false;
     for _ in 0..12 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         // The add row is focused once no detector name carries the `>`.
         if focused_detector(&harness).is_none()
             && harness.screen_to_string().contains("[+] Add new")
@@ -189,7 +184,6 @@ fn narrow_terminal_keeps_toggle_chip_visible() {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     let screen = harness.screen_to_string();
     let row = screen
@@ -230,7 +224,6 @@ fn language_entry_text_field_aligns_with_toggles() {
     harness.render().unwrap();
     harness.open_settings().unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     // Walk to the language map row (its `[Enter to edit]` affordance) and
     // open the entry dialog.
     for _ in 0..40 {
@@ -238,12 +231,10 @@ fn language_entry_text_field_aligns_with_toggles() {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         harness.screen_to_string().contains("Grammar"),
         "language entry dialog should show the Grammar field; screen:\n{}",

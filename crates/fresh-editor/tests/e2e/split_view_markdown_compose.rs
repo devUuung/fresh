@@ -69,7 +69,6 @@ fn create_vertical_split(harness: &mut EditorTestHarness) {
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
     harness.render().unwrap();
-    harness.render().unwrap();
 }
 
 /// Helper: enable compose mode via command palette

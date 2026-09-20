@@ -72,12 +72,10 @@ fn test_status_bar_shows_custom_branch_token() {
     // Navigate: General -> Clipboard -> Editor (2 Downs)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     // Right to expand Editor section
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     // Navigate down to Status Bar section (12 total from Editor expanded)
     for _ in 0..12 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
@@ -87,7 +85,6 @@ fn test_status_bar_shows_custom_branch_token() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     // Look for the custom token "Git: branch" in the settings body
     let screen = harness.screen_to_string();
     assert!(

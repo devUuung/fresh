@@ -85,7 +85,6 @@ fn quit_from_clean_workspace_prompts_for_dirty_background_workspace() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         !harness.should_quit(),
@@ -116,7 +115,6 @@ fn quit_prompt_counts_dirty_buffers_across_workspaces() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_screen_contains("2 buffers have unsaved changes");
 }
@@ -170,11 +168,9 @@ fn save_and_quit_writes_background_workspace_buffers_to_disk() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.should_quit(),
@@ -205,11 +201,9 @@ fn discard_and_quit_drops_background_workspace_recovery() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(harness.should_quit(), "'d' must quit");
     harness.shutdown(true).unwrap();
@@ -249,7 +243,6 @@ fn quit_still_exits_immediately_when_no_workspace_is_dirty() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.should_quit(),
@@ -359,7 +352,6 @@ fn quit_prompt_names_the_workspaces_holding_unsaved_work() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_screen_contains("3 buffers have unsaved changes");
     // The workspace holding more than one is qualified with its count; the
@@ -394,7 +386,6 @@ fn quit_prompt_stays_plain_when_all_unsaved_work_is_in_view() {
     harness
         .send_key(KeyCode::Char('q'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_screen_contains("1 buffer has unsaved changes.");
     let screen = harness.screen_to_string();

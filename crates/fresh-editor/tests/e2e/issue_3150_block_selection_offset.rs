@@ -32,7 +32,6 @@ fn harness() -> EditorTestHarness {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness
 }
 
@@ -71,7 +70,6 @@ fn copy(harness: &mut EditorTestHarness) -> String {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.editor_mut().clipboard_content_for_test()
 }
 

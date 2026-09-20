@@ -74,7 +74,6 @@ fn test_code_action_number_key_selects_and_applies() -> anyhow::Result<()> {
 
     // Position cursor on "let x = 5;" (line 2)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
-    harness.render()?;
 
     // Trigger code actions via the command palette. We avoid Alt+. because
     // the macOS CI terminal was not delivering the Alt modifier through
@@ -87,7 +86,6 @@ fn test_code_action_number_key_selects_and_applies() -> anyhow::Result<()> {
     harness.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)?;
     harness.type_text("Code Actions")?;
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
-    harness.render()?;
 
     // Wait for code action popup
     harness.wait_for_screen_contains("Extract function")?;
@@ -98,7 +96,6 @@ fn test_code_action_number_key_selects_and_applies() -> anyhow::Result<()> {
 
     // Press '3' to select "Add missing import" which has a real workspace edit
     harness.send_key(KeyCode::Char('3'), KeyModifiers::NONE)?;
-    harness.render()?;
 
     // The popup should be dismissed
     harness.assert_screen_not_contains("Code Actions");
@@ -170,7 +167,6 @@ fn test_code_action_arrow_enter_applies() -> anyhow::Result<()> {
 
     // Position cursor
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
-    harness.render()?;
 
     // Trigger code actions via the command palette rather than Alt+. — see
     // sibling test for the rationale (Alt modifier decoding is unreliable
@@ -178,18 +174,15 @@ fn test_code_action_arrow_enter_applies() -> anyhow::Result<()> {
     harness.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)?;
     harness.type_text("Code Actions")?;
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
-    harness.render()?;
 
     harness.wait_for_screen_contains("Extract function")?;
 
     // Navigate down twice to "Add missing import"
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
-    harness.render()?;
 
     // Press Enter to confirm
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
-    harness.render()?;
 
     // Popup should be dismissed and edit applied
     harness.assert_screen_not_contains("Code Actions");

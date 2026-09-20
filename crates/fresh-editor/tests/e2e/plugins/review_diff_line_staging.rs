@@ -187,7 +187,6 @@ fn test_review_visual_stage_single_added_line() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::NONE)
         .unwrap();
@@ -235,7 +234,6 @@ fn test_review_visual_stage_modified_line_pair() {
     harness
         .send_key(KeyCode::Char('j'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::NONE)
         .unwrap();
@@ -268,7 +266,6 @@ fn test_review_visual_discard_single_added_line() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
@@ -306,7 +303,6 @@ fn test_review_visual_discard_status_is_localized() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
@@ -384,7 +380,6 @@ fn test_review_visual_stage_only_selected_line_of_hunk() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::NONE)
         .unwrap();
@@ -454,7 +449,6 @@ fn test_review_visual_stage_line_in_second_file() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::NONE)
         .unwrap();
@@ -501,7 +495,6 @@ fn test_review_visual_unstage_single_added_line() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('u'), KeyModifiers::NONE)
         .unwrap();

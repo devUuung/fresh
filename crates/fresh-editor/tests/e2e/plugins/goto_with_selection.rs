@@ -85,19 +85,16 @@ fn verify_selection_contains_only(harness: &mut EditorTestHarness, expected_line
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Select all (Ctrl+A)
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Paste (Ctrl+V) - replaces all with copied selection
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Now screen should show ONLY the pasted content
     let screen = harness.screen_to_string();

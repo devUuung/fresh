@@ -24,12 +24,10 @@ fn split_vertical(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Helper: Cycle to the next pane via command palette
@@ -37,12 +35,10 @@ fn next_pane(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("next pane").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Helper: Cycle to the previous pane via command palette
@@ -50,12 +46,10 @@ fn prev_pane(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("previous pane").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Test that NextPane cycles through tabs within the same split
@@ -70,12 +64,10 @@ fn test_next_pane_cycles_tabs_within_split_first() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("new file").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("beta content").unwrap();
     // At this point we're on tab 1 ("beta content")
 
@@ -323,24 +315,20 @@ fn test_prev_pane_multiple_tabs_in_split() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("new file").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("second tab content").unwrap();
 
     // Open third tab
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("new file").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("third tab content").unwrap();
     // At this point we're on tab 2 ("third tab content")
 

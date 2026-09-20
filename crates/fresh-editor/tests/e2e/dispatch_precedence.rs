@@ -170,7 +170,6 @@ fn workspace_trust_keys_beat_open_prompt() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.editor_mut().maybe_prompt_workspace_trust(true);
     harness.render().unwrap();
     harness
@@ -183,7 +182,6 @@ fn workspace_trust_keys_beat_open_prompt() {
     harness
         .send_key(KeyCode::Char('t'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(

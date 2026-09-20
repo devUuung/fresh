@@ -77,7 +77,6 @@ fn quickfix_enter_opens_match_location() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Live Grep").unwrap();
     harness
         .wait_until(|h| h.screen_to_string().contains("Live Grep"))
@@ -85,7 +84,6 @@ fn quickfix_enter_opens_match_location() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text(unique).unwrap();
     harness
         .wait_until(|h| h.screen_to_string().contains("target.rs"))

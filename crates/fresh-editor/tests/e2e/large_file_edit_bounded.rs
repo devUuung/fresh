@@ -381,7 +381,6 @@ fn arrows_move_between_lines_that_are_merely_long() {
 
         // Down onto the next line, then back up onto the first.
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         let down = status_bar_byte(&harness.screen_to_string());
         assert!(
             down > start,
@@ -390,7 +389,6 @@ fn arrows_move_between_lines_that_are_merely_long() {
         );
 
         harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         let up = status_bar_byte(&harness.screen_to_string());
         assert_eq!(
             up, start,
@@ -515,7 +513,6 @@ fn end_reaches_the_end_of_a_long_line_and_home_comes_back() {
     assert_eq!(harness.cursor_position(), 0, "the file opens at its start");
 
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let screen = harness.screen_to_string();
 
     assert_eq!(
@@ -530,7 +527,6 @@ fn end_reaches_the_end_of_a_long_line_and_home_comes_back() {
     );
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let screen = harness.screen_to_string();
 
     assert_eq!(
@@ -552,7 +548,6 @@ fn stepping_left_from_the_end_of_a_long_line_moves_the_caret_not_the_view() {
 
     let mut harness = opened(&path, false);
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert_eq!(
         harness.cursor_position(),
         bytes,
@@ -577,7 +572,6 @@ fn stepping_left_from_the_end_of_a_long_line_moves_the_caret_not_the_view() {
     // it is scrolling.
     for step in 1..=10 {
         harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         assert_eq!(
             harness.cursor_position(),
             bytes - step,
@@ -617,15 +611,12 @@ fn an_edit_costs_the_same_at_either_end_of_a_long_line() {
 
     let at_start = bytes_read(&mut harness, |h| {
         h.send_key(KeyCode::Char('X'), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
     });
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert_eq!(
         harness.cursor_position(),
         file_bytes,
@@ -634,7 +625,6 @@ fn an_edit_costs_the_same_at_either_end_of_a_long_line() {
 
     let at_end = bytes_read(&mut harness, |h| {
         h.send_key(KeyCode::Char('X'), KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
     });
 
     eprintln!(

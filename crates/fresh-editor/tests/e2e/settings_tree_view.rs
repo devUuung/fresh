@@ -43,12 +43,10 @@ fn open_editor_expanded(harness: &mut EditorTestHarness) {
     // Navigate from default General → Clipboard → Editor (2 Downs).
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     // Right expands the focused expandable category (Editor has many sections).
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Bounding x range of the left-panel tree on a `width`-col terminal.
@@ -179,7 +177,6 @@ fn tree_keyboard_nav_scrolls_body_both_directions() {
     // continue from the clicked section without an extra focus hop.
     let next = &EDITOR_SECTIONS[4];
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert!(
         body_shows_section(&harness, next),
         "after tree Down, body should show next section '{}'. Screen:\n{}",
@@ -194,7 +191,6 @@ fn tree_keyboard_nav_scrolls_body_both_directions() {
 
     // Up on the tree → body should return to Display.
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert!(
         body_shows_section(&harness, middle),
         "after tree Up, body should return to '{}'. Screen:\n{}",
@@ -210,7 +206,6 @@ fn tree_keyboard_nav_scrolls_body_both_directions() {
     // One more Up → previous section (Diagnostics).
     let prev = &EDITOR_SECTIONS[2];
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert!(
         body_shows_section(&harness, prev),
         "after another tree Up, body should show '{}'. Screen:\n{}",
@@ -325,7 +320,6 @@ fn body_keyboard_scroll_updates_tree_highlight_both_directions() {
     // Section clicks keep focus in the tree; move to the body before
     // testing body keyboard scroll.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press PageDown several times in the body — content scrolls forward.
     for _ in 0..3 {
@@ -632,7 +626,6 @@ fn focus_categories(harness: &mut EditorTestHarness) {
         harness
             .send_key(KeyCode::BackTab, KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
     }
 }
 
@@ -650,7 +643,6 @@ fn right_key_never_moves_focus_to_settings() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let screen = harness.screen_to_string();
     assert!(
         screen.contains("│>"),
@@ -667,7 +659,6 @@ fn right_key_never_moves_focus_to_settings() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let screen = harness.screen_to_string();
     assert!(
         screen.contains("│>") && screen.contains("▼"),
@@ -679,7 +670,6 @@ fn right_key_never_moves_focus_to_settings() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let screen = harness.screen_to_string();
     assert!(
         screen.contains("│>"),
@@ -704,7 +694,6 @@ fn right_to_expand_does_not_jump_cursor_to_first_section() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Cursor must still be on the Editor row, not on Bracket Matchi.
     // Look for `>` immediately followed (after some spaces) by the
@@ -750,7 +739,6 @@ fn down_after_expand_walks_into_first_section() {
         .unwrap();
     // Step into the first section.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     let on_first_section = screen
@@ -789,7 +777,6 @@ fn down_then_up_walks_every_visible_tree_row() {
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert!(
         harness
             .screen_to_string()
@@ -802,7 +789,6 @@ fn down_then_up_walks_every_visible_tree_row() {
     // Up x2 → Bracket Matchi.
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert!(
         harness
             .screen_to_string()
@@ -814,7 +800,6 @@ fn down_then_up_walks_every_visible_tree_row() {
 
     // One more Up → Editor (the category row).
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert!(
         harness
             .screen_to_string()
@@ -829,7 +814,6 @@ fn down_then_up_walks_every_visible_tree_row() {
     // column for non-expandable categories is rendered as a plain
     // space, and the icon adds a variable-width glyph).
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let screen = harness.screen_to_string();
     let on_clipboard = screen.lines().any(|l| {
         if let Some(arrow_idx) = l.find('>') {
@@ -932,7 +916,6 @@ fn keyboard_up_after_body_scroll_starts_from_synced_section() {
     // step from the synced section (not from Completion).
     focus_categories(&mut harness);
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let after = highlighted_section_name(&harness, 120);
     let after_idx = after

@@ -922,11 +922,9 @@ line 5: unchanged
     // Go down to line 3 (press Down twice from line 1)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Go to beginning of line
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Insert a new line above (this should push line 3 down to line 4)
     harness.type_text("NEW LINE INSERTED\n").unwrap();
@@ -1244,7 +1242,6 @@ fn test_buffer_modified_newline_insert_only_marks_affected_lines() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     wait_for_indicator(&mut harness, "│");
 
     let screen = harness.screen_to_string();
@@ -1386,7 +1383,6 @@ fn test_buffer_modified_clears_after_paste_restores_content() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     wait_for_indicator(&mut harness, "│");
 
     let screen_after_cut = harness.screen_to_string();
@@ -1401,7 +1397,6 @@ fn test_buffer_modified_clears_after_paste_restores_content() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     wait_for_no_indicators(&mut harness, "│");
 
     let screen_after_paste = harness.screen_to_string();

@@ -62,7 +62,6 @@ fn goto_line(harness: &mut EditorTestHarness, line: usize) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Jump directly to line 405 (>10KB from `<style>` tag). Checkpoints must be
@@ -234,7 +233,6 @@ fn test_embedded_css_highlighting_after_delete() {
     harness
         .send_key(KeyCode::Backspace, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should not panic and highlighting should still work
     let colors_after = collect_highlight_colors(&harness, 2, 20);

@@ -427,7 +427,6 @@ proptest! {
 
         // Make no changes, just save
         harness.send_key(KeyCode::Char('s'), KeyModifiers::CONTROL).unwrap();
-        harness.render().unwrap();
 
         // Wait for save to complete using semantic waiting (not timeout)
         let _ = harness.wait_until(|h| !h.editor().active_state().buffer.is_modified());
@@ -463,7 +462,6 @@ proptest! {
 
         // Save
         harness.send_key(KeyCode::Char('s'), KeyModifiers::CONTROL).unwrap();
-        harness.render().unwrap();
 
         // Wait for save
         let _ = harness.wait_until(|h| !h.editor().active_state().buffer.is_modified());
@@ -582,7 +580,6 @@ proptest! {
 
         // Save
         harness.send_key(KeyCode::Char('s'), KeyModifiers::CONTROL).unwrap();
-        harness.render().unwrap();
 
         let _ = harness.wait_until(|h| !h.editor().active_state().buffer.is_modified());
 
@@ -610,7 +607,6 @@ proptest! {
 
         // Save without making any changes
         harness.send_key(KeyCode::Char('s'), KeyModifiers::CONTROL).unwrap();
-        harness.render().unwrap();
 
         // Wait for save to complete
         let _ = harness.wait_until(|h| !h.editor().active_state().buffer.is_modified());
@@ -649,7 +645,6 @@ proptest! {
 
         // Save
         harness.send_key(KeyCode::Char('s'), KeyModifiers::CONTROL).unwrap();
-        harness.render().unwrap();
         let _ = harness.wait_until(|h| !h.editor().active_state().buffer.is_modified());
 
         // Read saved file and decode it
@@ -759,7 +754,6 @@ fn test_utf8_bom_hidden_but_preserved() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .wait_until(|h| !h.editor().active_state().buffer.is_modified())
@@ -798,7 +792,6 @@ fn test_empty_file_defaults_to_utf8() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .wait_until(|h| !h.editor().active_state().buffer.is_modified())
@@ -960,7 +953,6 @@ fn test_clipboard_preserves_encoded_content() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Go to end and paste
     harness
@@ -969,7 +961,6 @@ fn test_clipboard_preserves_encoded_content() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have duplicated content correctly
     let buffer = harness.get_buffer_content().unwrap();
@@ -1010,7 +1001,6 @@ fn test_large_utf16_file_navigation() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should still show content
     harness.assert_screen_contains("test line");
@@ -1110,7 +1100,6 @@ fn test_utf16_encoding_indicator_click_and_change() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify encoding changed to UTF-8 in status bar
     harness.assert_screen_contains("UTF-8");
@@ -1122,7 +1111,6 @@ fn test_utf16_encoding_indicator_click_and_change() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Read the saved file and verify it's now UTF-8 (no BOM, plain text)
     let saved_content = std::fs::read(&file_path).unwrap();
@@ -1206,7 +1194,6 @@ fn test_utf8_to_utf16_encoding_change() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify encoding changed to UTF-16 LE in status bar
     let final_screen = harness.screen_to_string();
@@ -1222,7 +1209,6 @@ fn test_utf8_to_utf16_encoding_change() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Read the saved file and verify it's now UTF-16 LE
     let saved_content = std::fs::read(&file_path).unwrap();
@@ -1319,7 +1305,6 @@ fn test_windows1250_display_and_selector() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Windows-1250");
 }
 
@@ -1355,7 +1340,6 @@ fn test_windows1250_encoding_conversions() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     let _ = harness.wait_until(|h| !h.editor().active_state().buffer.is_modified());
 
     // Verify file is Windows-1250 encoded ('ż'=0xBF, 'ł'=0xB3)
@@ -1391,7 +1375,6 @@ fn test_windows1250_encoding_conversions() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     let _ = harness.wait_until(|h| !h.editor().active_state().buffer.is_modified());
 
     // Verify file is now valid UTF-8
@@ -1589,7 +1572,6 @@ fn test_windows1251_encoding_conversions() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     let _ = harness.wait_until(|h| !h.editor().active_state().buffer.is_modified());
 
     // Verify file is Windows-1251 encoded by decoding it back
@@ -1629,7 +1611,6 @@ fn test_windows1251_encoding_conversions() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     let _ = harness.wait_until(|h| !h.editor().active_state().buffer.is_modified());
 
     // Verify file is now valid UTF-8 and still contains the Russian text
@@ -1752,7 +1733,6 @@ fn test_all_encodings_load_and_save_as_utf8() {
         harness
             .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
         let _ = harness.wait_until(|h| !h.editor().active_state().buffer.is_modified());
 
         // Verify saved file is valid UTF-8 and contains expected content
@@ -1830,7 +1810,6 @@ fn test_large_file_gbk_encoding_confirmation_prompt() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type the file path in the file browser
     harness.type_text(file_path.to_str().unwrap()).unwrap();
@@ -1840,7 +1819,6 @@ fn test_large_file_gbk_encoding_confirmation_prompt() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Check that the confirmation prompt is shown
     let screen = harness.screen_to_string();
@@ -1854,7 +1832,6 @@ fn test_large_file_gbk_encoding_confirmation_prompt() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // After loading, the file content should be visible
     let screen_after = harness.screen_to_string();
@@ -1910,7 +1887,6 @@ fn test_large_file_gbk_encoding_cancel() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type the file path
     harness.type_text(file_path.to_str().unwrap()).unwrap();
@@ -1920,7 +1896,6 @@ fn test_large_file_gbk_encoding_cancel() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify prompt is shown
     let screen = harness.screen_to_string();
@@ -1935,7 +1910,6 @@ fn test_large_file_gbk_encoding_cancel() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // After cancelling, the file should NOT be loaded
     // The status message should indicate cancellation
@@ -1984,7 +1958,6 @@ fn test_large_file_gbk_encoding_change() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type the file path
     harness.type_text(file_path.to_str().unwrap()).unwrap();
@@ -1994,7 +1967,6 @@ fn test_large_file_gbk_encoding_change() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify prompt is shown
     let screen = harness.screen_to_string();
@@ -2008,7 +1980,6 @@ fn test_large_file_gbk_encoding_change() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The encoding selector should now be open
     let screen_after = harness.screen_to_string();
@@ -2064,7 +2035,6 @@ fn test_large_file_shift_jis_encoding_confirmation() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type the file path
     harness.type_text(file_path.to_str().unwrap()).unwrap();
@@ -2074,7 +2044,6 @@ fn test_large_file_shift_jis_encoding_confirmation() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Check that the confirmation prompt is shown
     let screen = harness.screen_to_string();
@@ -2088,7 +2057,6 @@ fn test_large_file_shift_jis_encoding_confirmation() {
     harness
         .send_key(KeyCode::Char('L'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // After loading, the file content should be visible (Japanese hiragana)
     let screen_after = harness.screen_to_string();
@@ -2139,13 +2107,11 @@ fn test_large_file_encoding_selector_non_sync_shows_prompt() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text(file_path.to_str().unwrap()).unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // First prompt for GBK
     let screen = harness.screen_to_string();
@@ -2159,11 +2125,9 @@ fn test_large_file_encoding_selector_non_sync_shows_prompt() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Type "Shift-JIS" (another non-resynchronizable encoding)
     // Clear the current input first
@@ -2179,7 +2143,6 @@ fn test_large_file_encoding_selector_non_sync_shows_prompt() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show confirmation prompt again for Shift-JIS
     let screen_after = harness.screen_to_string();
@@ -2228,13 +2191,11 @@ fn test_large_file_encoding_selector_sync_no_prompt() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text(file_path.to_str().unwrap()).unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // First prompt for GBK
     let screen = harness.screen_to_string();
@@ -2248,11 +2209,9 @@ fn test_large_file_encoding_selector_sync_no_prompt() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // UTF-8 should already be selected, just press Enter
     // (or clear and type UTF-8)
@@ -2268,7 +2227,6 @@ fn test_large_file_encoding_selector_sync_no_prompt() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should NOT show confirmation prompt - file should be loaded directly
     // (UTF-8 is resynchronizable, so no full load needed)
@@ -2320,7 +2278,6 @@ fn test_reload_with_encoding_command() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type "Reload with" to find the command
     harness.type_text("Reload with").unwrap();
@@ -2333,7 +2290,6 @@ fn test_reload_with_encoding_command() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The encoding selector prompt should open
     harness.assert_screen_contains("Reload with encoding:");
@@ -2350,7 +2306,6 @@ fn test_reload_with_encoding_command() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // After reload, encoding should show UTF-8 in status bar
     harness.assert_screen_contains("UTF-8");
@@ -2375,7 +2330,6 @@ fn test_reload_with_encoding_menu_item() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify the menu item is present
     harness.assert_screen_contains("Reload with Encoding...");
@@ -2407,14 +2361,12 @@ fn open_reload_with_encoding_prompt_at_ln4_col3(
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Reload with").unwrap();
     harness.render().unwrap();
     harness.assert_screen_contains("Reload with Encoding");
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Reload with encoding:");
 }
 
@@ -2482,7 +2434,6 @@ fn test_reload_with_encoding_click_does_not_confirm() {
     // Cancel the prompt so the status bar reverts to showing the buffer
     // cursor position, then confirm the click did not move it.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Ln 4, Col 3");
 
     // Re-open the prompt: keyboard Enter on the (now first) selected
@@ -2490,12 +2441,10 @@ fn test_reload_with_encoding_click_does_not_confirm() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Reload with").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let (col, row) = harness
         .find_text_on_screen("Latin-1")
         .expect("Latin-1 suggestion should be visible in the encoding list");
@@ -2503,7 +2452,6 @@ fn test_reload_with_encoding_click_does_not_confirm() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Reloaded with");
 }
 
@@ -2539,7 +2487,6 @@ fn test_reload_with_encoding_click_on_popup_border_keeps_cursor() {
     // Cancel the prompt to surface the buffer cursor in the status bar,
     // then verify the border-click did not move it.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Ln 4, Col 3");
 }
 

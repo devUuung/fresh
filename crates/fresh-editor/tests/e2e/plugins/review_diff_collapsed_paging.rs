@@ -56,7 +56,6 @@ fn repo_with_rewritten_files(lines: &[usize]) -> GitTestRepo {
 
 fn press(harness: &mut EditorTestHarness, code: KeyCode) {
     harness.send_key(code, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 }
 
 /// Paging towards a collapsed file has to walk *over* it, not through it.

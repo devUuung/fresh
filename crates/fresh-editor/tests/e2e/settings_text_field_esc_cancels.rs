@@ -38,7 +38,6 @@ fn focus_terminal_command(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         row_with(harness, "Command").contains('['),
         "precondition: the Command value cell should be visible; screen was:\n{}",
@@ -72,14 +71,12 @@ fn enter_commits_and_exits_text_field() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // A plain letter now that we're out of edit mode is not text input — if
     // Enter had trapped us in edit mode (the bug), this 'X' would append.
     harness
         .send_key(KeyCode::Char('X'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let row = row_with(&harness, "Command");
     assert!(
         row.contains("bashrc") && !row.contains("bashrcX") && !row.contains("bashrcx"),
@@ -110,7 +107,6 @@ fn esc_reverts_text_field_to_empty() {
     );
 
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert!(
         !row_with(&harness, "Command").contains("hello"),
         "Esc must revert the field to its empty pre-edit value; row: {:?}",
@@ -152,7 +148,6 @@ fn esc_reverts_text_field_to_prior_value() {
 
     // Esc reverts to 'bash' and drops the modified state.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let row = row_with(&harness, "Command");
     assert!(
         row.contains("bash") && !row.contains("zsh"),

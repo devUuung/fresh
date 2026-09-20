@@ -16,7 +16,6 @@ fn run_search(harness: &mut EditorTestHarness, query: &str) {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text(query).unwrap();
     harness.render().unwrap();
     harness
@@ -59,7 +58,6 @@ fn test_ctrl_d_after_search_uses_match_not_word() {
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let primary = harness.editor().active_cursors().primary().clone();
     let selection = primary
@@ -79,7 +77,6 @@ fn test_ctrl_d_after_search_uses_match_not_word() {
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let count = harness.editor().active_cursors().iter().count();
     assert_eq!(count, 2, "expected a second cursor after second Ctrl-D");

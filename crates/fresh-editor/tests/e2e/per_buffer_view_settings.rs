@@ -55,13 +55,11 @@ fn run_command(harness: &mut EditorTestHarness, name: &str) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text(name).unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Toggling line numbers for the current buffer via the command palette must
@@ -510,7 +508,6 @@ fn test_indentation_style_current_buffer_persists_across_restart() {
         harness.render().unwrap();
 
         harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         assert!(
             !harness.screen_to_string().contains('→'),

@@ -188,21 +188,17 @@ fn test_diff_cursor_empty_lines() {
     // Navigate to an empty line
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Try moving right on empty line - should stay at position 0
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Try End on empty line - should stay at position 0
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Try Home on empty line
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -238,25 +234,20 @@ fn test_diff_cursor_at_line_start() {
 
     // Go to line with content
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Ensure we're at start of line
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Moving left at start should not crash or move cursor
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Moving right should work
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(is_in_diff_view(&screen), "Should still be in diff view");
@@ -289,23 +280,19 @@ fn test_diff_cursor_at_line_end() {
 
     // Go to short line
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Go to end of line
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Moving right at end should not move cursor past end
     for _ in 0..5 {
         harness
             .send_key(KeyCode::Right, KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
     }
 
     // Moving left from end should work
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(is_in_diff_view(&screen), "Should still be in diff view");
@@ -339,7 +326,6 @@ fn test_diff_cursor_at_line_middle() {
     // Go to medium length line
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Move to middle of line
     for _ in 0..10 {
@@ -392,17 +378,14 @@ fn test_diff_cursor_at_buffer_start() {
     // Cursor should be at first row
     // Try moving up - should stay at first row
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Move down should work
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Ctrl+Home should go to start
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(is_in_diff_view(&screen), "Should still be in diff view");
@@ -434,7 +417,6 @@ fn test_diff_cursor_at_buffer_end() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Try moving down - should stay at last row
     for _ in 0..5 {
@@ -444,7 +426,6 @@ fn test_diff_cursor_at_buffer_end() {
 
     // Move up should work
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(is_in_diff_view(&screen), "Should still be in diff view");
@@ -508,14 +489,12 @@ fn test_diff_horizontal_scroll_long_line() {
 
     // Move to end of line
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen_at_end = harness.screen_to_string();
     println!("At end of line:\n{}", screen_at_end);
 
     // Move back to start
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen_at_home = harness.screen_to_string();
     println!("Back at home:\n{}", screen_at_home);
@@ -555,7 +534,6 @@ fn test_diff_vertical_scroll_long_file() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen_after_pagedown = harness.screen_to_string();
     println!("After PageDown:\n{}", screen_after_pagedown);
@@ -564,7 +542,6 @@ fn test_diff_vertical_scroll_long_file() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let screen_at_end = harness.screen_to_string();
     println!("At buffer end:\n{}", screen_at_end);
@@ -573,13 +550,11 @@ fn test_diff_vertical_scroll_long_file() {
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Go to start of buffer
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let screen_at_start = harness.screen_to_string();
     println!("Back at buffer start:\n{}", screen_at_start);
@@ -673,14 +648,12 @@ fn test_diff_word_movement_comprehensive() {
     // Go to medium length line
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Word right from start
     for _ in 0..4 {
         harness
             .send_key(KeyCode::Right, KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
     }
 
     // Word left back
@@ -688,7 +661,6 @@ fn test_diff_word_movement_comprehensive() {
         harness
             .send_key(KeyCode::Left, KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
     }
 
     // Go to end with Ctrl+Right repeatedly
@@ -703,7 +675,6 @@ fn test_diff_word_movement_comprehensive() {
     harness
         .send_key(KeyCode::Left, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Go to start with Ctrl+Left repeatedly
     for _ in 0..20 {
@@ -741,11 +712,9 @@ fn test_diff_pane_switching_with_tab() {
 
     // Move to a line with content
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Switch to NEW pane with Tab
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Move cursor in NEW pane
     harness
@@ -754,15 +723,12 @@ fn test_diff_pane_switching_with_tab() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Switch back to OLD pane
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Move cursor in OLD pane
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(is_in_diff_view(&screen), "Should still be in diff view");
@@ -985,7 +951,6 @@ fn test_diff_keyboard_scroll_to_cursor() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     // Cursor should be at a high line number (50+ due to trailing newlines in alignment)
@@ -1114,7 +1079,6 @@ fn test_diff_selection_comprehensive() {
     // Go to line with content
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Select right from start of line
     for _ in 0..5 {
@@ -1128,7 +1092,6 @@ fn test_diff_selection_comprehensive() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     // Extend selection left
     for _ in 0..3 {
@@ -1142,23 +1105,19 @@ fn test_diff_selection_comprehensive() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Select word right
     harness
         .send_key(KeyCode::Right, KeyModifiers::SHIFT | KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Select to end of line
     harness.send_key(KeyCode::End, KeyModifiers::SHIFT).unwrap();
-    harness.render().unwrap();
 
     // Select to start of line
     harness
         .send_key(KeyCode::Home, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(is_in_diff_view(&screen), "Should still be in diff view");
@@ -1192,25 +1151,21 @@ fn test_diff_combined_movement() {
         harness
             .send_key(KeyCode::Right, KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
     }
 
     // Move diagonally: up-left
     for _ in 0..3 {
         harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
         harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 
     // End then down
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Home then up
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(is_in_diff_view(&screen), "Should still be in diff view");
@@ -1242,23 +1197,19 @@ fn test_diff_no_scroll_needed() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // PageDown/Up should work even if no scroll needed
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(is_in_diff_view(&screen), "Should still be in diff view");
@@ -1298,66 +1249,50 @@ fn test_diff_home_end_all_line_types() {
 
     // Test 1: Empty line (first line might be empty in our test file)
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Test 2: Short line (line 2: "short")
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Home on short line
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // End on short line
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Home again to verify
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Test 3: Medium line
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Test 4: Very long line (requires horizontal scroll)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen_at_start = harness.screen_to_string();
     println!("Long line at start:\n{}", screen_at_start);
 
     // End on long line - should scroll horizontally
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen_at_end = harness.screen_to_string();
     println!("Long line at end:\n{}", screen_at_end);
 
     // Home on long line - should scroll back
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen_back_home = harness.screen_to_string();
     println!("Long line back at home:\n{}", screen_back_home);
 
     // Test 5: Empty line again
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(is_in_diff_view(&screen), "Should still be in diff view");
@@ -1399,7 +1334,6 @@ fn test_diff_cursor_always_visible() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     let screen = harness.screen_to_string();
     assert!(
         is_in_diff_view(&screen),
@@ -1410,7 +1344,6 @@ fn test_diff_cursor_always_visible() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Move right many times - cursor should remain visible (viewport scrolls)
     for _ in 0..30 {
@@ -1427,7 +1360,6 @@ fn test_diff_cursor_always_visible() {
 
     // Move left back to start - cursor should remain visible
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(is_in_diff_view(&screen), "Should still be in diff view");
@@ -1482,11 +1414,9 @@ fn test_diff_cursor_wrap_right_to_next_line() {
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Go to end of first content line
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Verify we're at line 1 (row 1 = source line 0 = "first" = Ln 1)
     let screen = harness.screen_to_string();
@@ -1500,7 +1430,6 @@ fn test_diff_cursor_wrap_right_to_next_line() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -1548,11 +1477,9 @@ fn test_diff_cursor_wrap_left_to_prev_line() {
         .unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Go to start of line (column 1)
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Verify we're at line 2 ("second" content, file line 2)
     // Note: After hunk header at row 0, line 1 is at row 1, line 2 is at row 2
@@ -1565,7 +1492,6 @@ fn test_diff_cursor_wrap_left_to_prev_line() {
 
     // Press Left - should wrap to end of line 1 (the "first" line)
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -1614,7 +1540,6 @@ fn test_diff_cursor_word_wrap_at_boundaries() {
         .unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Verify we're at line 1 (row 1 = source line 0 = Ln 1)
     let screen = harness.screen_to_string();
@@ -1628,7 +1553,6 @@ fn test_diff_cursor_word_wrap_at_boundaries() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -1639,13 +1563,11 @@ fn test_diff_cursor_word_wrap_at_boundaries() {
 
     // Go back to line 2 start
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Ctrl+Left at start of line should go to previous line (line 1)
     harness
         .send_key(KeyCode::Left, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -1717,7 +1639,6 @@ fn test_diff_horizontal_scroll_keeps_cursor_visible() {
 
     // First, move to start of line
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Verify we're still on line 4 after pressing Home
     let screen = harness.screen_to_string();
@@ -1776,7 +1697,6 @@ fn test_diff_horizontal_scroll_keeps_cursor_visible() {
     // Move to end of line - this goes to end of focused pane's line (OLD pane)
     // which is shorter than the NEW pane's line
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     // At end of OLD line (~216 chars), we should see content around that position
@@ -1790,7 +1710,6 @@ fn test_diff_horizontal_scroll_keeps_cursor_visible() {
 
     // Move back to start
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     // Back at start, should see "this" again
@@ -1840,7 +1759,6 @@ fn test_diff_move_without_shift_clears_selection() {
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Select some text with Shift+Right (select "fir" - 3 chars from "first")
     for _ in 0..3 {
@@ -1854,20 +1772,17 @@ fn test_diff_move_without_shift_clears_selection() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Now move without shift - this should clear the selection
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Clear clipboard and try to copy again - should copy nothing since selection is cleared
     harness.editor_mut().set_clipboard_for_test("".to_string());
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Close diff view with 'q' and wait until it's closed
     harness
@@ -1886,7 +1801,6 @@ fn test_diff_move_without_shift_clears_selection() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // The second copy should have copied nothing (selection was cleared)
     // So the paste should result in empty prompt
@@ -1942,7 +1856,6 @@ fn test_diff_copy_no_empty_lines() {
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Select multiple lines with Shift+Down
     harness
@@ -1951,13 +1864,11 @@ fn test_diff_copy_no_empty_lines() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     // Copy with Ctrl+C
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Close diff view with 'q' and wait until it's closed
     harness
@@ -1976,7 +1887,6 @@ fn test_diff_copy_no_empty_lines() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Check the prompt shows the pasted content
     // Quick Open starts with ">" prefix, so pasted content goes into ">pasted_content" format
@@ -2029,7 +1939,6 @@ fn test_diff_copy_preserves_selection() {
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Select 3 characters with Shift+Right (select "fir")
     for _ in 0..3 {
@@ -2043,19 +1952,16 @@ fn test_diff_copy_preserves_selection() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Extend selection with Shift+Right (now selecting "firs")
     harness
         .send_key(KeyCode::Right, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     // Copy again - should now have 4 characters if selection was preserved
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Close diff view with 'q' and wait until it's closed
     harness
@@ -2074,7 +1980,6 @@ fn test_diff_copy_preserves_selection() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have copied 4 characters: "firs" (first 4 chars of "first")
     // Quick Open starts with ">" prefix, so pasted content goes into ">pasted_content" format
@@ -2154,7 +2059,6 @@ fn test_diff_enter_new_pane_opens_working_file() {
 
     // Switch to the NEW (working) pane and land on the first line.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Open the file under the cursor.
     harness

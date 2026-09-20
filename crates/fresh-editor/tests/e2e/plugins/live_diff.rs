@@ -491,17 +491,13 @@ fn test_live_diff_does_not_skip_empty_lines_on_arrow_keys() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let pos0 = harness.cursor_position();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let pos1 = harness.cursor_position();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let pos2 = harness.cursor_position();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let pos3 = harness.cursor_position();
 
     // Buffer is "head\n\n\ntail\n":
@@ -776,7 +772,6 @@ fn test_live_diff_down_arrow_traverses_deletion_block() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     for _ in 0..4 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     }
@@ -802,7 +797,6 @@ fn test_live_diff_down_arrow_traverses_deletion_block() {
     // end-of-line on `before_05` (byte 49) or stays stuck at 40.
     let screen_before_down = harness.screen_to_string();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let pos_after = harness.cursor_position();
     assert_eq!(
         pos_after, 50,

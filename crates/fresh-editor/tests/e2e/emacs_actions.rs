@@ -44,13 +44,11 @@ fn test_transpose_chars_basic() {
 
     // Move cursor to position 2 (between 'b' and 'c')
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Execute transpose_chars (Ctrl+T)
     harness
         .send_key(KeyCode::Char('t'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // 'b' and 'c' should be swapped
     harness.assert_buffer_content("acb");
@@ -66,13 +64,11 @@ fn test_transpose_chars_at_beginning() {
 
     // Move to beginning
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Execute transpose_chars - should do nothing at position 0
     harness
         .send_key(KeyCode::Char('t'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Content should be unchanged
     harness.assert_buffer_content("abc");
@@ -91,7 +87,6 @@ fn test_transpose_chars_at_end() {
     harness
         .send_key(KeyCode::Char('t'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Content should be unchanged (can't transpose when cursor is at end)
     harness.assert_buffer_content("ab");
@@ -112,7 +107,6 @@ fn test_open_line_basic() {
     // Move cursor to middle of the word
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let _cursor_before = harness.cursor_position();
 
@@ -120,7 +114,6 @@ fn test_open_line_basic() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have a newline inserted at cursor position
     harness.assert_buffer_content("hel\nlo");
@@ -137,13 +130,11 @@ fn test_open_line_at_beginning() {
 
     harness.type_text("hello").unwrap();
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Execute open_line at beginning
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should insert newline at beginning
     harness.assert_buffer_content("\nhello");
@@ -183,7 +174,6 @@ fn test_recenter_basic() {
     harness
         .send_key(KeyCode::Char('l'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Get cursor line after recenter
     let cursor_line_after = harness
@@ -221,7 +211,6 @@ fn test_set_mark_basic() {
 
     harness.type_text("hello world").unwrap();
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Initially no selection
     let anchor_before = harness.editor().active_cursors().primary().anchor;
@@ -234,7 +223,6 @@ fn test_set_mark_basic() {
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should now have an anchor set
     let anchor_after = harness.editor().active_cursors().primary().anchor;
@@ -256,13 +244,11 @@ fn test_set_mark_then_regular_move_creates_selection() {
 
     harness.type_text("hello world").unwrap();
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Set mark at beginning
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Move forward 5 characters with regular movement (no shift)
     // In Emacs mark mode, this should extend selection
@@ -286,13 +272,11 @@ fn test_set_mark_then_shift_move_creates_selection() {
 
     harness.type_text("hello world").unwrap();
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Set mark at beginning
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Move forward 5 characters with Shift to extend selection
     for _ in 0..5 {
@@ -317,13 +301,11 @@ fn test_escape_cancels_mark_mode() {
 
     harness.type_text("hello world").unwrap();
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Set mark at beginning
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Move forward 5 characters
     for _ in 0..5 {
@@ -347,7 +329,6 @@ fn test_escape_cancels_mark_mode() {
 
     // Press Escape to cancel mark mode
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Verify mark mode is cancelled
     let cursor = harness.editor().active_cursors().primary();
@@ -365,13 +346,11 @@ fn test_ctrl_g_cancels_mark_mode() {
 
     harness.type_text("hello world").unwrap();
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Set mark at beginning
     harness
         .send_key(KeyCode::Char(' '), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Move forward 5 characters
     for _ in 0..5 {
@@ -389,7 +368,6 @@ fn test_ctrl_g_cancels_mark_mode() {
     harness
         .send_key(KeyCode::Char('g'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify mark mode is cancelled
     let cursor = harness.editor().active_cursors().primary();

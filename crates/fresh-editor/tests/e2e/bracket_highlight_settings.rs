@@ -66,7 +66,6 @@ fn settings_ui_toggle_disables_rainbow_brackets() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let screen = harness.screen_to_string();
     let toggled_off = screen
         .lines()
@@ -81,9 +80,7 @@ fn settings_ui_toggle_disables_rainbow_brackets() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     assert_eq!(
         distinct_bracket_colors(&harness),
@@ -124,7 +121,6 @@ fn matching_brackets_still_highlight_when_rainbow_is_off() {
         EditorTestHarness::create(80, 24, HarnessOptions::new().with_config(config)).unwrap();
     harness.type_text(BRACKETS).unwrap();
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let colors = bracket_colors(&harness);
     assert_eq!(
@@ -153,7 +149,6 @@ fn highlight_matching_brackets_config_false_disables_all_bracket_colors() {
         EditorTestHarness::create(80, 24, HarnessOptions::new().with_config(config)).unwrap();
     harness.type_text(BRACKETS).unwrap();
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     assert_eq!(
         distinct_bracket_colors(&harness),

@@ -94,7 +94,6 @@ fn shift_up_on_first_line_selects_to_buffer_start() {
     );
 
     harness.send_key(KeyCode::Up, KeyModifiers::SHIFT).unwrap();
-    harness.render().unwrap();
 
     assert_eq!(
         selected_offsets(&harness, LINE1),
@@ -142,7 +141,6 @@ fn shift_down_on_last_line_selects_to_buffer_end() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     assert_eq!(
         selected_offsets(&harness, LINE4),
@@ -178,7 +176,6 @@ fn shift_up_extends_existing_selection_to_buffer_start_then_stops() {
             .unwrap();
     }
     harness.send_key(KeyCode::Up, KeyModifiers::SHIFT).unwrap();
-    harness.render().unwrap();
     assert_eq!(
         selected_offsets(&harness, LINE1),
         (10..LINE1.len() as u16).collect::<Vec<u16>>(),
@@ -188,7 +185,6 @@ fn shift_up_extends_existing_selection_to_buffer_start_then_stops() {
 
     // Second Shift+Up: the head is on line 1, so it must run to the buffer start.
     harness.send_key(KeyCode::Up, KeyModifiers::SHIFT).unwrap();
-    harness.render().unwrap();
     assert_eq!(
         selected_offsets(&harness, LINE1),
         (0..LINE1.len() as u16).collect::<Vec<u16>>(),
@@ -205,7 +201,6 @@ fn shift_up_extends_existing_selection_to_buffer_start_then_stops() {
     // Third Shift+Up: the head is already at the buffer start, nothing may change.
     let before = harness.screen_to_string();
     harness.send_key(KeyCode::Up, KeyModifiers::SHIFT).unwrap();
-    harness.render().unwrap();
     assert_eq!(
         harness.screen_to_string(),
         before,

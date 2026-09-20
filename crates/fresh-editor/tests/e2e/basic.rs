@@ -104,28 +104,24 @@ fn test_buffer_switching() {
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("Content of alpha");
 
     // Switch to next buffer (beta) using Ctrl+PageDown
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("Content of beta");
 
     // Test cycling: next from beta should go to alpha
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("Content of alpha");
 
     // Test cycling backwards: prev from alpha should go to beta
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("Content of beta");
 }
 
@@ -292,7 +288,6 @@ fn test_append_at_end_of_file() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify cursor is at end
     let cursor_pos = harness.cursor_position();
@@ -302,7 +297,6 @@ fn test_append_at_end_of_file() {
     harness
         .send_key(KeyCode::Char('!'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify the character was appended
     harness.assert_buffer_content("Line 1\nLine 2\nLine 3!");
@@ -315,14 +309,12 @@ fn test_append_at_end_of_file() {
     harness
         .send_key(KeyCode::Char('!'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("Line 1\nLine 2\nLine 3!!");
 
     // Now press Enter to add a new line
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_buffer_content("Line 1\nLine 2\nLine 3!!\n");
 
     // Type on the new line
@@ -344,7 +336,6 @@ fn test_append_at_end_of_file() {
     harness
         .send_key(KeyCode::Char('4'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_buffer_content("Line 1\nLine 2\nLine 3!!\nLine 4");
 }

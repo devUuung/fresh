@@ -48,13 +48,11 @@ fn run_command_and_wait(harness: &mut EditorTestHarness, name: &str, ack: &str) 
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text(name).unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness
         .wait_until(|h| h.screen_to_string().contains(ack))
         .unwrap();

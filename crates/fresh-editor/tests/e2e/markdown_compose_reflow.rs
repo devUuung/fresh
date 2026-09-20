@@ -693,7 +693,6 @@ run past the window width by a comfortable margin.
                 break;
             }
             harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-            harness.render().unwrap();
         }
         let before = harness
             .render_observing_cursor()
@@ -772,7 +771,6 @@ Cursor home line.
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     let start = harness.render_observing_cursor().unwrap().expect("caret");
 

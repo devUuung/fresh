@@ -55,7 +55,6 @@ fn test_toggle_tab_bar_via_command_palette() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains(">command");
 
     // Type "toggle tab bar" to find the command
@@ -66,7 +65,6 @@ fn test_toggle_tab_bar_via_command_palette() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Tab bar should now be hidden - the status message should appear
     harness.assert_screen_contains("Tab bar hidden");
@@ -75,14 +73,12 @@ fn test_toggle_tab_bar_via_command_palette() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.type_text("Toggle Tab Bar").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Tab bar should be visible again
     harness.assert_screen_contains("Tab bar shown");
@@ -110,7 +106,6 @@ fn test_toggle_menu_bar_via_command_palette() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type "toggle menu bar" to find the command
     harness.type_text("Toggle Menu Bar").unwrap();
@@ -120,7 +115,6 @@ fn test_toggle_menu_bar_via_command_palette() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Menu bar should now be hidden
     harness.assert_screen_contains("Menu bar hidden");
@@ -136,14 +130,12 @@ fn test_toggle_menu_bar_via_command_palette() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.type_text("Toggle Menu Bar").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Menu bar should be visible again
     harness.assert_screen_contains("Menu bar shown");
@@ -220,23 +212,19 @@ fn test_tab_bar_toggle_with_multiple_buffers() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("file1.txt").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Open second file
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("file2.txt").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Both files should be in tab bar
     harness.assert_screen_contains("file1.txt");
@@ -246,13 +234,11 @@ fn test_tab_bar_toggle_with_multiple_buffers() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Toggle Tab Bar").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Tab bar should be hidden
     harness.assert_screen_contains("Tab bar hidden");
@@ -262,13 +248,11 @@ fn test_tab_bar_toggle_with_multiple_buffers() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Toggle Tab Bar").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Tab bar should be visible with both files
     harness.assert_screen_contains("Tab bar shown");
@@ -313,7 +297,6 @@ fn test_toggle_status_bar_via_command_palette() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type "toggle status bar" to find the command
     harness.type_text("Toggle Status Bar").unwrap();
@@ -323,7 +306,6 @@ fn test_toggle_status_bar_via_command_palette() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Status bar row should no longer show cursor position info
     let status_bar = harness.get_status_bar();
@@ -337,14 +319,12 @@ fn test_toggle_status_bar_via_command_palette() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.type_text("Toggle Status Bar").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Status bar should be visible again with "Status bar shown" message
     harness.assert_screen_contains("Status bar shown");
@@ -447,13 +427,11 @@ fn test_settings_show_prompt_line_applies_immediately() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Save with Ctrl+S
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Settings should be closed
     assert!(
@@ -486,7 +464,6 @@ fn test_toggle_prompt_line_via_command_palette() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type "toggle prompt line" to find the command
     harness.type_text("Toggle Prompt Line").unwrap();
@@ -496,7 +473,6 @@ fn test_toggle_prompt_line_via_command_palette() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Prompt line should now be hidden
     harness.assert_screen_contains("Prompt line hidden");
@@ -506,14 +482,12 @@ fn test_toggle_prompt_line_via_command_palette() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.type_text("Toggle Prompt Line").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Prompt line should be visible again
     harness.assert_screen_contains("Prompt line shown");
@@ -772,7 +746,6 @@ fn test_switch_keybinding_map_via_action_persists() {
         // ("vscode") — the same action the View menu's Keybinding Style
         // submenu emits.
         harness.send_key(KeyCode::F(9), KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         assert_eq!(
             harness.editor().config().active_keybinding_map.0,

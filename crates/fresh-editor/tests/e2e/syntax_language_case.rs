@@ -16,7 +16,6 @@ fn run_command(harness: &mut EditorTestHarness, command_name: &str) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type the command name
     harness.type_text(command_name).unwrap();
@@ -26,7 +25,6 @@ fn run_command(harness: &mut EditorTestHarness, command_name: &str) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Test that changing the language via "Set Language" command uses the same
@@ -89,7 +87,6 @@ fn test_set_language_case_matches_file_detection() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Step 5: Check the language that was set via the command
     let language_from_command = harness.editor().active_state().language.clone();
@@ -146,7 +143,6 @@ fn test_set_language_preserves_lsp_compatible_id() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let language_after_set = harness.editor().active_state().language.clone();
     eprintln!(

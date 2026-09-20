@@ -571,12 +571,10 @@ fn split_vertical(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Helper: Navigate to previous split
@@ -584,12 +582,10 @@ fn prev_split(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("prev split").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Test that session saves and restores cursor position in splits
@@ -2526,7 +2522,6 @@ fn test_restore_orphaned_active_unnamed_tab_renders_surviving_tab() {
         harness
             .send_key(KeyCode::PageUp, KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
 
         harness.shutdown(true).unwrap();
     }

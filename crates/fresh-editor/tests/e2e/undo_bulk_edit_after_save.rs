@@ -27,13 +27,11 @@ fn run_command(harness: &mut EditorTestHarness, command_name: &str) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text(command_name).unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Reproduce: BulkEdit (toggle comment) -> save -> type -> undo past BulkEdit -> corruption
@@ -81,7 +79,6 @@ fn test_undo_past_bulk_edit_after_save_does_not_corrupt_buffer() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         !harness.editor().active_state().buffer.is_modified(),
@@ -151,13 +148,11 @@ fn test_undo_past_indent_after_save_does_not_corrupt_buffer() {
 
     // Step 2: Indent selection (Tab) -> creates a BulkEdit
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Step 3: Save
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Step 4: Type after save (creates new buffers after consolidation)
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
@@ -221,13 +216,11 @@ fn test_bulk_edit_save_undo_minimal() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Step 3: Undo -> should restore original content
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let final_content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -258,7 +251,6 @@ fn test_move_line_down_save_undo_minimal() {
 
     // Step 1: Move line down (Alt+Down) - this is a BulkEdit
     harness.send_key(KeyCode::Down, KeyModifiers::ALT).unwrap();
-    harness.render().unwrap();
 
     let moved = harness.get_buffer_content().unwrap();
     assert_ne!(
@@ -270,13 +262,11 @@ fn test_move_line_down_save_undo_minimal() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Step 3: Undo -> should restore original content
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let final_content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -309,7 +299,6 @@ fn test_multiple_save_cycles_with_bulk_edit_undo() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("B").unwrap();
 
     // Cycle 2: toggle comment again -> save -> type
@@ -317,7 +306,6 @@ fn test_multiple_save_cycles_with_bulk_edit_undo() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("C").unwrap();
 
     // Now undo everything (past two BulkEdits and two consolidations)

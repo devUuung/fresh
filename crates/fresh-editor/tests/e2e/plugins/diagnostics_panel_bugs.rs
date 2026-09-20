@@ -85,13 +85,11 @@ fn open_diagnostics_panel(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Show Diagnostics Panel").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for panel to appear with diagnostics visible
     harness
@@ -138,7 +136,6 @@ fn test_diagnostics_panel_reopen_after_escape() {
 
     // Close the panel with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.render().unwrap();
 
     let screen_after_close = harness.screen_to_string();
@@ -216,7 +213,6 @@ fn test_diagnostics_panel_jump_to_correct_line() {
     // causing the cursor to overshoot past the items.
     for _ in 0..3 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 
     harness

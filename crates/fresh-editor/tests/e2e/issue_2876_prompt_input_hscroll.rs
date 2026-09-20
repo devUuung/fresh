@@ -22,7 +22,6 @@ fn test_search_prompt_long_input_scrolls_and_keeps_cursor_visible() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     let input = format!("{}TAILMARKER", "x".repeat(90));
     harness.type_text(&input).unwrap();
 

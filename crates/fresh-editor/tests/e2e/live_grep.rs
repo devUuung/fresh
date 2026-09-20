@@ -67,7 +67,6 @@ fn test_live_grep_git_grep_flow_finds_match_in_repo() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Live Grep").unwrap();
     harness
         .wait_until(|h| h.screen_to_string().contains("Live Grep"))
@@ -75,7 +74,6 @@ fn test_live_grep_git_grep_flow_finds_match_in_repo() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness.type_text(unique).unwrap();
 
@@ -152,7 +150,6 @@ fn test_live_grep_buffers_scope_finds_unmodified_open_buffer() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Live Grep (Find").unwrap();
     harness
         .wait_until(|h| h.screen_to_string().contains("Live Grep"))
@@ -172,7 +169,6 @@ fn test_live_grep_buffers_scope_finds_unmodified_open_buffer() {
     harness
         .send_key(KeyCode::Char('t'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     harness.type_text(token).unwrap();
 
@@ -224,7 +220,6 @@ fn test_live_grep_preview_highlights_query_matches() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Live Grep (Find").unwrap();
     harness
         .wait_until(|h| h.screen_to_string().contains("Live Grep"))
@@ -243,7 +238,6 @@ fn test_live_grep_preview_highlights_query_matches() {
     harness
         .send_key(KeyCode::Char('t'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     harness.type_text(token).unwrap();
     harness
@@ -381,7 +375,6 @@ fn test_live_grep_basic_search() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.type_text("Live Grep").unwrap();
 
@@ -397,7 +390,6 @@ fn test_live_grep_basic_search() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Now we should be in the live grep prompt
     // Type a search query
@@ -413,7 +405,6 @@ fn test_live_grep_basic_search() {
 
     // Press Escape to cancel
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Verify we're back to normal state
     let final_screen = harness.screen_to_string();
@@ -456,7 +447,6 @@ fn test_live_grep_select_result() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Live Grep").unwrap();
 
     // Wait for Live Grep command to appear (plugin loaded)
@@ -467,7 +457,6 @@ fn test_live_grep_select_result() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Search for the target
     harness.type_text("TARGET_FILE").unwrap();
@@ -525,7 +514,6 @@ fn test_live_grep_preview_split() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Live Grep").unwrap();
 
     // Wait for Live Grep command to appear (plugin loaded)
@@ -536,7 +524,6 @@ fn test_live_grep_preview_split() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Search for content
     harness.type_text("PREVIEW_TEST").unwrap();
@@ -594,7 +581,6 @@ fn test_live_grep_input_preserved() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Live Grep").unwrap();
 
     // Wait for Live Grep command to appear (plugin loaded)
@@ -605,7 +591,6 @@ fn test_live_grep_input_preserved() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Type search query
     harness.type_text("MULTI_MATCH").unwrap();
@@ -620,9 +605,7 @@ fn test_live_grep_input_preserved() {
 
     // Navigate down through results
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let screen_after_nav = harness.screen_to_string();
     println!("Screen after navigation:\n{}", screen_after_nav);
@@ -637,7 +620,6 @@ fn test_live_grep_input_preserved() {
 
     // Clean up
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 }
 
 /// Test Live Grep searches in the working directory, not the process current directory
@@ -695,7 +677,6 @@ fn test_live_grep_uses_working_dir() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Live Grep").unwrap();
 
     // Wait for Live Grep command to appear (plugin loaded)
@@ -706,7 +687,6 @@ fn test_live_grep_uses_working_dir() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Search for our unique marker
     harness.type_text(unique_marker).unwrap();
@@ -1094,7 +1074,6 @@ fn test_live_grep_input_undo_redo() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         !harness.screen_to_string().contains("ZQXJV"),
         "Ctrl+Z must undo the input edit; pre-fix it fell through to the \
@@ -1106,7 +1085,6 @@ fn test_live_grep_input_undo_redo() {
     harness
         .send_key(KeyCode::Char('y'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         harness.screen_to_string().contains("ZQXJV"),
         "Ctrl+Y must redo the input edit. Screen:\n{}",
@@ -1171,7 +1149,6 @@ fn test_live_grep_preview_follows_selection_across_files() {
 
     // Arrow-key down to the second result (bbb.txt).
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert!(
         harness.screen_to_string().contains("PREVIEWMARKERBBB"),
         "preview must follow the selection to bbb.txt; pre-fix it rendered \
@@ -1286,7 +1263,6 @@ fn test_live_grep_overlay_is_mouse_modal() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Live Grep").unwrap();
     harness
         .wait_until(|h| h.screen_to_string().contains("Live Grep"))
@@ -1294,7 +1270,6 @@ fn test_live_grep_overlay_is_mouse_modal() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     assert!(
         harness.screen_to_string().contains("Live grep:"),
         "Live Grep overlay should be open; screen:\n{}",
@@ -1385,7 +1360,6 @@ fn test_live_grep_toolbar_is_on_the_prompts_ring() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Live Grep").unwrap();
     harness
         .wait_until(|h| h.screen_to_string().contains("Live Grep"))

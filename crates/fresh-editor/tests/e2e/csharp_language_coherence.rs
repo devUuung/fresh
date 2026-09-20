@@ -13,7 +13,6 @@ fn run_command(harness: &mut EditorTestHarness, command_name: &str) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.type_text(command_name).unwrap();
     harness.render().unwrap();
@@ -21,7 +20,6 @@ fn run_command(harness: &mut EditorTestHarness, command_name: &str) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Helper: use "Set Language" command to switch to a language by typing
@@ -37,7 +35,6 @@ fn set_language(harness: &mut EditorTestHarness, syntax_name: &str) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// Opening a .cs file should detect language as "csharp" internally and
@@ -132,7 +129,6 @@ fn test_set_language_prompt_shows_csharp_as_current() {
 
     // Dismiss the prompt
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 }
 
 /// Switch from C# to Python via Set Language and back, verifying that the

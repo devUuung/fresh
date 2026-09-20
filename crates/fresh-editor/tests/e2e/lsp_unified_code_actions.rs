@@ -97,7 +97,6 @@ fn test_code_actions_merged_from_two_servers() -> anyhow::Result<()> {
 
     // Position cursor on "let x = 5;" (line 2)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE)?;
-    harness.render()?;
 
     // Trigger code actions via the command palette rather than Alt+. —
     // the macOS CI terminal does not deliver the Alt modifier through
@@ -108,7 +107,6 @@ fn test_code_actions_merged_from_two_servers() -> anyhow::Result<()> {
     harness.send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)?;
     harness.type_text("Code Actions")?;
     harness.send_key(KeyCode::Enter, KeyModifiers::NONE)?;
-    harness.render()?;
 
     // Wait for code action popup — actions from server A
     harness.wait_for_screen_contains("Extract function")?;

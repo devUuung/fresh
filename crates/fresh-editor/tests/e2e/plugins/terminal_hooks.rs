@@ -41,7 +41,6 @@ fn load_plugin(harness: &mut EditorTestHarness, source: &str, file_name: &str) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Load Plugin from Buffer").unwrap();
     for _ in 0..3 {
         harness.process_async_and_render().unwrap();

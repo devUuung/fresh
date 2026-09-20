@@ -28,13 +28,11 @@ fn open_python_lsp_edit_value(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Lsp");
 
     // Navigate down through LSP entries until we find "python"
     for _ in 0..50 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
         if screen.contains("python") && screen.contains("[Enter to edit]") {
@@ -45,7 +43,6 @@ fn open_python_lsp_edit_value(harness: &mut EditorTestHarness) {
                     harness
                         .send_key(KeyCode::Enter, KeyModifiers::NONE)
                         .unwrap();
-                    harness.render().unwrap();
                     harness.assert_screen_contains("Edit Value");
                     harness.assert_screen_contains("Key:python");
                     return;
@@ -90,7 +87,6 @@ fn test_lsp_edit_value_add_new_reachable_via_keyboard() {
     // indicator or [Enter to add] hint, before we reach the buttons.
     for i in 0..10 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
 
@@ -135,7 +131,6 @@ fn test_lsp_edit_value_add_new_reachable_via_keyboard() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Add Item");
 
     // Clean up
@@ -161,7 +156,6 @@ fn test_add_second_lsp_server_for_python_via_keyboard() {
     let mut reached_add_new = false;
     for _ in 0..10 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
         for line in screen.lines() {
@@ -187,7 +181,6 @@ fn test_add_second_lsp_server_for_python_via_keyboard() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The Add Item dialog should be open with fields for the new LSP server config
     let screen = harness.screen_to_string();
@@ -244,7 +237,6 @@ fn test_entry_dialog_text_field_delete_key_issue_2875() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Append a marker that is unique on screen and whose *shape* changes when
     // the delete lands: `q` is the character to remove and `W` is a tail that
@@ -261,7 +253,6 @@ fn test_entry_dialog_text_field_delete_key_issue_2875() {
     harness
         .send_key(KeyCode::Delete, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     // The positive assertion carries the signal and the negative one guards
@@ -281,7 +272,6 @@ fn test_entry_dialog_text_field_delete_key_issue_2875() {
     // Clean up (Esc out of edit mode and the stacked dialogs).
     for _ in 0..4 {
         harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 }
 
@@ -306,7 +296,6 @@ fn test_entry_dialog_down_visits_every_field_once() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness.wait_for_screen_contains("Edit Item").unwrap();
 
@@ -377,7 +366,6 @@ fn test_entry_dialog_down_visits_every_field_once() {
     // Press Down repeatedly until we hit buttons or exhaust attempts
     for _ in 0..60 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         if let Some(f) = identify_focused(&harness.screen_to_string()) {
             if f == "__BUTTONS__" {

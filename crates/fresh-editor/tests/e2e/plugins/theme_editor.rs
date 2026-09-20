@@ -13,7 +13,6 @@ fn open_theme_editor(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type to find the Edit Theme command
     harness.type_text("Edit Theme").unwrap();
@@ -23,7 +22,6 @@ fn open_theme_editor(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for theme selection prompt to appear
     harness
@@ -39,7 +37,6 @@ fn open_theme_editor(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for theme editor to fully load.
     //
@@ -112,7 +109,6 @@ fn test_theme_editor_command_registered() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type to find the Edit Theme command
     harness.type_text("Edit Theme").unwrap();
@@ -178,13 +174,11 @@ fn test_theme_editor_tab_bar_persists() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Close Theme Editor").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .wait_until(|h| !h.screen_to_string().contains("Theme Editor:"))
@@ -249,13 +243,11 @@ fn test_close_buffer_while_in_group_closes_whole_group() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Close Buffer").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // After close, the group tab, the group's panel content, and the group
     // panels themselves should all be gone.
@@ -343,13 +335,11 @@ fn test_next_buffer_cycles_across_groups_and_buffers() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Next Buffer").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .wait_until(|h| h.screen_to_string().contains("UniqueContentMarker"))
@@ -379,13 +369,11 @@ fn test_next_buffer_cycles_across_groups_and_buffers() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Next Buffer").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .wait_until(|h| h.screen_to_string().contains("Theme Editor:"))
@@ -518,7 +506,6 @@ fn test_theme_editor_open_close_reopen() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.type_text("Close Theme Editor").unwrap();
     harness.render().unwrap();
@@ -526,7 +513,6 @@ fn test_theme_editor_open_close_reopen() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for theme editor to close
     harness
@@ -586,7 +572,6 @@ fn test_theme_editor_reopen_after_close_buffer() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.type_text("Close Buffer").unwrap();
     harness.render().unwrap();
@@ -594,7 +579,6 @@ fn test_theme_editor_reopen_after_close_buffer() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for theme editor buffer to disappear from tabs
     harness
@@ -722,7 +706,6 @@ fn test_theme_editor_open_builtin() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for the prompt to appear
     harness
@@ -948,7 +931,6 @@ fn test_cursor_position_preserved_after_section_toggle() {
     // Keep pressing down until we see "UI Elements" on screen
     for _ in 0..20 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         let screen = harness.screen_to_string();
         if screen.contains("UI Elements") {
             break;
@@ -1017,7 +999,6 @@ fn test_color_prompt_shows_suggestions() {
     // So we need to navigate down enough to land on a field line (index 6+)
     for _ in 0..8 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 
     // Wait for Background to appear on screen
@@ -1053,7 +1034,6 @@ fn test_color_prompt_shows_suggestions() {
 
         // If no prompt, we might be on description/section, try moving down
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 
     assert!(prompt_opened, "Color prompt should appear");
@@ -1192,7 +1172,6 @@ fn test_comments_appear_before_fields() {
     // alphabetically-first field, breaking the old matcher). Instead, verify that
     // *some* editor field is selected and shown in the picker.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness
         .wait_until(|h| {
@@ -1291,7 +1270,6 @@ fn test_theme_applied_immediately_after_save() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for the prompt to appear
     harness
@@ -1321,7 +1299,6 @@ fn test_theme_applied_immediately_after_save() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for save-as prompt
     harness
@@ -1441,7 +1418,6 @@ fn test_cursor_x_position_preserved_after_section_toggle() {
     // Keep pressing Down until cursor is on the UI Elements line
     loop {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         let screen = harness.screen_to_string();
         let (cx, cy) = harness.screen_cursor_position();
         eprintln!("Navigating down: cursor at ({}, {})", cx, cy);
@@ -1709,7 +1685,6 @@ fn test_color_prompt_prefilled_with_current_value() {
     // Navigate down to Background field
     for _ in 0..8 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 
     // Keep pressing Down until we're on a field that opens a prompt
@@ -1718,7 +1693,6 @@ fn test_color_prompt_prefilled_with_current_value() {
         harness
             .send_key(KeyCode::Enter, KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
 
         let screen = harness.screen_to_string();
         if screen.contains("#RRGGBB") || screen.contains("(#RRGGBB or named)") {
@@ -1727,7 +1701,6 @@ fn test_color_prompt_prefilled_with_current_value() {
         }
 
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 
     assert!(prompt_opened, "Color prompt should appear");
@@ -2039,14 +2012,12 @@ fn test_cursor_position_preserved_after_color_edit() {
     // The first few items are section headers, we need to get to actual color fields
     for _ in 0..5 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 
     // Now we should be on a color field. Open the prompt.
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for color prompt to appear (semantic waiting, no timeout)
     harness
@@ -2058,7 +2029,6 @@ fn test_cursor_position_preserved_after_color_edit() {
 
     // Cancel the prompt to go back to the field
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Wait for prompt to close
     harness
@@ -2072,7 +2042,6 @@ fn test_cursor_position_preserved_after_color_edit() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for color prompt to appear
     harness
@@ -2087,7 +2056,6 @@ fn test_cursor_position_preserved_after_color_edit() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.type_text("#FF0000").unwrap();
     harness.render().unwrap();
@@ -2243,7 +2211,6 @@ fn test_builtin_theme_requires_save_as() {
     harness
         .send_key(KeyCode::Char('o'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .wait_until(|h| {
@@ -2399,7 +2366,6 @@ fn test_theme_editor_nostalgia_builtin_shows_correct_colors() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type to find the Edit Theme command
     harness.type_text("Edit Theme").unwrap();
@@ -2409,7 +2375,6 @@ fn test_theme_editor_nostalgia_builtin_shows_correct_colors() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for theme selection prompt to appear
     harness
@@ -2424,7 +2389,6 @@ fn test_theme_editor_nostalgia_builtin_shows_correct_colors() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for theme editor to fully load with the nostalgia theme
     harness
@@ -2485,7 +2449,6 @@ fn test_theme_editor_nostalgia_builtin_via_arrow_selection() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Type to find the Edit Theme command
     harness.type_text("Edit Theme").unwrap();
@@ -2495,7 +2458,6 @@ fn test_theme_editor_nostalgia_builtin_via_arrow_selection() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for theme selection prompt to appear
     harness
@@ -2514,13 +2476,11 @@ fn test_theme_editor_nostalgia_builtin_via_arrow_selection() {
     // Press Down arrow to select the suggestion from the list
     // This should send the `value` field from the suggestion (e.g., "builtin:nostalgia")
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Now press Enter to confirm selection
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for theme editor to fully load with the nostalgia theme
     harness
@@ -2581,7 +2541,6 @@ fn test_theme_editor_select_nostalgia_from_dropdown() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     eprintln!("[TEST] command palette opened");
 
     eprintln!("[TEST] typing 'Edit Theme'...");
@@ -2593,7 +2552,6 @@ fn test_theme_editor_select_nostalgia_from_dropdown() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     eprintln!("[TEST] Enter pressed, waiting for theme selection prompt...");
 
     // Wait for theme selection prompt
@@ -2612,7 +2570,6 @@ fn test_theme_editor_select_nostalgia_from_dropdown() {
     // This is the key part - selecting from dropdown sends the suggestion's `value`
     eprintln!("[TEST] pressing Down to select suggestion...");
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     eprintln!("[TEST] Down pressed");
 
     // Confirm selection
@@ -2620,7 +2577,6 @@ fn test_theme_editor_select_nostalgia_from_dropdown() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     eprintln!("[TEST] Enter pressed, waiting for Theme Editor to load...");
 
     // Wait for theme editor to fully load.
@@ -2827,7 +2783,6 @@ fn test_inspect_theme_at_cursor_opens_theme_editor() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness.type_text("Inspect Theme at Cursor").unwrap();
     harness.render().unwrap();
@@ -2837,7 +2792,6 @@ fn test_inspect_theme_at_cursor_opens_theme_editor() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for the theme editor to open and auto-navigate to the editor field
     // (the resolved key will be editor.fg or editor.bg, so "Editor" section expands).
@@ -2892,13 +2846,11 @@ fn test_inspect_theme_at_cursor_multiple_rounds() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Inspect Theme at Cursor").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .wait_until(|h| {
@@ -2914,7 +2866,6 @@ fn test_inspect_theme_at_cursor_multiple_rounds() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify we're back on the source file
     harness
@@ -2925,13 +2876,11 @@ fn test_inspect_theme_at_cursor_multiple_rounds() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Inspect Theme at Cursor").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Theme editor should re-focus (the hook navigates when already open)
     harness
@@ -2948,7 +2897,6 @@ fn test_inspect_theme_at_cursor_multiple_rounds() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .wait_until(|h| h.screen_to_string().contains("Hello world"))
@@ -2958,13 +2906,11 @@ fn test_inspect_theme_at_cursor_multiple_rounds() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Inspect Theme at Cursor").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness
         .wait_until(|h| {
@@ -3027,13 +2973,11 @@ fn test_save_builtin_theme_produces_valid_file() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Edit Theme").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for theme selection prompt
     harness
@@ -3046,7 +2990,6 @@ fn test_save_builtin_theme_produces_valid_file() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for theme editor to load
     harness
@@ -3060,7 +3003,6 @@ fn test_save_builtin_theme_produces_valid_file() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for color input prompt (should show a # hex prefix)
     harness
@@ -3078,7 +3020,6 @@ fn test_save_builtin_theme_produces_valid_file() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for theme editor to redisplay
     harness
@@ -3089,7 +3030,6 @@ fn test_save_builtin_theme_produces_valid_file() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for save-as prompt
     harness
@@ -3108,7 +3048,6 @@ fn test_save_builtin_theme_produces_valid_file() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for save confirmation
     harness
@@ -3218,13 +3157,11 @@ fn test_issue_1180_save_theme_creates_themes_directory() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Edit Theme").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for theme selection prompt
     harness
@@ -3237,7 +3174,6 @@ fn test_issue_1180_save_theme_creates_themes_directory() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for theme editor to load
     harness
@@ -3251,7 +3187,6 @@ fn test_issue_1180_save_theme_creates_themes_directory() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for color input prompt
     harness
@@ -3269,7 +3204,6 @@ fn test_issue_1180_save_theme_creates_themes_directory() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for theme editor to redisplay
     harness
@@ -3283,7 +3217,6 @@ fn test_issue_1180_save_theme_creates_themes_directory() {
             KeyModifiers::CONTROL | KeyModifiers::SHIFT,
         )
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for save-as prompt
     harness
@@ -3301,7 +3234,6 @@ fn test_issue_1180_save_theme_creates_themes_directory() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for save confirmation
     harness
@@ -3387,13 +3319,11 @@ fn test_inspect_after_saving_custom_theme() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Edit Theme").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     tracing::warn!("[test] waiting for 'Select theme to edit'");
     harness
@@ -3406,7 +3336,6 @@ fn test_inspect_after_saving_custom_theme() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     tracing::warn!("[test] waiting for Theme Editor tab");
     harness
@@ -3421,15 +3350,12 @@ fn test_inspect_after_saving_custom_theme() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Edit the color field
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     tracing::warn!("[test] waiting for '#' (color edit field)");
     harness
         .wait_until(|h| h.screen_to_string().contains("#"))
@@ -3443,7 +3369,6 @@ fn test_inspect_after_saving_custom_theme() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     tracing::warn!("[test] waiting for Theme Editor after color edit");
     harness
@@ -3455,7 +3380,6 @@ fn test_inspect_after_saving_custom_theme() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     tracing::warn!("[test] waiting for 'Save theme as' dialog");
     harness
         .wait_until(|h| {
@@ -3470,7 +3394,6 @@ fn test_inspect_after_saving_custom_theme() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     tracing::warn!("[test] waiting for saved/applied confirmation");
     harness
@@ -3483,7 +3406,6 @@ fn test_inspect_after_saving_custom_theme() {
     // === Step 2: Close theme editor via Escape ===
     tracing::warn!("[test] step 2: closing theme editor via Escape");
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     tracing::warn!("[test] waiting for 'Hello world' (main editor)");
     harness
@@ -3495,13 +3417,11 @@ fn test_inspect_after_saving_custom_theme() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Inspect Theme at Cursor").unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for theme editor to reopen and auto-navigate to editor fields.
     // The full qualified name (editor.fg / editor.bg) appears in the right panel
@@ -3576,7 +3496,6 @@ fn test_palette_swatch_click_targets_correct_column() {
 
     // Navigate down from section header to first color field (bg)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Wait for theme editor to fully render with color palette
     harness
@@ -4223,9 +4142,7 @@ fn test_paste_in_theme_editor_does_not_panic() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::End, KeyModifiers::SHIFT).unwrap();
-    harness.render().unwrap();
 
     // This must not panic.
     harness.editor_mut().paste_for_test();
@@ -4260,7 +4177,6 @@ fn test_theme_editor_terminal_builtin_renders_field_rows() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Edit Theme").unwrap();
     harness.render().unwrap();
     harness

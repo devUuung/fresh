@@ -30,7 +30,6 @@ fn test_block_select_down_basic() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::ALT | KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     // After block selection - should have a selection
     assert!(
@@ -65,7 +64,6 @@ fn test_block_select_multiple_consecutive() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::ALT | KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.has_selection(),
@@ -76,7 +74,6 @@ fn test_block_select_multiple_consecutive() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::ALT | KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.has_selection(),
@@ -87,7 +84,6 @@ fn test_block_select_multiple_consecutive() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::ALT | KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.has_selection(),
@@ -111,13 +107,11 @@ fn test_block_select_then_escape() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::ALT | KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(harness.has_selection(), "Should have selection");
 
     // Press Escape to clear selection
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness.assert_no_selection();
 }
@@ -139,7 +133,6 @@ fn test_block_select_all_directions() {
         harness
             .send_key(KeyCode::Down, KeyModifiers::ALT | KeyModifiers::SHIFT)
             .unwrap();
-        harness.render().unwrap();
 
         assert!(
             harness.has_selection(),
@@ -161,7 +154,6 @@ fn test_block_select_all_directions() {
         harness
             .send_key(KeyCode::Up, KeyModifiers::ALT | KeyModifiers::SHIFT)
             .unwrap();
-        harness.render().unwrap();
 
         assert!(
             harness.has_selection(),
@@ -180,7 +172,6 @@ fn test_block_select_all_directions() {
         harness
             .send_key(KeyCode::Right, KeyModifiers::ALT | KeyModifiers::SHIFT)
             .unwrap();
-        harness.render().unwrap();
 
         assert!(
             harness.has_selection(),
@@ -205,7 +196,6 @@ fn test_block_select_all_directions() {
         harness
             .send_key(KeyCode::Left, KeyModifiers::ALT | KeyModifiers::SHIFT)
             .unwrap();
-        harness.render().unwrap();
 
         assert!(
             harness.has_selection(),
@@ -242,7 +232,6 @@ fn test_block_select_persistence_across_cycles() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::ALT | KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.has_selection(),
@@ -251,7 +240,6 @@ fn test_block_select_persistence_across_cycles() {
 
     // Clear selection with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness.assert_no_selection();
 
@@ -268,7 +256,6 @@ fn test_block_select_persistence_across_cycles() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::ALT | KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.has_selection(),
@@ -277,14 +264,12 @@ fn test_block_select_persistence_across_cycles() {
 
     // Third cycle - make sure it still works
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
     harness
         .send_key(KeyCode::Down, KeyModifiers::ALT | KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.has_selection(),
@@ -312,7 +297,6 @@ fn test_block_select_then_type() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::ALT | KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.has_selection(),
@@ -346,13 +330,11 @@ fn test_normal_then_block_selection() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(harness.has_selection(), "Should have normal selection");
 
     // Clear selection
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness.assert_no_selection();
 
@@ -360,7 +342,6 @@ fn test_normal_then_block_selection() {
     harness
         .send_key(KeyCode::Down, KeyModifiers::ALT | KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         harness.has_selection(),
@@ -401,7 +382,6 @@ fn test_block_selection_renders_rectangular() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::ALT | KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     // Get the screen and verify selection rendering
     let buffer = harness.buffer();
@@ -508,7 +488,6 @@ fn test_block_selection_copy_copies_rectangular_region() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Get clipboard content
     let clipboard_content = harness.editor_mut().clipboard_content_for_test();

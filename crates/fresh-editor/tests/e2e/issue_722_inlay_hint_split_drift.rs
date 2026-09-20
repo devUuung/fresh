@@ -89,7 +89,6 @@ fn test_issue_722_hint_stays_on_its_line_when_split_at_anchor() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Without waiting for any LSP refresh, the hint must still sit on the
     // binding's own line, after `d` — not dragged onto the next line.
@@ -158,7 +157,6 @@ fn test_issue_722_hint_stays_ahead_of_text_typed_at_anchor() {
     harness
         .send_key(KeyCode::Char('1'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let (hint_row_after, hint_col_after) =
         find_hint(&harness, hint_text).expect("hint must survive typing at its anchor");

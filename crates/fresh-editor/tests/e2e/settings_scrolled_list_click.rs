@@ -34,7 +34,6 @@ fn test_settings_scrolled_languages_list_mouse_click() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The Languages map should now be visible. Verify it.
     harness.assert_screen_contains("Languages:");

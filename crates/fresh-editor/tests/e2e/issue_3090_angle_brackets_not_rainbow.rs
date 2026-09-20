@@ -118,7 +118,6 @@ fn the_jump_command_agrees_about_what_a_bracket_is() {
     harness
         .send_key(KeyCode::Char(']'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let (after_x, after_y) = harness.screen_cursor_position();
     assert_eq!(
@@ -143,7 +142,6 @@ fn the_jump_command_still_pairs_markup_delimiters() {
     harness
         .send_key(KeyCode::Char(']'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let (x, y) = harness.screen_cursor_position();
     assert_eq!(

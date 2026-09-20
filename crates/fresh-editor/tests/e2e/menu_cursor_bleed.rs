@@ -70,7 +70,6 @@ fn test_cursor_does_not_bleed_through_dropdown_menu() {
     harness
         .send_key(KeyCode::Char('f'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify the menu is open
     harness.assert_screen_contains("New File");

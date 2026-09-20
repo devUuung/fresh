@@ -676,7 +676,6 @@ fn test_chinese_file_save_roundtrip() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify file was saved correctly
     let saved = std::fs::read_to_string(&file_path).unwrap();
@@ -707,7 +706,6 @@ fn test_mouse_click_double_width_characters() {
     let row = content_start as u16;
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let (gutter_x, _) = harness.screen_cursor_position();
 
     // Valid byte boundaries: 0 (before 你), 3 (after 你), 6 (after 好)
@@ -799,7 +797,6 @@ fn test_mouse_click_mixed_ascii_and_double_width() {
     let row = content_start as u16;
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let (gutter_x, _) = harness.screen_cursor_position();
 
     // Valid byte boundaries: 0, 1, 4, 5
@@ -880,7 +877,6 @@ fn test_mouse_click_emoji() {
     let row = content_start as u16;
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let (gutter_x, _) = harness.screen_cursor_position();
 
     // Valid byte boundaries: 0, 4, 5
@@ -946,7 +942,6 @@ fn test_mouse_click_never_lands_mid_character() {
     let row = content_start as u16;
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let (gutter_x, _) = harness.screen_cursor_position();
 
     // Valid byte boundaries
@@ -1114,12 +1109,10 @@ fn test_end_key_screen_cursor_position_double_width() {
 
         // Get gutter width by going to Home
         h.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         let (gutter_x, _) = h.screen_cursor_position();
 
         // Go to End
         h.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-        h.render().unwrap();
         let (end_x, _) = h.screen_cursor_position();
 
         let actual_width = end_x as usize - gutter_x as usize;
@@ -1152,7 +1145,6 @@ fn test_cursor_left_right_screen_position_double_width() {
 
     // Go to Home to get gutter position
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let (gutter_x, _) = harness.screen_cursor_position();
 
     // Expected screen X positions after each Right:
@@ -1185,14 +1177,12 @@ fn test_cursor_left_right_screen_position_double_width() {
             harness
                 .send_key(KeyCode::Right, KeyModifiers::NONE)
                 .unwrap();
-            harness.render().unwrap();
         }
     }
 
     // Now test going back with Left - should also move by correct visual width
     for i in (0..expected_offsets.len() - 1).rev() {
         harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let (actual_x, _) = harness.screen_cursor_position();
         let expected_x = gutter_x + expected_offsets[i] as u16;
@@ -1223,7 +1213,6 @@ fn test_screen_cursor_position_double_width() {
 
     // Move to beginning
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let (start_x, start_y) = harness.screen_cursor_position();
 
@@ -1231,7 +1220,6 @@ fn test_screen_cursor_position_double_width() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let (after_one_x, after_one_y) = harness.screen_cursor_position();
 
@@ -1249,7 +1237,6 @@ fn test_screen_cursor_position_double_width() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let (after_two_x, _) = harness.screen_cursor_position();
     assert_eq!(
@@ -1318,7 +1305,6 @@ fn test_all_operations_on_multibyte_fixture() {
         // --- Test 1: End key goes to actual end ---
         harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
         harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let pos_after_end = harness.cursor_position();
         assert_eq!(
@@ -1349,10 +1335,8 @@ fn test_all_operations_on_multibyte_fixture() {
         // Screen X = gutter_width + visual_content_width
         // Get gutter width by checking cursor X at Home position
         harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         let (gutter_x, _) = harness.screen_cursor_position();
         harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let expected_screen_x = gutter_x as usize + expected_visual_width;
         assert_eq!(
@@ -1369,7 +1353,6 @@ fn test_all_operations_on_multibyte_fixture() {
 
         // --- Test 2: Home key goes to start ---
         harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
 
         let pos_after_home = harness.cursor_position();
         assert_eq!(
@@ -1410,7 +1393,6 @@ fn test_all_operations_on_multibyte_fixture() {
             harness
                 .send_key(KeyCode::Right, KeyModifiers::NONE)
                 .unwrap();
-            harness.render().unwrap();
             let pos = harness.cursor_position();
 
             assert!(
@@ -1648,7 +1630,6 @@ fn test_mouse_select_double_width_characters() {
     let row = content_start as u16;
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let (gutter_x, _) = harness.screen_cursor_position();
 
     // Valid byte boundaries: 0, 3, 6, 9, 12
@@ -1709,7 +1690,6 @@ fn test_mouse_select_snaps_to_character_boundary() {
     let row = content_start as u16;
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let (gutter_x, _) = harness.screen_cursor_position();
 
     // Drag starting from second column of 你 (middle of character)
@@ -1772,7 +1752,6 @@ fn test_mouse_select_emoji() {
     let row = content_start as u16;
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let (gutter_x, _) = harness.screen_cursor_position();
 
     // Valid byte boundaries: 0, 4, 8
@@ -1824,7 +1803,6 @@ fn test_mouse_select_mixed_content() {
     let row = content_start as u16;
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let (gutter_x, _) = harness.screen_cursor_position();
 
     // Valid byte boundaries: 0, 1, 4, 5
@@ -1876,7 +1854,6 @@ fn test_mouse_select_backwards() {
     let row = content_start as u16;
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let (gutter_x, _) = harness.screen_cursor_position();
 
     // Drag backwards: from end of 好 to start of 你
@@ -1926,7 +1903,6 @@ fn test_mouse_select_never_creates_invalid_utf8() {
     let row = content_start as u16;
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let (gutter_x, _) = harness.screen_cursor_position();
 
     // Calculate valid byte boundaries
@@ -2026,7 +2002,6 @@ fn test_mouse_click_thai_grapheme_clusters() {
     let row = content_start as u16;
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let (gutter_x, _) = harness.screen_cursor_position();
 
     // Valid byte boundaries: 0, 3, 6, 9, 10 (one per code point + end)
@@ -2091,7 +2066,6 @@ fn test_mouse_click_zwj_emoji() {
     let row = content_start as u16;
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let (gutter_x, _) = harness.screen_cursor_position();
 
     // Valid byte boundaries are at each code point start
@@ -2140,7 +2114,6 @@ fn test_mouse_select_multiline_multibyte() {
     let end_row = start_row + 1;
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let (gutter_x, _) = harness.screen_cursor_position();
 
     // Drag from first line to second line
@@ -2198,7 +2171,6 @@ fn test_status_bar_column_counts_graphemes_not_bytes() {
         harness
             .send_key(KeyCode::Right, KeyModifiers::NONE)
             .unwrap();
-        harness.render().unwrap();
         let status = harness.get_status_bar();
         assert!(
             status.contains(&format!("Col {expected_col}")),

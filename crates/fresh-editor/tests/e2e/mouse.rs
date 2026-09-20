@@ -196,13 +196,10 @@ fn test_mouse_click_switches_split_focus() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-
-    harness.render().unwrap();
 
     // Both splits show the same buffer initially, so type more to differentiate
     harness.type_text(" plus right").unwrap();
@@ -242,7 +239,6 @@ fn test_mouse_click_file_explorer() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Click in the file explorer area
     // File explorer is on the left (30% of width)
@@ -274,7 +270,6 @@ fn test_mouse_open_file_from_explorer() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Try clicking in the file explorer area
     harness.mouse_click(10, 4).unwrap();
@@ -459,7 +454,6 @@ fn test_scrollbar_drag_to_top() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Cursor is at bottom, so we're scrolled down
     // Get current position
@@ -562,7 +556,6 @@ fn test_mouse_focus_after_file_explorer() {
     harness
         .send_key(KeyCode::Char('e'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Click in the editor area (right side, not in file explorer)
     harness.mouse_click(50, 10).unwrap();
@@ -638,7 +631,6 @@ fn test_scrollbar_drag_leaves_cursor_alone() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let initial_cursor_pos = harness.cursor_position();
     let initial_top_line = harness.top_line_number();
@@ -799,12 +791,10 @@ fn test_hovering_a_split_separator_names_it() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split horiz").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let separators = harness.editor().get_separator_areas().to_vec();
     assert_eq!(
@@ -849,12 +839,10 @@ fn test_horizontal_split_separator_drag_resize() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split horiz").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Get the separator info - should have exactly one separator for horizontal split
     let separators = harness.editor().get_separator_areas().to_vec();
@@ -931,12 +919,10 @@ fn test_vertical_split_separator_drag_resize() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split vert").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Get the separator info - should have exactly one separator for vertical split
     let separators = harness.editor().get_separator_areas().to_vec();
@@ -1018,12 +1004,10 @@ fn test_split_separator_drag_respects_limits() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("split horiz").unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let (content_first, content_last) = harness.content_area_rows();
     // `content_first` is where buffer *text* begins; a pane's split rectangle

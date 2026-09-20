@@ -28,7 +28,6 @@ fn test_arrow_down_renders_cursor_past_eol() {
             .unwrap();
     }
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let (cx, cy) = harness.screen_cursor_position();
     assert_eq!(
@@ -55,7 +54,6 @@ fn test_arrow_down_snaps_to_eol_when_off() {
             .unwrap();
     }
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let (cx, cy) = harness.screen_cursor_position();
     assert_eq!((cx, cy), (x0 + 2, y0 + 1), "cursor clamps to end of 'ab'");
@@ -90,7 +88,6 @@ fn test_arrow_right_renders_cursor_past_eol() {
 
     // Left walks back through the virtual columns before bytes move.
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let (cx, cy) = harness.screen_cursor_position();
     assert_eq!((cx, cy), (x0 + 4, y0));
 }
@@ -373,7 +370,6 @@ fn test_block_rectangle_renders_past_short_line() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::ALT | KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
 
     let selected_bg = harness
         .get_cell_style(x0 + 3, y0)
@@ -418,7 +414,6 @@ fn test_click_below_last_line_places_virtual_cursor() {
 
     // Left/Right move along the virtual line.
     harness.send_key(KeyCode::Left, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert_eq!(harness.screen_cursor_position(), (x0 + 4, y0 + 2));
 
     // Backspace steps left without touching the buffer.
@@ -452,15 +447,12 @@ fn test_arrow_down_extends_below_eof() {
 
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert_eq!(harness.screen_cursor_position(), (x0 + 2, y0 + 1));
 
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert_eq!(harness.screen_cursor_position(), (x0 + 2, y0 + 2));
 
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert_eq!(harness.screen_cursor_position(), (x0 + 2, y0 + 1));
 
     // Nothing was inserted by the movement; typing materializes one line.
@@ -478,7 +470,6 @@ fn test_arrow_down_at_eof_noop_when_off() {
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert_eq!(harness.screen_cursor_position(), (x0 + 2, y0));
 }
 
@@ -538,13 +529,11 @@ fn run_command(harness: &mut EditorTestHarness, name: &str) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text(name).unwrap();
     harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// "Toggle Virtual Space (Current Buffer)" cycles off → block → on for the
@@ -644,7 +633,6 @@ fn test_status_bar_reports_virtual_column() {
 
     // End of line 1 ("ab") — the real content end, Col 3.
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert!(
         harness.get_status_bar().contains("Ln 1, Col 3"),
         "baseline: cursor at real content end reads Col 3, got: {}",
@@ -676,7 +664,6 @@ fn test_status_bar_reports_virtual_line_below_eof() {
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Two lines below line 1, keeping the goal column (Col 3).
     let status = harness.get_status_bar();
@@ -698,7 +685,6 @@ fn test_status_bar_clamps_when_off() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let status = harness.get_status_bar();
     assert!(
         status.contains("Ln 2, Col 1"),
@@ -724,7 +710,6 @@ fn test_column_survives_through_short_line() {
     }
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let (cx, cy) = harness.screen_cursor_position();
     assert_eq!((cx, cy), (x0 + 5, y0 + 2), "column 5 restored on line 3");

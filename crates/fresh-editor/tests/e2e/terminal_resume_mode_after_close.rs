@@ -48,12 +48,10 @@ fn run_command(harness: &mut EditorTestHarness, command: &str) {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text(command).unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 /// First terminal is active (capturing keyboard). Opening a second terminal

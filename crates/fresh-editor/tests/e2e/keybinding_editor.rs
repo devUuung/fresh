@@ -14,7 +14,6 @@ fn open_keybinding_editor(harness: &mut EditorTestHarness) {
 fn select_first_binding(harness: &mut EditorTestHarness) {
     // The first row is a section header; move down to the first actual binding
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 }
 
 // ========================
@@ -43,7 +42,6 @@ fn test_close_keybinding_editor_with_escape() {
     harness.assert_screen_contains("Keybinding Editor");
 
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness.assert_screen_not_contains("Keybinding Editor");
 }
@@ -91,12 +89,10 @@ fn test_home_end_navigation() {
 
     // Go to end
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let screen_end = harness.screen_to_string();
 
     // Go to beginning
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let screen_home = harness.screen_to_string();
 
     assert_ne!(
@@ -117,7 +113,6 @@ fn test_page_up_down_navigation() {
     harness
         .send_key(KeyCode::PageDown, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let screen_page_down = harness.screen_to_string();
 
     assert_ne!(
@@ -129,7 +124,6 @@ fn test_page_up_down_navigation() {
     harness
         .send_key(KeyCode::PageUp, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 }
 
 // ========================
@@ -146,7 +140,6 @@ fn test_text_search() {
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Type "save" to filter bindings
     for ch in "save".chars() {
@@ -188,7 +181,6 @@ fn test_search_persists_after_enter() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Search query should still be visible
     harness.assert_screen_contains("undo");
@@ -213,7 +205,6 @@ fn test_escape_cancels_search() {
 
     // Press Escape to cancel search
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Search bar should be gone, but editor should still be open
     harness.assert_screen_contains("Keybinding Editor");
@@ -240,14 +231,12 @@ fn test_search_down_arrow_moves_to_list() {
 
     // Press Down to unfocus and navigate list
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Search query should remain visible
     harness.assert_screen_contains("copy");
 
     // Further Down keys should navigate in the list (not type in search)
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Keybinding Editor");
 }
 
@@ -268,7 +257,6 @@ fn test_context_filter_cycle() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should now show a specific context (not All anymore, or cycled to next)
     let screen = harness.screen_to_string();
@@ -292,7 +280,6 @@ fn test_source_filter_cycle() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show a filtered source
     let screen = harness.screen_to_string();
@@ -316,7 +303,6 @@ fn test_help_overlay() {
     harness
         .send_key(KeyCode::Char('?'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Help overlay should be visible
     harness.assert_screen_contains("Keyboard Shortcuts");
@@ -324,7 +310,6 @@ fn test_help_overlay() {
 
     // Close help with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Help should be gone, editor should still be open
     harness.assert_screen_not_contains("Keyboard Shortcuts");
@@ -346,7 +331,6 @@ fn test_open_edit_dialog() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Edit dialog should be visible
     harness.assert_screen_contains("Edit Keybinding");
@@ -368,12 +352,10 @@ fn test_close_edit_dialog_with_escape() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Edit Keybinding");
 
     // Close with Escape
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Dialog should be closed, editor still open
     harness.assert_screen_not_contains("Edit Keybinding");
@@ -391,20 +373,16 @@ fn test_edit_dialog_tab_focus() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Tab through the focus areas (Key -> Action -> Context -> Buttons)
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     // Should still show the dialog
     harness.assert_screen_contains("Edit Keybinding");
 
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Edit Keybinding");
 
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Edit Keybinding");
 
     // Close
@@ -424,7 +402,6 @@ fn test_edit_dialog_tab_cycles_through_cancel() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Edit Keybinding");
 
     // Tab: Key(0) -> Action(1)
@@ -433,12 +410,10 @@ fn test_edit_dialog_tab_cycles_through_cancel() {
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
     // Tab: Context(2) -> Buttons/Save(3, btn=0)
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Edit Keybinding");
 
     // Tab: Save(3, btn=0) -> Cancel(3, btn=1)
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     // Cancel button should now be highlighted — pressing Enter now should close dialog
     harness.assert_screen_contains("Edit Keybinding");
 
@@ -446,7 +421,6 @@ fn test_edit_dialog_tab_cycles_through_cancel() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains("Edit Keybinding");
 
     // Keybinding editor should still be open (dialog closed, not the editor)
@@ -467,7 +441,6 @@ fn test_open_add_dialog() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Add dialog should be visible
     harness.assert_screen_contains("Add Keybinding");
@@ -486,24 +459,20 @@ fn test_add_new_binding() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Add Keybinding");
 
     // Enter capture mode, then record Ctrl+K
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('k'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     // The key should be shown
     harness.assert_screen_contains("Ctrl+K");
 
     // Tab to Action field
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Type action name "save"
     for ch in "save".chars() {
@@ -517,18 +486,15 @@ fn test_add_new_binding() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Tab to context, then to buttons
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Enter on Save button
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show modified indicator since we added a binding
     harness.assert_screen_contains("modified");
@@ -552,10 +518,8 @@ fn select_ctrl_s_save_keymap_row(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let mut found_keymap = false;
     for _ in 0..20 {
         let screen = harness.screen_to_string();
@@ -569,7 +533,6 @@ fn select_ctrl_s_save_keymap_row(harness: &mut EditorTestHarness) {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     assert!(
         found_keymap,
@@ -589,10 +552,8 @@ fn test_delete_keymap_binding_removes_it() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Save as:");
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains("Save as:");
 
     open_keybinding_editor(&mut harness);
@@ -601,7 +562,6 @@ fn test_delete_keymap_binding_removes_it() {
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -616,14 +576,12 @@ fn test_delete_keymap_binding_removes_it() {
 
     // Record-key search for Ctrl+S: nothing stands in for the removed row.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('r'), KeyModifiers::NONE)
         .unwrap();
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     let screen = harness.screen_to_string();
     assert!(
         !screen
@@ -640,7 +598,6 @@ fn test_delete_keymap_binding_removes_it() {
 
     // The action is still listed, now unbound, so it can be rebound.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::NONE)
         .unwrap();
@@ -664,11 +621,9 @@ fn test_delete_keymap_binding_removes_it() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains("Keybinding Editor");
 
     // The buffer is unnamed, so a live Ctrl+S would open the "Save as:"
@@ -678,7 +633,6 @@ fn test_delete_keymap_binding_removes_it() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains("Save as:");
 }
 
@@ -694,10 +648,8 @@ fn test_disable_keymap_binding_creates_noop_override() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Save as:");
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains("Save as:");
 
     open_keybinding_editor(&mut harness);
@@ -706,7 +658,6 @@ fn test_disable_keymap_binding_creates_noop_override() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -721,14 +672,12 @@ fn test_disable_keymap_binding_creates_noop_override() {
 
     // Record-key search for Ctrl+S: the noop override shows as custom.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('r'), KeyModifiers::NONE)
         .unwrap();
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     let screen = harness.screen_to_string();
     assert!(
         screen.contains("noop"),
@@ -743,7 +692,6 @@ fn test_disable_keymap_binding_creates_noop_override() {
 
     // The original action is listed as unbound.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('/'), KeyModifiers::NONE)
         .unwrap();
@@ -767,11 +715,9 @@ fn test_disable_keymap_binding_creates_noop_override() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains("Keybinding Editor");
 
     // The buffer is unnamed, so a live Ctrl+S would open the "Save as:"
@@ -779,7 +725,6 @@ fn test_disable_keymap_binding_creates_noop_override() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains("Save as:");
 }
 
@@ -794,7 +739,6 @@ fn test_cannot_delete_unbound_action() {
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show error about not being able to delete
     let screen = harness.screen_to_string();
@@ -819,7 +763,6 @@ fn test_unsaved_changes_confirm_dialog() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Enter capture mode, then record key
     harness
@@ -828,7 +771,6 @@ fn test_unsaved_changes_confirm_dialog() {
     harness
         .send_key(KeyCode::Char('k'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Tab to action
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
@@ -847,11 +789,9 @@ fn test_unsaved_changes_confirm_dialog() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Now press Esc - should show confirm dialog
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness.assert_screen_contains("Unsaved Changes");
     harness.assert_screen_contains("Save");
@@ -889,16 +829,13 @@ fn test_confirm_dialog_cancel() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Press Esc to show confirm dialog
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Unsaved Changes");
 
     // Press Esc again (or navigate to Cancel) to cancel
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Should be back in the editor
     harness.assert_screen_contains("Keybinding Editor");
@@ -935,11 +872,9 @@ fn test_confirm_dialog_discard() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Press Esc to show confirm dialog
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Unsaved Changes");
 
     // Navigate to Discard button (Right from Save) and press Enter
@@ -949,7 +884,6 @@ fn test_confirm_dialog_discard() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Editor should be closed
     harness.assert_screen_not_contains("Keybinding Editor");
@@ -1176,7 +1110,6 @@ fn test_record_key_search() {
     harness
         .send_key(KeyCode::Char('r'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show record key search mode
     harness.assert_screen_contains("Record Key:");
@@ -1185,7 +1118,6 @@ fn test_record_key_search() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show the recorded key and filter results
     harness.assert_screen_contains("Ctrl+S");
@@ -1225,14 +1157,12 @@ fn test_save_changes_with_ctrl_s() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("modified");
 
     // Save with Ctrl+S
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Editor should close after saving
     harness.assert_screen_not_contains("Keybinding Editor");
@@ -1252,7 +1182,6 @@ fn test_action_field_autocomplete() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Enter capture mode, then record a key
     harness
@@ -1264,7 +1193,6 @@ fn test_action_field_autocomplete() {
 
     // Tab to action field
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Type partial action name
     for ch in "und".chars() {
@@ -1292,12 +1220,10 @@ fn test_edit_dialog_context_cycling() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Tab past key and action to context
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Default context should be "normal"
     harness.assert_screen_contains("normal");
@@ -1306,7 +1232,6 @@ fn test_edit_dialog_context_cycling() {
     harness
         .send_key(KeyCode::Right, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show a different context now
     let screen = harness.screen_to_string();
@@ -1420,7 +1345,6 @@ fn test_selected_item_stays_visible_when_scrolling() {
     // After every key press the ">" indicator must remain on screen.
     for i in 0..40 {
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         assert!(
             harness.screen_to_string().contains(">"),
             "Selection indicator '>' not visible after pressing Down {} times",
@@ -1431,7 +1355,6 @@ fn test_selected_item_stays_visible_when_scrolling() {
     // Now press Up all the way back to the top.
     for i in 0..40 {
         harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
         assert!(
             harness.screen_to_string().contains(">"),
             "Selection indicator '>' not visible after pressing Up {} times",
@@ -1494,7 +1417,6 @@ fn test_edit_unbound_action() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Edit dialog should open
     harness.assert_screen_contains("Edit Keybinding");
@@ -1511,19 +1433,16 @@ fn test_edit_unbound_action() {
             KeyModifiers::CONTROL | KeyModifiers::SHIFT,
         )
         .unwrap();
-    harness.render().unwrap();
 
     // Tab to context, then to Save button
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Enter to save
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Dialog should be closed and editor should show modified
     harness.assert_screen_not_contains("Edit Keybinding");
@@ -1540,7 +1459,6 @@ fn test_deleted_binding_appears_as_unbound() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Add Keybinding");
 
     // Enter capture mode, then record key: Ctrl+Shift+D
@@ -1553,7 +1471,6 @@ fn test_deleted_binding_appears_as_unbound() {
             KeyModifiers::CONTROL | KeyModifiers::SHIFT,
         )
         .unwrap();
-    harness.render().unwrap();
 
     // Tab to action field and type "duplicate_line"
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
@@ -1566,18 +1483,15 @@ fn test_deleted_binding_appears_as_unbound() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Tab to context, then to Save button
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Press Enter to save
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show modified
     harness.assert_screen_contains("modified");
@@ -1595,7 +1509,6 @@ fn test_deleted_binding_appears_as_unbound() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The custom binding should be visible
     let screen = harness.screen_to_string();
@@ -1607,7 +1520,6 @@ fn test_deleted_binding_appears_as_unbound() {
     // Navigate to the custom binding row (it should be one of the filtered results)
     // Go to the first result which should be the custom one (or the unbound one)
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Find the custom one - cycle through results to find the "custom" row
     // Look for the line with "custom" to know which row has the custom binding
@@ -1625,18 +1537,15 @@ fn test_deleted_binding_appears_as_unbound() {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
 
     // Delete the custom binding
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Now clear the search to see all results for duplicate_line
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Search again to find duplicate_line
     harness
@@ -1679,7 +1588,6 @@ fn test_delete_binding_full_flow() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Add Keybinding");
 
     // Enter capture mode, then record key: Ctrl+Shift+D
@@ -1692,7 +1600,6 @@ fn test_delete_binding_full_flow() {
             KeyModifiers::CONTROL | KeyModifiers::SHIFT,
         )
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Ctrl+Shift+D");
 
     // Tab to Action field
@@ -1707,7 +1614,6 @@ fn test_delete_binding_full_flow() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Tab to context, then to Save button, press Enter to save the dialog
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
@@ -1715,14 +1621,12 @@ fn test_delete_binding_full_flow() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("modified");
 
     // Save and close keybinding editor with Ctrl+S
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains("Keybinding Editor");
 
     // === Phase 2: Verify binding works (before delete) ===
@@ -1734,7 +1638,6 @@ fn test_delete_binding_full_flow() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Press Ctrl+Shift+D to duplicate the line
     harness
@@ -1743,7 +1646,6 @@ fn test_delete_binding_full_flow() {
             KeyModifiers::CONTROL | KeyModifiers::SHIFT,
         )
         .unwrap();
-    harness.render().unwrap();
 
     let buffer_content = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -1767,7 +1669,6 @@ fn test_delete_binding_full_flow() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify the custom binding appears in the table
     let screen = harness.screen_to_string();
@@ -1782,7 +1683,6 @@ fn test_delete_binding_full_flow() {
 
     // Navigate to the custom binding row
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let mut found_custom = false;
     for _ in 0..10 {
@@ -1797,7 +1697,6 @@ fn test_delete_binding_full_flow() {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     assert!(found_custom, "Should find the custom binding row to delete");
 
@@ -1805,7 +1704,6 @@ fn test_delete_binding_full_flow() {
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Immediately after delete (before saving/closing): the table should
     // already reflect the removal — the action appears as unbound with no key.
@@ -1827,7 +1725,6 @@ fn test_delete_binding_full_flow() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains("Keybinding Editor");
 
     // === Phase 4: After delete - verify table shows action without key ===
@@ -1863,7 +1760,6 @@ fn test_delete_binding_full_flow() {
 
     // Close keybinding editor
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // === Phase 5: After delete - verify key has no effect ===
     // Buffer still has "aaa\naaa" from Phase 2. Record it, then press the
@@ -1877,7 +1773,6 @@ fn test_delete_binding_full_flow() {
             KeyModifiers::CONTROL | KeyModifiers::SHIFT,
         )
         .unwrap();
-    harness.render().unwrap();
 
     let buffer_after = harness.get_buffer_content().unwrap();
     assert_eq!(
@@ -1896,7 +1791,6 @@ fn test_add_binding_conflict_warning_for_existing_key() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Add Keybinding");
 
     // Enter capture mode, then record a key already in use: Ctrl+S (bound to "save")
@@ -1906,7 +1800,6 @@ fn test_add_binding_conflict_warning_for_existing_key() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show the recorded key
     harness.assert_screen_contains("Ctrl+S");
@@ -1975,7 +1868,6 @@ fn test_keybinding_editor_captures_keys_over_terminal_mode() {
 
     // Press Escape — should close the editor, not be eaten by terminal
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Keybinding editor should be closed now
     harness.assert_screen_not_contains("Keybinding Editor");
@@ -1997,7 +1889,6 @@ fn test_delete_shift_letter_binding_full_flow() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Add Keybinding");
 
     // Enter capture mode, then record key: Shift+N (crossterm sends uppercase 'N' with SHIFT)
@@ -2007,7 +1898,6 @@ fn test_delete_shift_letter_binding_full_flow() {
     harness
         .send_key(KeyCode::Char('N'), KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Shift+N");
 
     // Tab to Action field
@@ -2022,7 +1912,6 @@ fn test_delete_shift_letter_binding_full_flow() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Tab to context, then to Save button, press Enter to save the dialog
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
@@ -2030,14 +1919,12 @@ fn test_delete_shift_letter_binding_full_flow() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("modified");
 
     // Save and close keybinding editor with Ctrl+S
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains("Keybinding Editor");
 
     // === Phase 2: Reopen keybinding editor and delete the binding ===
@@ -2055,7 +1942,6 @@ fn test_delete_shift_letter_binding_full_flow() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify the custom binding appears
     let screen = harness.screen_to_string();
@@ -2072,7 +1958,6 @@ fn test_delete_shift_letter_binding_full_flow() {
 
     // Navigate to the custom binding row
     harness.send_key(KeyCode::Home, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let mut found_custom = false;
     for _ in 0..10 {
@@ -2087,7 +1972,6 @@ fn test_delete_shift_letter_binding_full_flow() {
             break;
         }
         harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-        harness.render().unwrap();
     }
     assert!(found_custom, "Should find the custom binding row to delete");
 
@@ -2095,7 +1979,6 @@ fn test_delete_shift_letter_binding_full_flow() {
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify deletion happened in the UI
     let screen = harness.screen_to_string();
@@ -2109,7 +1992,6 @@ fn test_delete_shift_letter_binding_full_flow() {
     harness
         .send_key(KeyCode::Char('s'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_not_contains("Keybinding Editor");
 
     // === Phase 3: Reopen and verify the binding is truly gone (persisted) ===
@@ -2154,7 +2036,6 @@ fn test_capture_mode_shows_hint() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Add Keybinding");
 
     // Key field is focused, should show the capture hint
@@ -2164,7 +2045,6 @@ fn test_capture_mode_shows_hint() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Should show capture-mode instruction
     harness.assert_screen_contains("press any key");
@@ -2180,18 +2060,15 @@ fn test_capture_escape_key() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Add Keybinding");
 
     // Enter capture mode
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Press Escape — should be captured, not close the dialog
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Dialog should still be open with Esc recorded
     harness.assert_screen_contains("Add Keybinding");
@@ -2208,15 +2085,12 @@ fn test_capture_tab_key() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Enter capture mode, then press Tab
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Dialog should still be open with Tab recorded (not moved focus)
     harness.assert_screen_contains("Add Keybinding");
@@ -2235,17 +2109,14 @@ fn test_capture_enter_key() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Enter capture mode (first Enter), then capture Enter (second Enter)
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Dialog should still be open with Enter recorded
     harness.assert_screen_contains("Add Keybinding");
@@ -2268,12 +2139,10 @@ fn test_escape_still_closes_dialog_without_capture_mode() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Add Keybinding");
 
     // Press Escape directly (without entering capture mode) — should close dialog
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness.assert_screen_not_contains("Add Keybinding");
     harness.assert_screen_contains("Keybinding Editor");
@@ -2290,12 +2159,10 @@ fn test_key_not_recorded_without_capture_mode() {
     harness
         .send_key(KeyCode::Char('a'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Add Keybinding");
 
     // Press Down arrow directly WITHOUT entering capture mode
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // The key field should still be empty — the arrow should NOT have been recorded
     let screen = harness.screen_to_string();

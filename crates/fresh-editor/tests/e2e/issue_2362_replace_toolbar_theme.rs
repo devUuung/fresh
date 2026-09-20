@@ -39,7 +39,6 @@ fn open_replace(harness: &mut EditorTestHarness) {
     harness
         .send_key(KeyCode::Char('r'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     // The toolbar should now be on screen with Case Sensitive checked
     // (its default state).
     harness.assert_screen_contains("Case Sensitive");

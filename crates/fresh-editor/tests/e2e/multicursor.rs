@@ -336,7 +336,6 @@ fn test_multi_cursor_undo_atomic() {
         harness
             .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
     }
 
     // All "xyz" should be gone after undoing all 3 character insertions
@@ -347,7 +346,6 @@ fn test_multi_cursor_undo_atomic() {
         harness
             .send_key(KeyCode::Char('y'), KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
     }
 
     // All "xyz" should be back after redoing all 3
@@ -387,7 +385,6 @@ fn test_multi_cursor_delete_undo_atomic() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // All characters should be restored
     harness.assert_buffer_content("aaa\nbbb\nccc");
@@ -428,7 +425,6 @@ fn test_add_cursor_undo() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should be back to 2 cursors
     assert_eq!(harness.editor().active_cursors().count(), 2);
@@ -437,7 +433,6 @@ fn test_add_cursor_undo() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should be back to 1 cursor
     assert_eq!(harness.editor().active_cursors().count(), 1);
@@ -446,7 +441,6 @@ fn test_add_cursor_undo() {
     harness
         .send_key(KeyCode::Char('y'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should be back to 2 cursors
     assert_eq!(harness.editor().active_cursors().count(), 2);
@@ -478,7 +472,6 @@ fn test_remove_cursor_undo() {
 
     // Remove secondary cursors (using Escape)
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Should be back to 1 cursor
     assert_eq!(harness.editor().active_cursors().count(), 1);
@@ -487,7 +480,6 @@ fn test_remove_cursor_undo() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should be back to 3 cursors
     assert_eq!(harness.editor().active_cursors().count(), 3);
@@ -496,7 +488,6 @@ fn test_remove_cursor_undo() {
     harness
         .send_key(KeyCode::Char('y'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should be back to 1 cursor
     assert_eq!(harness.editor().active_cursors().count(), 1);
@@ -537,7 +528,6 @@ fn test_undo_beyond_cursor_add() {
         harness
             .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
     }
 
     // "xyz" should be gone, but we should still have 2 cursors
@@ -548,7 +538,6 @@ fn test_undo_beyond_cursor_add() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should be back to 1 cursor
     assert_eq!(harness.editor().active_cursors().count(), 1);
@@ -557,7 +546,6 @@ fn test_undo_beyond_cursor_add() {
     harness
         .send_key(KeyCode::Char('y'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Should have 2 cursors again
     assert_eq!(harness.editor().active_cursors().count(), 2);
@@ -567,7 +555,6 @@ fn test_undo_beyond_cursor_add() {
         harness
             .send_key(KeyCode::Char('y'), KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
     }
 
     // "xyz" should be back
@@ -626,7 +613,6 @@ fn test_multi_cursor_status_bar_indicator() {
 
     // Remove secondary cursors
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Status bar should NOT show cursor count again
     let screen = harness.screen_to_string();
@@ -730,7 +716,6 @@ fn test_multi_cursor_comprehensive_abc_editing() {
         harness
             .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
     }
 
     // Verify content is restored after undo
@@ -758,7 +743,6 @@ fn test_single_cursor_visible() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Expected positions for "Hello World\nSecond Line Here\nThird Line\nFourth"
     let expected_chars = vec![
@@ -867,7 +851,6 @@ fn test_single_cursor_visible() {
 
     // Test moving up and down
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let cursors = harness.find_all_cursors();
     assert!(
@@ -877,7 +860,6 @@ fn test_single_cursor_visible() {
     println!("After Down: cursor at {:?}", cursors[0]);
 
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     let cursors = harness.find_all_cursors();
     assert!(
@@ -890,7 +872,6 @@ fn test_single_cursor_visible() {
     harness
         .send_key(KeyCode::End, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let cursors = harness.find_all_cursors();
     assert!(
@@ -941,7 +922,6 @@ fn test_cursor_visible_on_empty_line() {
     // Add multiple empty lines and test cursor on different empty lines
     harness.type_text("\n\n\n").unwrap();
     harness.send_key(KeyCode::Up, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Cursor should be visible on the empty line we moved to
     let cursors_on_middle_empty = harness.find_all_cursors();
@@ -1017,7 +997,6 @@ fn test_ctrl_end_cursor_position() {
         harness
             .send_key(KeyCode::End, KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
 
         let (cursor_x, _cursor_y) = harness.screen_cursor_position();
         println!("  Cursor x after Ctrl+End: {}", cursor_x);
@@ -1044,7 +1023,6 @@ fn test_ctrl_end_cursor_position() {
         harness
             .send_key(KeyCode::End, KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
 
         let (cursor_x, cursor_y) = harness.screen_cursor_position();
         println!(
@@ -1089,7 +1067,6 @@ fn test_ctrl_end_cursor_position() {
         harness
             .send_key(KeyCode::End, KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
 
         let (cursor_x, _cursor_y) = harness.screen_cursor_position();
         println!("  Cursor x after Ctrl+End: {}", cursor_x);
@@ -1115,7 +1092,6 @@ fn test_ctrl_end_cursor_position() {
         harness
             .send_key(KeyCode::End, KeyModifiers::CONTROL)
             .unwrap();
-        harness.render().unwrap();
 
         let (cursor_x, _cursor_y) = harness.screen_cursor_position();
         println!("  Cursor x after Ctrl+End: {}", cursor_x);
@@ -1270,7 +1246,6 @@ fn test_multi_cursor_end_key_positioning() {
 
     // Press End key to move all cursors to end of their lines
     harness.send_key(KeyCode::End, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Print cursor positions after End key
     println!("\nAfter End key:");
@@ -1390,7 +1365,6 @@ fn test_esc_returns_to_original_cursor_position() {
 
     // Press Esc to remove secondary cursors
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Should have only 1 cursor now
     assert_eq!(harness.editor().active_cursors().iter().count(), 1);
@@ -1482,7 +1456,6 @@ fn test_auto_close_parens_multiple_cursors() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Buffer should be "\n\n\n" (3 newlines)
     harness.assert_buffer_content("\n\n\n");
@@ -1491,7 +1464,6 @@ fn test_auto_close_parens_multiple_cursors() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Add two cursors below (so we have cursors on lines 1, 2, and 3)
     harness.editor_mut().add_cursor_below();
@@ -1570,7 +1542,6 @@ fn test_multicursor_cut() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Add cursors below (should have 3 cursors, one per line)
     harness.editor_mut().add_cursor_below();
@@ -1613,7 +1584,6 @@ fn test_multicursor_cut() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Buffer should now have " world" on each line (hello removed)
     let buffer_content = harness.get_buffer_content().unwrap();
@@ -1638,7 +1608,6 @@ fn test_multicursor_cut_same_line() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Select first "foo" using Ctrl+D (add cursor at next match)
     // First, select "foo" with Shift+Right 3 times
@@ -1664,7 +1633,6 @@ fn test_multicursor_cut_same_line() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Buffer should now have " bar  baz" (both "foo"s removed)
     let buffer_content = harness.get_buffer_content().unwrap();
@@ -1692,7 +1660,6 @@ fn test_multicursor_cut_undo_batched() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Add cursors below (should have 3 cursors, one per line)
     harness.editor_mut().add_cursor_below();
@@ -1718,7 +1685,6 @@ fn test_multicursor_cut_undo_batched() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Verify cut worked
     let buffer_after_cut = harness.get_buffer_content().unwrap();
@@ -1731,7 +1697,6 @@ fn test_multicursor_cut_undo_batched() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Buffer should be restored to original content after single undo
     let buffer_after_undo = harness.get_buffer_content().unwrap();

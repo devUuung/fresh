@@ -73,7 +73,6 @@ fn enter_search_and_replace(harness: &mut EditorTestHarness, search: &str, repla
     harness.render().unwrap();
 
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness.type_text(replace).unwrap();
     harness.render().unwrap();
@@ -158,7 +157,6 @@ fn test_search_replace_plugin_loads() {
     harness
         .send_key(KeyCode::Char('p'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("Search and Replace").unwrap();
 
     harness
@@ -166,7 +164,6 @@ fn test_search_replace_plugin_loads() {
         .unwrap();
 
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 }
 
 /// Search flow shows a results panel with correct matches.
@@ -243,7 +240,6 @@ fn test_search_replace_toggle_selection() {
     // Focus is now on matches panel at index 0 (first file node).
     // Navigate down to the first match row (child of the file node).
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Toggle the match with Space
     harness
@@ -886,7 +882,6 @@ fn test_search_replace_escape_always_closes() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Escape should close the panel
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
@@ -976,13 +971,11 @@ fn test_search_replace_delete_pattern() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Empty replacement — just press Enter to confirm
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Wait for search results to be populated AND for the panel focus to
     // stabilize before sending Alt+Enter.
@@ -1072,7 +1065,6 @@ fn test_search_replace_multiple_matches_same_line() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     eprintln!("[DEBUG {}] pressed Enter on palette item", elapsed());
 
     // --- Enter search and replace terms ---
@@ -1102,7 +1094,6 @@ fn test_search_replace_multiple_matches_same_line() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     eprintln!(
         "[DEBUG {}] pressed Enter to move to replace field",
         elapsed()
@@ -1115,7 +1106,6 @@ fn test_search_replace_multiple_matches_same_line() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     eprintln!(
         "[DEBUG {}] pressed Enter to confirm and run search",
         elapsed()
@@ -2775,7 +2765,6 @@ fn test_search_replace_positions_track_edits() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Step to the second match — it must land on the shifted "ZZNEEDLE two",
     // not the stale line 4 ("middle text").
@@ -2918,7 +2907,6 @@ fn test_search_replace_positions_track_bulk_edits() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // Step to the second match: marker anchoring lands it on the shifted
     // "ZZNEEDLE two". (With the after_insert/after_delete approach the bulk
@@ -3037,7 +3025,6 @@ fn test_search_replace_bracketed_paste_reaches_fields() {
 
     // Same for the Replace field, one Tab away.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     harness.send_paste("goodbye").unwrap();
     harness
         .wait_until(|h| {
@@ -3340,7 +3327,6 @@ fn test_search_replace_unlocatable_pattern_renders_line_head() {
     harness
         .send_key(KeyCode::Char('r'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
     harness.type_text("(?i)NEEDLE_MARKER").unwrap();
     wait_for_search_finished(&mut harness);
     harness
@@ -3380,7 +3366,6 @@ fn focus_first_match_row(harness: &mut EditorTestHarness, pattern: &str) {
         .wait_until_stable(|h| h.screen_to_string().contains("long.txt:1"))
         .unwrap();
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 }
 
 /// Press Shift+`code` `n` times, rendering after each — one press is one
@@ -3388,7 +3373,6 @@ fn focus_first_match_row(harness: &mut EditorTestHarness, pattern: &str) {
 fn press_shift(harness: &mut EditorTestHarness, code: KeyCode, n: usize) {
     for _ in 0..n {
         harness.send_key(code, KeyModifiers::SHIFT).unwrap();
-        harness.render().unwrap();
     }
 }
 
@@ -3518,7 +3502,6 @@ fn test_search_replace_pan_home_and_end() {
     harness
         .send_key(KeyCode::Home, KeyModifiers::SHIFT)
         .unwrap();
-    harness.render().unwrap();
     let homed = row_containing(&harness, "long.txt:1");
     assert!(
         homed.contains("NEEDLE_MARKER") && !homed.contains("HEADMARK"),
@@ -3527,7 +3510,6 @@ fn test_search_replace_pan_home_and_end() {
     );
 
     harness.send_key(KeyCode::End, KeyModifiers::SHIFT).unwrap();
-    harness.render().unwrap();
     let ended = row_containing(&harness, "long.txt:1");
     assert!(
         ended.contains("TAILMARK"),
@@ -3551,7 +3533,6 @@ fn test_search_replace_pan_end_is_walkable_back() {
 
     focus_first_match_row(&mut harness, "NEEDLE_MARKER");
     harness.send_key(KeyCode::End, KeyModifiers::SHIFT).unwrap();
-    harness.render().unwrap();
     assert!(
         row_containing(&harness, "long.txt:1").contains("TAILMARK"),
         "precondition: panned to the tail"
@@ -3725,7 +3706,6 @@ fn test_search_replace_pan_homes_on_a_new_search() {
     // Back to the Search field — the focus ring wraps from the tree to it —
     // and retype, which replaces the tree's rows.
     harness.send_key(KeyCode::Tab, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     for _ in 0.."NEEDLE_MARKER".len() {
         harness
             .send_key(KeyCode::Backspace, KeyModifiers::NONE)

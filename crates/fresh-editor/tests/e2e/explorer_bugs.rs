@@ -261,7 +261,6 @@ fn test_multi_selection_cleared_after_cut_paste() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Marked");
 
     // Navigate to dst/ and paste.
@@ -271,7 +270,6 @@ fn test_multi_selection_cleared_after_cut_paste() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // All three files should now live in dst/.
     assert!(project_root.join("dst/a.txt").exists());
@@ -285,7 +283,6 @@ fn test_multi_selection_cleared_after_cut_paste() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     let screen = harness.screen_to_string();
     assert!(
         !screen.contains("Cannot copy project root"),
@@ -343,7 +340,6 @@ fn test_cut_does_not_fall_back_on_permission_denied() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Correct behavior: rename refused → error surfaced, source intact,
     // destination untouched. The buggy behavior silently succeeds via
@@ -412,7 +408,6 @@ fn test_cut_cleanup_on_partial_dir_copy_failure() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // After the fix, the half-written dst/src_dir must be cleaned up on
     // failure. The buggy code returns the error but leaves the partial
@@ -470,7 +465,6 @@ fn test_paste_rejects_directory_into_itself() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // The paste must not have spawned a recursive copy.
     assert!(
@@ -537,7 +531,6 @@ fn test_delete_preserves_sibling_expansion_state() {
     harness
         .send_key(KeyCode::Char('d'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // keep_open/inside.txt must still be visible — the expansion state of
     // an untouched sibling should not be collapsed by deleting another
@@ -573,7 +566,6 @@ fn test_rename_preserves_sibling_expansion_state() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("inside.txt");
 
     // Navigate to rename_me.txt and rename via F2.
@@ -588,7 +580,6 @@ fn test_rename_preserves_sibling_expansion_state() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -624,7 +615,6 @@ fn test_paste_success_status_is_distinct_from_clipboard_set() {
     harness
         .send_key(KeyCode::Char('c'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Copied:");
 
     // Paste into dst/. The status after paste must NOT be literally the
@@ -634,7 +624,6 @@ fn test_paste_success_status_is_distinct_from_clipboard_set() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Pasted:");
     // And the file really landed:
     assert!(project_root.join("dst/thing.txt").exists());
@@ -719,7 +708,6 @@ fn test_conflict_prompt_typo_re_prompts_does_not_cancel() {
     harness
         .send_key(KeyCode::Char('z'), KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
     let screen = harness.screen_to_string();
     assert!(
         screen.contains("exists"),
@@ -731,7 +719,6 @@ fn test_conflict_prompt_typo_re_prompts_does_not_cancel() {
     // Now cancel explicitly with Escape and verify the source file
     // stays in place (cancel doesn't move anything).
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     assert!(
         project_root.join("a.txt").exists(),
         "Explicit Escape cancel should not delete the source"
@@ -761,13 +748,11 @@ fn test_explorer_menu_exposes_cut_copy_paste() {
     // Select a file so the Cut/Copy menu items would be enabled by
     // can_copy (explorer cursor is on a real file).
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Open the Explorer menu (Alt+X).
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::ALT)
         .unwrap();
-    harness.render().unwrap();
 
     harness.assert_screen_contains("Cut");
     harness.assert_screen_contains("Copy");
@@ -808,7 +793,6 @@ fn test_rename_prompt_appends_to_existing_name() {
     harness
         .send_key(KeyCode::Enter, KeyModifiers::NONE)
         .unwrap();
-    harness.render().unwrap();
 
     // The desired rename is "report.txt-v2" — the prefilled text should
     // have been kept and "-v2" appended. If the prompt selected-all the
@@ -869,7 +853,6 @@ fn test_paste_auto_expands_collapsed_destination() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Destination directory must now be open — both the newly-pasted file
     // and the pre-existing sibling should be visible.
@@ -899,7 +882,6 @@ fn test_shift_up_at_top_seeds_selection_before_escape_unfocuses() {
     // Cursor starts on the project root (pos 0 in the visible list).
     // Shift+Up is at the boundary — nothing above.
     harness.send_key(KeyCode::Up, KeyModifiers::SHIFT).unwrap();
-    harness.render().unwrap();
 
     // Escape should now observe a non-empty multi-selection (seeded with
     // the cursor row) and clear it — keeping focus on the explorer.
@@ -907,7 +889,6 @@ fn test_shift_up_at_top_seeds_selection_before_escape_unfocuses() {
     // to `focus_editor`, so the title bar picks up the "(Ctrl+E)" hint
     // that only appears when the explorer is NOT focused.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     harness.assert_screen_not_contains("File Explorer (Ctrl+E)");
     harness.assert_screen_contains("File Explorer");
@@ -965,7 +946,6 @@ fn test_cross_fs_cut_source_delete_failure_is_reported() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Copy landed.
     assert!(
@@ -1015,12 +995,10 @@ fn test_escape_cancels_pending_cut() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
     harness.assert_screen_contains("Marked");
 
     // Escape should clear the pending cut while keeping focus on the explorer.
     harness.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
 
     // Move to dst/ and attempt to paste. With the cut cancelled, paste must
     // report "Nothing to paste" — the clipboard is empty — and the source
@@ -1029,7 +1007,6 @@ fn test_escape_cancels_pending_cut() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -1070,13 +1047,11 @@ fn test_paste_into_same_dir_cancels_cut() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Paste where cursor already is → same directory. Must cancel the cut.
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     assert!(
         project_root.join("a.txt").exists(),
@@ -1095,7 +1070,6 @@ fn test_paste_into_same_dir_cancels_cut() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let screen = harness.screen_to_string();
     assert!(
@@ -1146,7 +1120,6 @@ fn test_poll_after_cut_paste_preserves_expansion_and_cursor() {
     harness
         .send_key(KeyCode::Char('x'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     // Paste into the workspace root: move cursor up past sub/ to the root
     // line, then Ctrl+V. dst_dir = root.
@@ -1207,7 +1180,6 @@ fn test_poll_after_cut_paste_preserves_expansion_and_cursor() {
         .and_then(|e| e.get_selected())
         .expect("explorer should still have a live selection after poll");
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let after_nav = harness
         .editor()
         .file_explorer()
@@ -1305,7 +1277,6 @@ fn test_refresh_resets_cursor_to_root_when_path_disappears() {
     // User-facing outcome #3: Down still navigates. Before the fix, a
     // stale cursor id would make `select_next` a silent no-op.
     harness.send_key(KeyCode::Down, KeyModifiers::NONE).unwrap();
-    harness.render().unwrap();
     let screen_after_down = harness.screen_to_string();
     let cursor_moved_off_root = screen_after_down
         .lines()
@@ -1526,7 +1497,6 @@ fn test_cut_paste_move_redirects_save_to_new_path() {
     harness
         .send_key(KeyCode::Char('v'), KeyModifiers::CONTROL)
         .unwrap();
-    harness.render().unwrap();
 
     let new_path = project_root.join("dst").join("source.txt");
     let old_path = project_root.join("source.txt");

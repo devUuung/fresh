@@ -63,7 +63,6 @@ fn rendered_after_ix_esc(h: &mut EditorTestHarness) -> String {
     h.send_key(KeyCode::Char('i'), KeyModifiers::NONE).unwrap();
     h.send_key(KeyCode::Char('X'), KeyModifiers::NONE).unwrap();
     h.send_key(KeyCode::Esc, KeyModifiers::NONE).unwrap();
-    h.render().unwrap();
     h.screen_to_string()
 }
 
