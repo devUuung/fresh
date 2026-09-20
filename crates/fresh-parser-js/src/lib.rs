@@ -1189,3 +1189,87 @@ import { helper } from "./lib/utils";
         assert!(alpha_pos < gamma_pos);
     }
 }
+
+/// Everything about a plugin that is a pure function of its source text.
+///
+/// One pipeline, two callers: the build script precomputes this for the
+/// plugins shipped with the editor, and the runtime computes it for
+/// user-installed ones. Sharing the function is what keeps the precomputed
+/// table and the live path from drifting apart.
+pub struct PreparedSource {
+    /// Bundled/stripped/transpiled JavaScript, ready for the engine.
+    pub js_code: String,
+    /// `.d.ts` emit from oxc's isolated-declarations transformer. `None` when
+    /// that emit failed -- the plugin still runs, it just contributes no types.
+    pub declarations: Option<String>,
+    /// Plugins this one declares a dependency on, for load ordering.
+    pub dependencies: Vec<String>,
+}
+
+/// Run the plugin preparation pipeline over one source file.
+///
+/// `path` is load-bearing, not decorative: a plugin containing ES imports is
+/// bundled, and bundling resolves those imports relative to this file.
+pub fn prepare_source(path: &Path, source: &str) -> Result<PreparedSource> {
+    let filename = path
+        .file_name()
+        .and_then(|s| s.to_str())
+        .unwrap_or("plugin.ts");
+
+    let dependencies = extract_plugin_dependencies(source);
+
+    // Emitted from the raw TS, before transpilation strips the types away:
+    // every `export type`, `export interface` and `declare global` the author
+    // wrote is exactly what downstream plugins and init.ts need in order to
+    // reach this plugin's surface without casts.
+    let declarations = if filename.ends_with(".ts") {
+        match emit_isolated_declarations(source, filename) {
+            Ok(dts) => Some(dts),
+            Err(e) => {
+                eprintln!(
+                    "warning: plugin {} isolated-declarations emit failed: {e}",
+                    path.display()
+                );
+                None
+            }
+        }
+    } else {
+        None
+    };
+
+    let js_code = if has_es_imports(source) {
+        bundle_module(path)?
+    } else if has_es_module_syntax(source) {
+        let stripped = strip_imports_and_exports(source);
+        if filename.ends_with(".ts") {
+            transpile_typescript(&stripped, filename)?
+        } else {
+            stripped
+        }
+    } else if filename.ends_with(".ts") {
+        transpile_typescript(source, filename)?
+    } else {
+        source.to_string()
+    };
+
+    Ok(PreparedSource {
+        js_code,
+        declarations,
+        dependencies,
+    })
+}
+
+/// A 64-bit fingerprint of a plugin's source text (FNV-1a).
+///
+/// Spelled out rather than reached for from `std`: the build script and the
+/// runtime must agree on this value across separately compiled crates, and
+/// `DefaultHasher` makes no stability promise. This one is fixed by its own
+/// definition.
+pub fn source_fingerprint(source: &str) -> u64 {
+    let mut hash: u64 = 0xcbf2_9ce4_8422_2325;
+    for byte in source.as_bytes() {
+        hash ^= *byte as u64;
+        hash = hash.wrapping_mul(0x100_0000_01b3);
+    }
+    hash
+}

@@ -1443,80 +1443,50 @@ fn prepare_plugin(path: &Path) -> Result<PreparedPlugin> {
     let source = std::fs::read_to_string(path)
         .map_err(|e| anyhow!("Failed to read plugin {}: {}", path.display(), e))?;
 
-    let filename = path
+    let file_name = path
         .file_name()
         .and_then(|s| s.to_str())
-        .unwrap_or("plugin.ts");
+        .unwrap_or_default();
 
-    // Extract dependencies before transpilation
-    let dependencies = fresh_parser_js::extract_plugin_dependencies(&source);
+    // Plugins shipped with the editor were prepared by `build.rs`; the table
+    // is keyed on the source, so a hit means oxc already answered this exact
+    // question at compile time. A user-installed plugin misses and takes the
+    // pipeline below, exactly as before.
+    if let Some(entry) = crate::lookup_prepared_plugin(file_name, &source) {
+        return Ok(PreparedPlugin {
+            name: plugin_name,
+            path: path.to_path_buf(),
+            js_code: entry.js_code.to_string(),
+            i18n: read_plugin_i18n(path),
+            dependencies: entry.dependencies.iter().map(|d| d.to_string()).collect(),
+            declarations: entry.declarations.map(|d| d.to_string()),
+        });
+    }
 
-    // Emit `.d.ts` via oxc's isolated-declarations before the
-    // transpile step consumes `source`. We want the raw TS (every
-    // `export type`, `export interface`, and `declare global` block
-    // the plugin author wrote) so downstream plugins and init.ts
-    // reach the plugin's public types without casts. Failures are
-    // non-fatal — the plugin still runs.
-    let declarations = if filename.ends_with(".ts") {
-        match fresh_parser_js::emit_isolated_declarations(&source, filename) {
-            Ok(dts) => Some(dts),
-            Err(e) => {
-                tracing::warn!(
-                    "Plugin {} isolated-declarations emit failed: {}",
-                    path.display(),
-                    e
-                );
-                None
-            }
-        }
-    } else {
-        None
-    };
-
-    // Transpile/bundle to JS (same logic as QuickJsBackend::load_module_with_source)
-    let js_code = if fresh_parser_js::has_es_imports(&source) {
-        match fresh_parser_js::bundle_module(path) {
-            Ok(bundled) => bundled,
-            Err(e) => {
-                tracing::warn!(
-                    "Plugin {} uses ES imports but bundling failed: {}. Skipping.",
-                    path.display(),
-                    e
-                );
-                return Err(anyhow!("Bundling failed for {}: {}", plugin_name, e));
-            }
-        }
-    } else if fresh_parser_js::has_es_module_syntax(&source) {
-        let stripped = fresh_parser_js::strip_imports_and_exports(&source);
-        if filename.ends_with(".ts") {
-            fresh_parser_js::transpile_typescript(&stripped, filename)?
-        } else {
-            stripped
-        }
-    } else if filename.ends_with(".ts") {
-        fresh_parser_js::transpile_typescript(&source, filename)?
-    } else {
-        source
-    };
-
-    // Load accompanying .i18n.json file
-    let i18n_path = path.with_extension("i18n.json");
-    let i18n = if i18n_path.exists() {
-        std::fs::read_to_string(&i18n_path)
-            .ok()
-            .and_then(|content| serde_json::from_str(&content).ok())
-    } else {
-        None
-    };
+    let prepared = fresh_parser_js::prepare_source(path, &source)
+        .map_err(|e| anyhow!("Failed to prepare plugin '{}': {}", plugin_name, e))?;
 
     Ok(PreparedPlugin {
         name: plugin_name,
         path: path.to_path_buf(),
-        js_code,
-        i18n,
-        dependencies,
-        declarations,
+        js_code: prepared.js_code,
+        i18n: read_plugin_i18n(path),
+        dependencies: prepared.dependencies,
+        declarations: prepared.declarations,
     })
+}
+
+/// Load a plugin's accompanying `.i18n.json`, if it has one. Read on both
+/// paths: it is a small file, and baking translations into the build-time
+/// table would only add a way for them to go stale.
+fn read_plugin_i18n(path: &Path) -> Option<HashMap<String, HashMap<String, String>>> {
+    let i18n_path = path.with_extension("i18n.json");
+    if !i18n_path.exists() {
+        return None;
+    }
+    std::fs::read_to_string(&i18n_path)
+        .ok()
+        .and_then(|content| serde_json::from_str(&content).ok())
 }
 
 /// Execute a pre-prepared plugin in QuickJS. This is the serial phase —
