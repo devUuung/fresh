@@ -343,6 +343,11 @@ windows-sys = { version = "0.61", features = [
 # graph and a slower cold build; the trade was made knowingly.
 [build-dependencies]
 fresh-parser-js = { workspace = true }
+# Compiles the prepared plugin bodies to QuickJS bytecode at build time. Same
+# engine as the runtime links, because it is the same dependency resolved once
+# for the whole build -- bytecode is only valid against the engine that wrote
+# it.
+rquickjs = { workspace = true }
 
 [target.'cfg(windows)'.build-dependencies]
 winresource = "0.1"

@@ -1417,6 +1417,9 @@ struct PreparedPlugin {
     name: String,
     path: PathBuf,
     js_code: String,
+    /// Build-time bytecode for this plugin, when there is any. Present only
+    /// for the plugins shipped with the editor.
+    bytecode: Option<&'static [u8]>,
     i18n: Option<HashMap<String, HashMap<String, String>>>,
     dependencies: Vec<String>,
     /// `.d.ts` emit for the plugin source, produced by oxc's
@@ -1457,6 +1460,7 @@ fn prepare_plugin(path: &Path) -> Result<PreparedPlugin> {
             name: plugin_name,
             path: path.to_path_buf(),
             js_code: entry.js_code.to_string(),
+            bytecode: entry.bytecode,
             i18n: read_plugin_i18n(path),
             dependencies: entry.dependencies.iter().map(|d| d.to_string()).collect(),
             declarations: entry.declarations.map(|d| d.to_string()),
@@ -1470,6 +1474,7 @@ fn prepare_plugin(path: &Path) -> Result<PreparedPlugin> {
         name: plugin_name,
         path: path.to_path_buf(),
         js_code: prepared.js_code,
+        bytecode: None,
         i18n: read_plugin_i18n(path),
         dependencies: prepared.dependencies,
         declarations: prepared.declarations,
@@ -1513,7 +1518,7 @@ fn execute_prepared_plugin(
     let exec_start = std::time::Instant::now();
     runtime
         .borrow_mut()
-        .execute_js(&prepared.js_code, path_str)?;
+        .execute_prepared(prepared.bytecode, &prepared.js_code, path_str)?;
     let exec_elapsed = exec_start.elapsed();
 
     tracing::debug!(

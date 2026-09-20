@@ -1273,3 +1273,18 @@ pub fn source_fingerprint(source: &str) -> u64 {
     }
     hash
 }
+
+/// Wrap a prepared plugin body the way the engine expects to receive it.
+///
+/// Shared because the build script compiles this exact text to bytecode and
+/// the runtime evaluates this exact text when there is no bytecode; if the two
+/// spellings drifted, the compiled and interpreted paths would stop being the
+/// same program.
+///
+/// The IIFE keeps a plugin's top-level `const editor = ...` from colliding
+/// with the `editor` global (a TDZ error otherwise). `.call(globalThis)` is
+/// what keeps `this` meaning the global object: module bodies are strict, and
+/// a plain call would pass `undefined`.
+pub fn wrap_plugin_body(code: &str) -> String {
+    format!("(function() {{ {code} }}).call(globalThis);")
+}

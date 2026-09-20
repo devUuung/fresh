@@ -9520,24 +9520,7 @@ impl QuickJsBackend {
             source_name
         );
 
-        // Get or create context for this plugin
-        let context = {
-            let mut contexts = self.plugin_contexts.borrow_mut();
-            if let Some(ctx) = contexts.get(plugin_name) {
-                ctx.clone()
-            } else {
-                let ctx = Context::full(&self.runtime).map_err(|e| {
-                    anyhow!(
-                        "Failed to create QuickJS context for plugin {}: {}",
-                        plugin_name,
-                        e
-                    )
-                })?;
-                self.setup_context_api(&ctx, plugin_name)?;
-                contexts.insert(plugin_name.to_string(), ctx.clone());
-                ctx
-            }
-        };
+        let context = self.context_for_plugin(plugin_name)?;
 
         // Wrap plugin code in IIFE to prevent TDZ errors and scope pollution
         // This is critical for plugins like vi_mode that declare `const editor = ...`
@@ -9547,7 +9530,7 @@ impl QuickJsBackend {
         // and modules are always strict, where a plain call would leave `this`
         // as `undefined` instead of the global object the plugins have always
         // seen. Binding it explicitly keeps that unchanged.
-        let wrapped_code = format!("(function() {{ {} }}).call(globalThis);", code);
+        let wrapped_code = fresh_parser_js::wrap_plugin_body(code);
 
         // Modules are declared by name, and re-declaring one in a context that
         // still holds the previous definition is an error. A plugin can be
@@ -9575,6 +9558,92 @@ impl QuickJsBackend {
         })
     }
 
+    /// Run a prepared plugin, from bytecode when the build produced some and
+    /// from source otherwise. The two paths are the same module and the same
+    /// body; only the parse differs.
+    pub(crate) fn execute_prepared(
+        &mut self,
+        bytecode: Option<&[u8]>,
+        js_code: &str,
+        source_name: &str,
+    ) -> Result<()> {
+        match bytecode {
+            Some(bytes) => self.execute_bytecode(bytes, source_name),
+            None => self.execute_js(js_code, source_name),
+        }
+    }
+
+    /// Execute a plugin from bytecode the build script compiled earlier.
+    ///
+    /// Same module, same body, same context setup as [`Self::execute_js`] --
+    /// only the parse is skipped, because QuickJS already did it at build
+    /// time.
+    pub(crate) fn execute_bytecode(&mut self, bytecode: &[u8], source_name: &str) -> Result<()> {
+        let plugin_name = Path::new(source_name)
+            .file_stem()
+            .and_then(|s| s.to_str())
+            .unwrap_or("unknown");
+
+        let context = self.context_for_plugin(plugin_name)?;
+
+        context.with(|ctx| {
+            // SAFETY: `bytecode` comes from `Module::write` in this crate's
+            // build script, compiled against the same QuickJS as this binary
+            // and only emitted when the build host and target agree on
+            // endianness and pointer width. `JS_ReadObject` on anything else
+            // is undefined behaviour, which is why the build script refuses to
+            // emit rather than letting a mismatch reach here.
+            let declared = unsafe { rquickjs::Module::load(ctx.clone(), bytecode) }
+                .map_err(|e| format_js_error(&ctx, e, source_name))?;
+            let (_module, promise) = declared
+                .eval()
+                .map_err(|e| format_js_error(&ctx, e, source_name))?;
+            Self::settle_plugin_module(promise, source_name)
+                .map_err(|e| format_js_error(&ctx, e, source_name))
+        })
+    }
+
+    /// The QuickJS context this plugin runs in, created (and given the host
+    /// API) on first use. Each plugin gets its own, so one cannot see
+    /// another's globals.
+    fn context_for_plugin(&mut self, plugin_name: &str) -> Result<Context> {
+        if let Some(ctx) = self.plugin_contexts.borrow().get(plugin_name) {
+            return Ok(ctx.clone());
+        }
+        let ctx = Context::full(&self.runtime).map_err(|e| {
+            anyhow!(
+                "Failed to create QuickJS context for plugin {}: {}",
+                plugin_name,
+                e
+            )
+        })?;
+        self.setup_context_api(&ctx, plugin_name)?;
+        self.plugin_contexts
+            .borrow_mut()
+            .insert(plugin_name.to_string(), ctx.clone());
+        Ok(ctx)
+    }
+
+    /// Drive a module's evaluation promise to settlement, so a plugin whose
+    /// top level throws is reported as an error rather than loading silently.
+    fn settle_plugin_module(promise: rquickjs::Promise<'_>, name: &str) -> rquickjs::Result<()> {
+        match promise.finish::<()>() {
+            Ok(()) => Ok(()),
+            // No plugin uses top-level `await`, so a module body settles as it
+            // evaluates. If one ever does and leaves work outstanding, that is
+            // not a load failure -- the old script path could not report it
+            // either -- so note it and carry on.
+            Err(rquickjs::Error::WouldBlock) => {
+                tracing::warn!(
+                    "plugin module '{name}' left work pending after evaluation; \
+                     continuing without it"
+                );
+                Ok(())
+            }
+            Err(e) => Err(e),
+        }
+    }
+
     /// Declare and evaluate one plugin body as a module.
     ///
     /// Evaluating a module hands back a promise rather than raising, so a
@@ -9589,21 +9658,7 @@ impl QuickJsBackend {
     ) -> rquickjs::Result<()> {
         let declared = rquickjs::Module::declare(ctx.clone(), module_name, code)?;
         let (_module, promise) = declared.eval()?;
-        match promise.finish::<()>() {
-            Ok(()) => Ok(()),
-            // No plugin uses top-level `await`, so a module body settles as it
-            // evaluates. If one ever does and leaves work outstanding, that is
-            // not a load failure -- the old script path could not report it
-            // either -- so note it and carry on.
-            Err(rquickjs::Error::WouldBlock) => {
-                tracing::warn!(
-                    "plugin module '{module_name}' left work pending after evaluation; \
-                     continuing without it"
-                );
-                Ok(())
-            }
-            Err(e) => Err(e),
-        }
+        Self::settle_plugin_module(promise, module_name)
     }
 
     /// Execute JavaScript source code directly as a plugin (no file I/O).

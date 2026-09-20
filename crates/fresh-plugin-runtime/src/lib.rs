@@ -22,6 +22,12 @@ pub struct PreparedPluginEntry {
     pub source_len: usize,
     pub source_fingerprint: u64,
     pub js_code: &'static str,
+    /// QuickJS bytecode for this plugin's wrapped body, when the build script
+    /// was able to emit it. `None` when the build host and target disagree on
+    /// endianness or pointer width, in which case the runtime parses
+    /// `js_code` as before -- reading bytecode built for another shape is
+    /// undefined behaviour, so it is simply not produced.
+    pub bytecode: Option<&'static [u8]>,
     pub declarations: Option<&'static str>,
     pub dependencies: &'static [&'static str],
 }

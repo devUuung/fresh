@@ -1466,6 +1466,7 @@ dependencies = [
  "pulldown-cmark",
  "ratatui",
  "regex",
+ "rquickjs",
  "schemars",
  "serde",
  "serde_json",
