@@ -363,9 +363,6 @@ fn generate_prepared_plugins() {
             .map(|d| format!("{d:?}"))
             .collect::<Vec<_>>()
             .join(", ");
-        let bytecode = compile_bytecode(&file_name, &prepared.js_code)
-            .map(|rel| format!("Some(include_bytes!(concat!(env!(\"OUT_DIR\"), {rel:?})))"))
-            .unwrap_or_else(|| "None".to_string());
         let mut entry = String::new();
         entry.push_str("    fresh_plugin_runtime::PreparedPluginEntry {\n");
         entry.push_str(&format!("        file_name: {file_name:?},\n"));
@@ -375,7 +372,6 @@ fn generate_prepared_plugins() {
             fresh_parser_js::source_fingerprint(&source)
         ));
         entry.push_str(&format!("        js_code: {:?},\n", prepared.js_code));
-        entry.push_str(&format!("        bytecode: {bytecode},\n"));
         entry.push_str(&format!("        declarations: {declarations},\n"));
         entry.push_str(&format!("        dependencies: &[{deps}],\n"));
         entry.push_str("    },");
@@ -395,69 +391,4 @@ fn write_prepared_plugins(bodies: &[String]) {
     );
     fs::write(Path::new(&out_dir).join("prepared_plugins.rs"), file)
         .expect("write prepared_plugins.rs");
-}
-
-/// Whether bytecode written here can be read by the binary being built.
-///
-/// QuickJS bytecode is tied to the shape of the machine that wrote it, and
-/// `JS_ReadObject` on a mismatch is undefined behaviour rather than something
-/// it can refuse. This script runs on the host; the binary runs on the target.
-/// When those disagree we emit no bytecode and the runtime parses source
-/// instead, which is merely slower.
-fn bytecode_is_portable_to_target() -> bool {
-    let target_endian = std::env::var("CARGO_CFG_TARGET_ENDIAN").unwrap_or_default();
-    let target_width = std::env::var("CARGO_CFG_TARGET_POINTER_WIDTH").unwrap_or_default();
-    let host_endian = if cfg!(target_endian = "big") {
-        "big"
-    } else {
-        "little"
-    };
-    let host_width = (std::mem::size_of::<usize>() * 8).to_string();
-    target_endian == host_endian && target_width == host_width
-}
-
-/// Compile one prepared plugin body to QuickJS bytecode, returning the path it
-/// was written to relative to `OUT_DIR` -- the shape `include_bytes!` wants.
-///
-/// `None` when bytecode would not be portable to the target, or when this
-/// plugin fails to compile. Either way the runtime parses the source, so a
-/// failure here costs speed and never correctness.
-fn compile_bytecode(file_name: &str, js_code: &str) -> Option<String> {
-    use std::sync::OnceLock;
-    static PORTABLE: OnceLock<bool> = OnceLock::new();
-    if !*PORTABLE.get_or_init(|| {
-        let portable = bytecode_is_portable_to_target();
-        if !portable {
-            println!(
-                "cargo:warning=host and target disagree on endianness or pointer width; shipping plugin sources without bytecode"
-            );
-        }
-        portable
-    }) {
-        return None;
-    }
-
-    // Wrapped exactly as the runtime wraps it, or the compiled and interpreted
-    // paths would not be the same program.
-    let wrapped = fresh_parser_js::wrap_plugin_body(js_code);
-
-    let runtime = rquickjs::Runtime::new().ok()?;
-    let context = rquickjs::Context::full(&runtime).ok()?;
-    let bytes = context.with(|ctx| {
-        let module = rquickjs::Module::declare(ctx.clone(), file_name, wrapped).ok()?;
-        module
-            .write(rquickjs::module::WriteOptions {
-                // Native: we only reach here when host and target agree.
-                endianness: rquickjs::module::WriteOptionsEndianness::Native,
-                ..Default::default()
-            })
-            .ok()
-    })?;
-
-    let out_dir = std::env::var("OUT_DIR").ok()?;
-    let dir = Path::new(&out_dir).join("plugin_bc");
-    fs::create_dir_all(&dir).ok()?;
-    let stem = file_name.replace(['.', '/'], "_");
-    fs::write(dir.join(format!("{stem}.bin")), bytes).ok()?;
-    Some(format!("/plugin_bc/{stem}.bin"))
 }
