@@ -9542,18 +9542,27 @@ impl QuickJsBackend {
         // Wrap plugin code in IIFE to prevent TDZ errors and scope pollution
         // This is critical for plugins like vi_mode that declare `const editor = ...`
         // which shadows the global `editor` causing TDZ if not wrapped.
-        let wrapped_code = format!("(function() {{ {} }})();", code);
-        let wrapped = wrapped_code.as_str();
+        //
+        // `.call(globalThis)` rather than `()`: the body runs as a module now,
+        // and modules are always strict, where a plain call would leave `this`
+        // as `undefined` instead of the global object the plugins have always
+        // seen. Binding it explicitly keeps that unchanged.
+        let wrapped_code = format!("(function() {{ {} }}).call(globalThis);", code);
+
+        // Modules are declared by name, and re-declaring one in a context that
+        // still holds the previous definition is an error. A plugin can be
+        // loaded more than once into the same context (hot reload), so the
+        // name carries a counter and is never reused.
+        static MODULE_SEQ: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+        let module_name = format!(
+            "{source_name}#{}",
+            MODULE_SEQ.fetch_add(1, std::sync::atomic::Ordering::Relaxed)
+        );
 
         context.with(|ctx| {
             tracing::debug!("execute_js: executing plugin code for '{}'", plugin_name);
 
-            // Execute the plugin code with filename for better stack traces
-            let mut eval_options = rquickjs::context::EvalOptions::default();
-            eval_options.global = true;
-            eval_options.filename = Some(source_name.to_string());
-            let result = ctx
-                .eval_with_options::<(), _>(wrapped.as_bytes(), eval_options)
+            let result = Self::eval_plugin_module(&ctx, &module_name, &wrapped_code)
                 .map_err(|e| format_js_error(&ctx, e, source_name));
 
             tracing::debug!(
@@ -9564,6 +9573,37 @@ impl QuickJsBackend {
 
             result
         })
+    }
+
+    /// Declare and evaluate one plugin body as a module.
+    ///
+    /// Evaluating a module hands back a promise rather than raising, so a
+    /// plugin whose top level throws would otherwise load "successfully" and
+    /// fail silently. `finish` drives the job queue until that promise settles
+    /// and turns a rejection back into an `Err`, which is what the caller's
+    /// error reporting has always relied on.
+    fn eval_plugin_module<'js>(
+        ctx: &rquickjs::Ctx<'js>,
+        module_name: &str,
+        code: &str,
+    ) -> rquickjs::Result<()> {
+        let declared = rquickjs::Module::declare(ctx.clone(), module_name, code)?;
+        let (_module, promise) = declared.eval()?;
+        match promise.finish::<()>() {
+            Ok(()) => Ok(()),
+            // No plugin uses top-level `await`, so a module body settles as it
+            // evaluates. If one ever does and leaves work outstanding, that is
+            // not a load failure -- the old script path could not report it
+            // either -- so note it and carry on.
+            Err(rquickjs::Error::WouldBlock) => {
+                tracing::warn!(
+                    "plugin module '{module_name}' left work pending after evaluation; \
+                     continuing without it"
+                );
+                Ok(())
+            }
+            Err(e) => Err(e),
+        }
     }
 
     /// Execute JavaScript source code directly as a plugin (no file I/O).
